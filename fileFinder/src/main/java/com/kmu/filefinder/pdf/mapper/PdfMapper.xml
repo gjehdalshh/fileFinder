@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kmu.filefinder.pdf.mapper.PdfMapper">
+	<select id="getCategoryPathByIcategory" resultType="string">
+		SELECT
+		category_path FROM category WHERE i_category = #{i_category};
+	</select>
+
+	<insert id="createFile">
+		INSERT INTO pdf (pdf_nm, pdf_extension, i_category)
+		VALUES (#{pdf_nm}, #{pdf_extension}, #{i_category})
+	</insert>
+</mapper>
