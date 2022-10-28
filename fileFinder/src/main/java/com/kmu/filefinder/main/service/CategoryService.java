@@ -30,6 +30,9 @@ public class CategoryService {
 		if (!validateFolderNameExistence(dto.getCategory_nm())) {
 			return 2;
 		}
+		if(dto.getCategory_nm().equals("")) {
+			return 3;
+		}
 		String urlPath = createFile(dto);
 		dto.setCategory_path(urlPath);
 		return mainMapper.createCategory(dto);
@@ -60,5 +63,14 @@ public class CategoryService {
 		}
 		
 		return urlPath;
+	}
+	
+	public int deleteSmallCategory(int i_category) {
+		return mainMapper.deleteSmallCategory(i_category);
+	}
+	
+	public int deleteLargeCategory(int i_category) {
+		mainMapper.deleteLargeCategory(i_category);
+		return mainMapper.deleteSmallCategory(i_category);
 	}
 }

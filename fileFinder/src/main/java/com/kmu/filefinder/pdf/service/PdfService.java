@@ -22,11 +22,14 @@ public class PdfService {
 	private int path;
 	
 	public void filePath(String path) {
+		System.out.println("확인1 : " + path);
 		this.path = ConvertType.convertStringToInt(path);
 	}
 	
 	public int fileUpload(MultipartHttpServletRequest files) {
+		System.out.println("확인2 : " + path);
 		String urlPath = getCategoryPathByIcategory(path);
+		System.out.println(urlPath);
 		String uploadFolder = urlPath + "\\";
 		List<MultipartFile> list = files.getFiles("files");
 		for(int i = 0; i<list.size(); i++) {
@@ -43,7 +46,7 @@ public class PdfService {
 				e.printStackTrace();
 			}
 		}
-		
+		System.out.println("aaa");
 		return 1;
 	}
 	

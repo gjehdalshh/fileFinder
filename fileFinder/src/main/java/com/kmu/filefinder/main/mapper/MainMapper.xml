@@ -21,5 +21,12 @@
 	<select id="getCategoryNmByTop" resultType="string">
 		SELECT category_nm FROM category WHERE i_category = #{category_top};
 	</select>
-
+	
+	<delete id="deleteSmallCategory">
+		DELETE FROM category WHERE i_category = #{i_category}; 
+	</delete>
+	
+	<delete id="deleteLargeCategory">
+		DELETE FROM category WHERE category_top = #{i_category}; 
+	</delete>
 </mapper>

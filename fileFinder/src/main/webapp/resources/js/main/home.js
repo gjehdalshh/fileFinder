@@ -1,9 +1,23 @@
-let category_modal_open_btn = document.querySelector('#category_modal_open_btn')
-let category_modal_close_btn = document.querySelector('#category_modal_close_btn')
+let category_insert_open_btn = document.querySelector('#category_insert_open_btn')
+let category_insert_close_btn = document.querySelector('#category_insert_close_btn')
 let category_insert = document.querySelector('#category_insert')
-let modal = document.querySelector('#modal')
+let modal_insert = document.querySelector('#modal_insert')
+
+let category_delete_open_btn = document.querySelector('#category_delete_open_btn')
+let category_delete_close_btn = document.querySelector('#category_delete_close_btn')
+let modal_delete = document.querySelector('#modal_delete')
+
 let large_category = document.querySelector('#large_category')
 let small_category = document.querySelector('#small_category')
+
+let large_delete_category = document.querySelector('#large_delete_category')
+let small_delete_category = document.querySelector('#small_delete_category')
+
+let large_category_div = document.querySelector('#large_category_div')
+let small_category_div = document.querySelector('#small_category_div')
+
+let large_delete_category_div = document.querySelector('#large_delete_category_div')
+let small_delete_category_div = document.querySelector('#small_delete_category_div')
 
 let order = 1;
 
@@ -20,15 +34,34 @@ small_category.onclick = function() {
 	small_category_div.style.display = 'block'
 }
 
-/* --------------- 모달창 -------------------*/
-category_modal_open_btn.onclick = function() {
-	modal.style.display = 'block';
+large_delete_category.onclick = function() {
+	order = 1
+	large_delete_category_div.style.display = 'block'
+	small_delete_category_div.style.display = 'none'
+}
+small_delete_category.onclick = function() {
+	order = 2
+	large_delete_category_div.style.display = 'none'
+	small_delete_category_div.style.display = 'block'
 }
 
-category_modal_close_btn.onclick = function() {
-	modal.style.display = 'none';
+/* --------------- 등록 모달창 -------------------*/
+category_insert_open_btn.onclick = function() {
+	modal_insert.style.display = 'block';
 }
 
+category_insert_close_btn.onclick = function() {
+	modal_insert.style.display = 'none';
+}
+
+/* --------------- 삭제 모달창 -------------------*/
+category_delete_open_btn.onclick = function() {
+	modal_delete.style.display = 'block';
+}
+
+category_delete_close_btn.onclick = function() {
+	modal_delete.style.display = 'none';
+}
 
 /* --------------- 카테고리 생성 -------------------*/
 category_insert.onclick = function() {
@@ -65,14 +98,59 @@ category_insert.onclick = function() {
 		switch (data.category) {
 			case 1:
 				alert('카테고리가 등록되었습니다.')
-				modal.style.display = 'none';
+				modal_insert.style.display = 'none';
 				location.reload()
 				break;
 			case 2:
 				alert('이미 존재하는 카테고리입니다.')
 				break;
+			case 3:
+				alert('이름을 입력해주세요.')
 		}
 	})
 }
 
+function top_categoryChange(e) {
+	let sub_category_top = document.querySelectorAll('.sub_category_top')
+	let sub_category_nm = document.querySelectorAll('.sub_category_nm')
+	let sub_category_i_category = document.querySelectorAll('.sub_category_i_category')
+	let small_category_choice = document.querySelector('#small_category_choice')
+
+	small_category_choice.length = 0;
+
+	for (i = 0; i < sub_category_nm.length; i++) {
+		let opt = document.createElement("option");
+		if (e.value == sub_category_top.item(i).value) {
+			opt.value = sub_category_i_category.item(i).value
+			opt.innerHTML = sub_category_nm.item(i).value
+			small_category_choice.appendChild(opt);
+		}
+	}
+}
+
+function delete_category() {
+	let small_category_choice = document.querySelector('#small_category_choice')
+	let large_category_choice = document.querySelector('#large_category_choice')
+	let id
+	console.log(large_category_choice.options[large_category_choice.selectedIndex].value)
+	if (order == 1) {
+		id = large_category_choice.options[large_category_choice.selectedIndex].value
+	
+		fetch('/deleteLargeCategory/' + id, {
+			method: 'DELETE',
+		}).then(function(data) {
+			//console.log(data)
+		});
+	}
+	if (order == 2) {
+		id = small_category_choice.options[small_category_choice.selectedIndex].value
+		
+		fetch('/deleteSmallCategory/' + id, {
+			method: 'DELETE',
+		}).then(function(data) {
+			//console.log(data)
+		});
+	}
+
+}
 

@@ -13,4 +13,6 @@ public interface MainMapper {
 	public List<CategoryDAO> getCategoryList();
 	public CategoryDAO getCategoryByNm(String nm);
 	public String getCategoryNmByTop(int category_top);
+	public int deleteSmallCategory(int i_category);
+	public int deleteLargeCategory(int i_category);
 }

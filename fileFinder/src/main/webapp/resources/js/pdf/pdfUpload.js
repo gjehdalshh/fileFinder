@@ -1,3 +1,4 @@
+// 업로드전 path 위치 설정
 function changeCategory() {
 	let category_choice_upload = document.querySelector('#category_choice_upload')
 	
@@ -10,6 +11,7 @@ function changeCategory() {
 	})
 }
 
+// 파일 업로드
 function upload() {
 	let fileUpload = document.querySelector('#fileUpload')
 
