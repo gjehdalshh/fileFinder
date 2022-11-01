@@ -17,6 +17,11 @@
 		SELECT i_category, category_nm, category_order FROM category
 		WHERE category_nm = #{nm};
 	</select>
+	
+	<select id="getCategoryPathByIcategory" resultType="string">
+		SELECT
+		category_path FROM category WHERE i_category = #{i_category};
+	</select>
 
 	<select id="getCategoryNmByTop" resultType="string">
 		SELECT category_nm FROM category WHERE i_category = #{category_top};

@@ -46,15 +46,12 @@ public class MainController {
 	@ResponseBody
 	@DeleteMapping("/deleteSmallCategory/{id}")
 	public int deleteSmallCategory(@PathVariable("id") String id) {
-		int i_category = ConvertType.convertStringToInt(id);
-		return categoryService.deleteSmallCategory(i_category);
+		return categoryService.deleteSmallCategory(id);
 	}
 	
 	@ResponseBody
 	@DeleteMapping("/deleteLargeCategory/{id}")
 	public int deleteLargeCategory(@PathVariable("id") String id) {
-		System.out.println("확인 : " + id);
-		int i_category = ConvertType.convertStringToInt(id);
-		return categoryService.deleteLargeCategory(i_category);
+		return categoryService.deleteLargeCategory(id);
 	}
 }

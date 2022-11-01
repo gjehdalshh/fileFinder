@@ -4,8 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,11 +32,8 @@ public class PdfController {
 	
 	@ResponseBody
 	@PostMapping("/fileUpload")
-	public Map<String, Object> upload(MultipartHttpServletRequest files) {
-		Map<String, Object> val = new HashMap<String, Object>();
-		val.put("result", pdfService.fileUpload(files));
-		
-		return val;
+	public int upload(MultipartHttpServletRequest files) {
+		return pdfService.fileUpload(files);
 	}
 	
 	@ResponseBody

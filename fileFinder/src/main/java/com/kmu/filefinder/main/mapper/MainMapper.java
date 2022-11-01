@@ -15,4 +15,5 @@ public interface MainMapper {
 	public String getCategoryNmByTop(int category_top);
 	public int deleteSmallCategory(int i_category);
 	public int deleteLargeCategory(int i_category);
+	public String getCategoryPathByIcategory(int i_category);
 }

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=30">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=31">
 
 <div>
 	<div id="title">file finder</div>
@@ -26,22 +26,9 @@
 			</c:forEach>
 			<div id="category_delete_open_btn">카테고리 삭제</div>
 		</div>
-		<div id="middle">
-			여기에 표시
-			<form id="fileForm" method="post" enctype="multipart/form-data">
-				<input type="file" id="fileUpload" name="fileUpload"
-					multiple="multiple"> <select id="category_choice_upload"
-					onchange="changeCategory()">
-					<c:forEach var="category" items="${category}">
-						<c:if test="${category.category_order == 2}">
-							<option value="${category.i_category}">${category.category_nm}</option>
-						</c:if>
-					</c:forEach>
-				</select>
-			</form>
-			<span onclick="upload()">업로드</span>
-		</div>
+		<div id="middle">여기에 표시</div>
 		<div id="right">
+			<div id="file_upload_open_btn">파일 업로드</div>
 			<select>
 				<option>=====선택======</option>
 				<option selected="selected">전체</option>
@@ -49,6 +36,27 @@
 			</select> <input type="text"> <span>검색</span>
 		</div>
 	</div>
+</div>
+
+<!-- 파일 업로드 모달창 -->
+<div id="file_modal_div">
+	<div class="file_modal_content">
+		<div>파일 업로드</div>
+		<form id="fileForm" method="post" enctype="multipart/form-data">
+			<input type="file" id="fileUpload" name="fileUpload"
+				multiple="multiple"> <select id="category_choice_upload"
+				onchange="changeCategory()">
+				 <option value="0" selected>카테고리 선택</option>
+				<c:forEach var="category" items="${category}">
+					<c:if test="${category.category_order == 2}">
+						<option value="${category.i_category}">${category.category_nm}</option>
+					</c:if>
+				</c:forEach>
+			</select>
+		</form>
+		<span onclick="upload()">업로드</span>
+	</div>
+	<div class="file_modal_layer"></div>
 </div>
 
 <!-- 카테고리 등록 모달창 -->
@@ -131,5 +139,5 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=12"></script>
-<script defer src="/res/js/pdf/pdfUpload.js?ver=15"></script>
+<script defer src="/res/js/main/home.js?ver=21"></script>
+<script defer src="/res/js/pdf/pdfUpload.js?ver=23"></script>

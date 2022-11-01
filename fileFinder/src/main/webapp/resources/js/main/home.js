@@ -5,6 +5,7 @@ let modal_insert = document.querySelector('#modal_insert')
 
 let category_delete_open_btn = document.querySelector('#category_delete_open_btn')
 let category_delete_close_btn = document.querySelector('#category_delete_close_btn')
+let category_delete = document.querySelector('#category_delete')
 let modal_delete = document.querySelector('#modal_delete')
 
 let large_category = document.querySelector('#large_category')
@@ -20,6 +21,9 @@ let large_delete_category_div = document.querySelector('#large_delete_category_d
 let small_delete_category_div = document.querySelector('#small_delete_category_div')
 
 let order = 1;
+
+let file_upload_open_btn = document.querySelector('#file_upload_open_btn')
+let file_modal_div = document.querySelector('#file_modal_div')
 
 /* --------------- 대/소분류 구분 -------------------*/
 
@@ -45,7 +49,12 @@ small_delete_category.onclick = function() {
 	small_delete_category_div.style.display = 'block'
 }
 
-/* --------------- 등록 모달창 -------------------*/
+/* --------------- 파일 업로드 모달창 -------------------*/
+file_upload_open_btn.onclick = function() {
+	file_modal_div.style.display = 'block';
+}
+
+/* --------------- 카테고리 등록 모달창 -------------------*/
 category_insert_open_btn.onclick = function() {
 	modal_insert.style.display = 'block';
 }
@@ -54,7 +63,7 @@ category_insert_close_btn.onclick = function() {
 	modal_insert.style.display = 'none';
 }
 
-/* --------------- 삭제 모달창 -------------------*/
+/* --------------- 카테고리 삭제 모달창 -------------------*/
 category_delete_open_btn.onclick = function() {
 	modal_delete.style.display = 'block';
 }
@@ -110,6 +119,8 @@ category_insert.onclick = function() {
 	})
 }
 
+/* --------------- 카테고리 삭제 -------------------*/
+/* --------------- 카테고리 분류 뿌리기 -------------------*/
 function top_categoryChange(e) {
 	let sub_category_top = document.querySelectorAll('.sub_category_top')
 	let sub_category_nm = document.querySelectorAll('.sub_category_nm')
@@ -128,6 +139,7 @@ function top_categoryChange(e) {
 	}
 }
 
+/* --------------- 카테고리 삭제 -------------------*/
 function delete_category() {
 	let small_category_choice = document.querySelector('#small_category_choice')
 	let large_category_choice = document.querySelector('#large_category_choice')
@@ -135,21 +147,44 @@ function delete_category() {
 	console.log(large_category_choice.options[large_category_choice.selectedIndex].value)
 	if (order == 1) {
 		id = large_category_choice.options[large_category_choice.selectedIndex].value
-	
+
 		fetch('/deleteLargeCategory/' + id, {
 			method: 'DELETE',
-		}).then(function(data) {
-			//console.log(data)
-		});
+		}).then(function(res) {
+			res.text().then(function(text) {
+				console.log(text)
+				if (text == 1) {
+					alert('카테고리가 삭제되었습니다.')
+					location.reload()
+				} else if (text == 2) {
+					alert('카테고리를 선택해주세요.')
+				}
+			})
+		})
 	}
 	if (order == 2) {
-		id = small_category_choice.options[small_category_choice.selectedIndex].value
+		console.log(small_category_choice.options.length)
+		console.log(small_category_choice.length)
+		if(small_category_choice.length == 0) {
+			alert('소분류가 존재하지 않습니다.')
+			return
+		}
 		
+		id = small_category_choice.options[small_category_choice.selectedIndex].value
+
 		fetch('/deleteSmallCategory/' + id, {
 			method: 'DELETE',
-		}).then(function(data) {
-			//console.log(data)
-		});
+		}).then(function(res) {
+			res.text().then(function(text) {
+				console.log(text)
+				if (text == 1) {
+					alert('카테고리가 삭제되었습니다.')
+					location.reload()
+				} else if (text == 2) {
+					alert('카테고리를 선택해주세요.')
+				}
+			})
+		})
 	}
 
 }

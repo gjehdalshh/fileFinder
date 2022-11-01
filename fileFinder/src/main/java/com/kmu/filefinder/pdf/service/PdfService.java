@@ -19,7 +19,7 @@ public class PdfService {
 	@Autowired
 	private PdfMapper pdfMapper;
 	
-	private int path;
+	private int path = 0;
 	
 	public void filePath(String path) {
 		System.out.println("확인1 : " + path);
@@ -27,6 +27,10 @@ public class PdfService {
 	}
 	
 	public int fileUpload(MultipartHttpServletRequest files) {
+		if(path == 0) {
+			return 2;
+		}
+		
 		System.out.println("확인2 : " + path);
 		String urlPath = getCategoryPathByIcategory(path);
 		System.out.println(urlPath);
@@ -46,7 +50,6 @@ public class PdfService {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("aaa");
 		return 1;
 	}
 	
