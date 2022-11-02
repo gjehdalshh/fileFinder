@@ -1,11 +1,4 @@
-let category_insert_open_btn = document.querySelector('#category_insert_open_btn')
-let category_insert_close_btn = document.querySelector('#category_insert_close_btn')
-let category_insert = document.querySelector('#category_insert')
 let modal_insert = document.querySelector('#modal_insert')
-
-let category_delete_open_btn = document.querySelector('#category_delete_open_btn')
-let category_delete_close_btn = document.querySelector('#category_delete_close_btn')
-let category_delete = document.querySelector('#category_delete')
 let modal_delete = document.querySelector('#modal_delete')
 
 let large_category = document.querySelector('#large_category')
@@ -22,7 +15,6 @@ let small_delete_category_div = document.querySelector('#small_delete_category_d
 
 let order = 1;
 
-let file_upload_open_btn = document.querySelector('#file_upload_open_btn')
 let file_modal_div = document.querySelector('#file_modal_div')
 
 /* --------------- 대/소분류 구분 -------------------*/
@@ -50,30 +42,35 @@ small_delete_category.onclick = function() {
 }
 
 /* --------------- 파일 업로드 모달창 -------------------*/
-file_upload_open_btn.onclick = function() {
-	file_modal_div.style.display = 'block';
+function upload_modal_open() {
+	file_modal_div.style.display = 'block';	
 }
 
+function upload_modal_close() {
+	file_modal_div.style.display = 'none';
+}
+
+
 /* --------------- 카테고리 등록 모달창 -------------------*/
-category_insert_open_btn.onclick = function() {
+function insert_category_open() {
 	modal_insert.style.display = 'block';
 }
 
-category_insert_close_btn.onclick = function() {
+function insert_category_close() {
 	modal_insert.style.display = 'none';
 }
 
 /* --------------- 카테고리 삭제 모달창 -------------------*/
-category_delete_open_btn.onclick = function() {
+function delete_category_open() {
 	modal_delete.style.display = 'block';
 }
 
-category_delete_close_btn.onclick = function() {
+function delete_category_close() {
 	modal_delete.style.display = 'none';
 }
 
 /* --------------- 카테고리 생성 -------------------*/
-category_insert.onclick = function() {
+function insert_cateogry() {
 	let large_category_input = document.querySelector('.large_category_input')
 	let small_category_input = document.querySelector('.small_category_input')
 	let category_choice = document.querySelector('#category_choice')
@@ -126,7 +123,7 @@ function top_categoryChange(e) {
 	let sub_category_nm = document.querySelectorAll('.sub_category_nm')
 	let sub_category_i_category = document.querySelectorAll('.sub_category_i_category')
 	let small_category_choice = document.querySelector('#small_category_choice')
-
+	console.log(small_category_choice.length)
 	small_category_choice.length = 0;
 
 	for (i = 0; i < sub_category_nm.length; i++) {
@@ -134,7 +131,7 @@ function top_categoryChange(e) {
 		if (e.value == sub_category_top.item(i).value) {
 			opt.value = sub_category_i_category.item(i).value
 			opt.innerHTML = sub_category_nm.item(i).value
-			small_category_choice.appendChild(opt);
+			small_category_choice.append(opt);
 		}
 	}
 }
@@ -165,11 +162,11 @@ function delete_category() {
 	if (order == 2) {
 		console.log(small_category_choice.options.length)
 		console.log(small_category_choice.length)
-		if(small_category_choice.length == 0) {
+		if (small_category_choice.length == 0) {
 			alert('소분류가 존재하지 않습니다.')
 			return
 		}
-		
+
 		id = small_category_choice.options[small_category_choice.selectedIndex].value
 
 		fetch('/deleteSmallCategory/' + id, {

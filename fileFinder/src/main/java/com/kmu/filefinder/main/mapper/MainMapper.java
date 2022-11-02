@@ -16,4 +16,5 @@ public interface MainMapper {
 	public int deleteSmallCategory(int i_category);
 	public int deleteLargeCategory(int i_category);
 	public String getCategoryPathByIcategory(int i_category);
+	public int getTotalNumberPosts();
 }

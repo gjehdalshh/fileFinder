@@ -39,6 +39,10 @@ public class CategoryService {
 		dto.setCategory_path(urlPath);
 		return mainMapper.createCategory(dto);
 	}
+	
+	public int getTotalNumberPosts() {
+		return mainMapper.getTotalNumberPosts();
+	}
 
 	// 이름 존재 유무 검색
 	private boolean validateFolderNameExistence(String nm) {

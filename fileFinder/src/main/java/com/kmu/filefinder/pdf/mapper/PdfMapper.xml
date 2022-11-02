@@ -11,4 +11,8 @@
 		INSERT INTO pdf (pdf_nm, pdf_extension, i_category)
 		VALUES (#{pdf_nm}, #{pdf_extension}, #{i_category})
 	</insert>
+	
+	<select id="getFileNameList" resultType="string">
+		SELECT pdf_nm FROM pdf;
+	</select>
 </mapper>

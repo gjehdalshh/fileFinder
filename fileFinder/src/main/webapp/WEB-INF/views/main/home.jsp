@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=31">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=32">
 
 <div>
 	<div id="title">file finder</div>
 	<div id="wholeViewContainer">
 		<div id="left">
-			<div id="category_insert_open_btn">카테고리 등록</div>
-			<div id="whole_category">분류 전체보기(110)</div>
+			<div onclick="insert_category_open()">카테고리 등록</div>
+			<div id="whole_category">분류 전체보기(${totalNumberPosts})</div>
 			<!-- top 카테고리 출력 -->
 			<c:forEach var="top_category" items="${category}">
 				<c:set var="cate" value="${top_category.i_category}"></c:set>
@@ -24,11 +24,11 @@
 					</c:if>
 				</c:forEach>
 			</c:forEach>
-			<div id="category_delete_open_btn">카테고리 삭제</div>
+			<div onclick="delete_category_open()">카테고리 삭제</div>
 		</div>
 		<div id="middle">여기에 표시</div>
 		<div id="right">
-			<div id="file_upload_open_btn">파일 업로드</div>
+			<div onclick="upload_modal_open()">파일 업로드</div>
 			<select>
 				<option>=====선택======</option>
 				<option selected="selected">전체</option>
@@ -44,17 +44,33 @@
 		<div>파일 업로드</div>
 		<form id="fileForm" method="post" enctype="multipart/form-data">
 			<input type="file" id="fileUpload" name="fileUpload"
-				multiple="multiple"> <select id="category_choice_upload"
-				onchange="changeCategory()">
-				 <option value="0" selected>카테고리 선택</option>
-				<c:forEach var="category" items="${category}">
-					<c:if test="${category.category_order == 2}">
-						<option value="${category.i_category}">${category.category_nm}</option>
+				multiple="multiple"> <select id="top_category_choice_upload"
+				onchange="uploadCategoryChange(this)">
+				<option selected="selected" value="0">대분류 선택</option>
+				<c:forEach var="top_category_upload" items="${category}">
+					<c:if test="${top_category_upload.category_order == 1}">
+						<option value="${top_category_upload.i_category}">${top_category_upload.category_nm}</option>
 					</c:if>
 				</c:forEach>
+				<c:forEach var="sub_category_upload" items="${category}">
+					<c:if test="${sub_category_upload.category_order == 2}">
+						<input class="sub_category_top_upload" type="hidden"
+							value="${sub_category_upload.category_top }">
+						<input class="sub_category_nm_upload" type="hidden"
+							value="${sub_category_upload.category_nm }">
+						<input class="sub_category_i_category_upload" type="hidden"
+							value="${sub_category_upload.i_category }">
+					</c:if>
+				</c:forEach>
+			</select> <select id="sub_category_choice_upload"
+				onchange="subUploadCategoryChange(this)">
+				<option value="0">소분류 선택</option>
 			</select>
 		</form>
-		<span onclick="upload()">업로드</span>
+		<div class=flex>
+			<div onclick="upload()">업로드</div>
+			<div onclick="upload_modal_close()">취소</div>
+		</div>
 	</div>
 	<div class="file_modal_layer"></div>
 </div>
@@ -82,8 +98,8 @@
 			</div>
 		</div>
 		<div class="flex">
-			<div id="category_insert">추가</div>
-			<div id="category_insert_close_btn">닫기</div>
+			<div onclick="insert_cateogry()">추가</div>
+			<div onclick="insert_category_close()">닫기</div>
 		</div>
 	</div>
 	<div class="modal_layer"></div>
@@ -132,12 +148,12 @@
 			</div>
 		</div>
 		<div class="flex">
-			<div onclick="delete_category()" id="category_delete">삭제</div>
-			<div id="category_delete_close_btn">닫기</div>
+			<div onclick="delete_category()">삭제</div>
+			<div onclick="delete_category_close()">닫기</div>
 		</div>
 	</div>
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=21"></script>
-<script defer src="/res/js/pdf/pdfUpload.js?ver=23"></script>
+<script defer src="/res/js/main/home.js?ver=42"></script>
+<script defer src="/res/js/pdf/pdfUpload.js?ver=58"></script>

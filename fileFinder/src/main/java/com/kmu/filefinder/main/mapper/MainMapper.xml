@@ -12,6 +12,10 @@
 		SELECT i_category,
 		category_nm, category_order, category_top FROM category;
 	</select>
+	
+	<select id="getTotalNumberPosts" resultType="int">
+		SELECT COUNT(i_pdf) AS category_count FROM pdf;
+	</select>
 
 	<select id="getCategoryByNm" resultType="CategoryDAO">
 		SELECT i_category, category_nm, category_order FROM category

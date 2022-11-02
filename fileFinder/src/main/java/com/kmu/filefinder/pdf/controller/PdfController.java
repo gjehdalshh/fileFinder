@@ -22,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.kmu.filefinder.pdf.service.PdfService;
+import com.kmu.filefinder.pdf.service.FileService;
 
 @Controller
 public class PdfController {
 
 	@Autowired
-	private PdfService pdfService;
+	private FileService pdfService;
 	
 	@ResponseBody
 	@PostMapping("/fileUpload")

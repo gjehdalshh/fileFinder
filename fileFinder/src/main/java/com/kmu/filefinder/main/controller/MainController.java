@@ -29,10 +29,12 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("main/home");
 		mv.addObject("category",categoryService.getCategoryList());
+		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
 		
 		return mv;
 	}
 	
+	// 카테고리 생성
 	@ResponseBody
 	@PostMapping("/createCategory")
 	public Map<String, Object> createCategory(@RequestBody CategoryDTO dto) {
@@ -43,12 +45,14 @@ public class MainController {
 		return val;
 	}
 	
+	// 소분류 삭제
 	@ResponseBody
 	@DeleteMapping("/deleteSmallCategory/{id}")
 	public int deleteSmallCategory(@PathVariable("id") String id) {
 		return categoryService.deleteSmallCategory(id);
 	}
 	
+	// 대분류 삭제
 	@ResponseBody
 	@DeleteMapping("/deleteLargeCategory/{id}")
 	public int deleteLargeCategory(@PathVariable("id") String id) {
