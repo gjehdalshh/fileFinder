@@ -2,40 +2,71 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.kmu.filefinder.main.mapper.MainMapper">
+
+	<!-- read -->
+	<select id="getCategoryList" resultType="CategoryDAO">
+		SELECT i_category,
+		category_nm, category_order, category_top, category_path,
+		category_count FROM category;
+	</select>
+	<select id="getTotalNumberPosts" resultType="int">
+		SELECT COUNT(i_file)
+		AS category_count FROM file;
+	</select>
+	<select id="getCategoryByNm" resultType="CategoryDAO">
+		SELECT i_category,
+		category_nm, category_order FROM category
+		WHERE category_nm = #{nm};
+	</select>
+	<select id="getCategoryPathByIcategory" resultType="string">
+		SELECT
+		category_path FROM category WHERE i_category = #{i_category};
+	</select>
+	<select id="getCategoryNmByTop" resultType="string">
+		SELECT category_nm
+		FROM category WHERE i_category = #{category_top};
+	</select>
+	<select id="getCategoryByIcategory" resultType="CategoryDAO">
+		SELECT * FROM
+		category WHERE i_category = #{i_category};
+	</select>
+	<select id="getCategoryIcategoryByCategoryTop" resultType="int">
+		SELECT i_category FROM category WHERE i_category = #{category_top};
+	</select>
+	<select id="getCategoryCountByIcategory">
+		SELECT category_count FROM category WHERE i_category
+		= #{i_category};
+	</select>
+
+	<!-- create -->
 	<insert id="createCategory">
 		INSERT INTO category (category_nm, category_order,
 		category_top, category_path) VALUE (#{category_nm}, #{category_order},
 		#{category_top}, #{category_path});
 	</insert>
 
-	<select id="getCategoryList" resultType="CategoryDAO">
-		SELECT i_category,
-		category_nm, category_order, category_top FROM category;
-	</select>
-	
-	<select id="getTotalNumberPosts" resultType="int">
-		SELECT COUNT(i_pdf) AS category_count FROM pdf;
-	</select>
+	<!-- update -->
+	<update id="increaseSmallFileCount">
+		UPDATE category SET category_count = category_count +
+		1 WHERE i_category = #{i_category};
+	</update>
+	<update id="increaseLargeFileCount">
+		UPDATE category SET category_count = category_count +
+		1 WHERE i_category = #{category_top};
+	</update>
+	<update id="decreaseLargeFileCount">
+		UPDATE category SET category_count = category_count -
+		${category_count} where i_category = #{category_top}
+	</update>
 
-	<select id="getCategoryByNm" resultType="CategoryDAO">
-		SELECT i_category, category_nm, category_order FROM category
-		WHERE category_nm = #{nm};
-	</select>
-	
-	<select id="getCategoryPathByIcategory" resultType="string">
-		SELECT
-		category_path FROM category WHERE i_category = #{i_category};
-	</select>
-
-	<select id="getCategoryNmByTop" resultType="string">
-		SELECT category_nm FROM category WHERE i_category = #{category_top};
-	</select>
-	
+	<!-- delete -->
 	<delete id="deleteSmallCategory">
-		DELETE FROM category WHERE i_category = #{i_category}; 
+		DELETE FROM category WHERE i_category =
+		#{i_category};
 	</delete>
-	
 	<delete id="deleteLargeCategory">
-		DELETE FROM category WHERE category_top = #{i_category}; 
+		DELETE FROM category WHERE category_top =
+		#{i_category};
 	</delete>
+
 </mapper>

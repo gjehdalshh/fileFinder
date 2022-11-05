@@ -17,6 +17,8 @@ let order = 1;
 
 let file_modal_div = document.querySelector('#file_modal_div')
 
+let sub_category_i_cateogry = document.querySelectorAll('#sub_category_i_cateogry')
+
 /* --------------- 대/소분류 구분 -------------------*/
 
 large_category.onclick = function() {
@@ -43,7 +45,7 @@ small_delete_category.onclick = function() {
 
 /* --------------- 파일 업로드 모달창 -------------------*/
 function upload_modal_open() {
-	file_modal_div.style.display = 'block';	
+	file_modal_div.style.display = 'block';
 }
 
 function upload_modal_close() {

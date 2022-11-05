@@ -40,6 +40,7 @@ public class CategoryService {
 		return mainMapper.createCategory(dto);
 	}
 	
+	// 전체 게시글 수 가져오기
 	public int getTotalNumberPosts() {
 		return mainMapper.getTotalNumberPosts();
 	}
@@ -71,17 +72,26 @@ public class CategoryService {
 		return urlPath;
 	}
 
+	// DB 소분류 카테고리 삭제
 	public int deleteSmallCategory(String id) {
 		int i_category = ConvertType.convertStringToInt(id);
-		if(Verification.checkNullByString(id)) {
+		if(Verification.checkNullByString(id)) { // null 체크
 			return 2;
 		}
+		decreaseLargeFileCount(i_category);
 		String path = getPath(i_category);
 		deleteLocalCategory(path);
 
 		return mainMapper.deleteSmallCategory(i_category);
 	}
+	
+	// DB 대분류 카테고리 개수 감소
+	private void decreaseLargeFileCount(int i_category) {
+		CategoryDAO dao = getCategoryByIcategory(i_category);
+		mainMapper.decreaseLargeFileCount(dao);
+	}
 
+	// DB 대분류 카테고리 삭제
 	public int deleteLargeCategory(String id) {
 		int i_category = ConvertType.convertStringToInt(id);
 		if(Verification.checkNullByString(id)) {
@@ -94,12 +104,22 @@ public class CategoryService {
 		return mainMapper.deleteSmallCategory(i_category); // 소분류 삭제
 	}
 
-	
-
+	// i_category로 파일 경로 가져오기
 	private String getPath(int i_category) {
 		return mainMapper.getCategoryPathByIcategory(i_category);
 	}
+	
+	// i_category로 categoryDAO 를 가져옴
+	public CategoryDAO getCategoryByIcategory(int i_category) {
+		return mainMapper.getCategoryByIcategory(i_category);
+	}
+	
+	// category_top 으로 category.i_category를 가져옴
+	public int getCategoryIcategoryByCategoryTop(int category_Top) {
+		return mainMapper.getCategoryIcategoryByCategoryTop(category_Top);
+	}
 
+	// 로컬 카테고리 삭제
 	private void deleteLocalCategory(String path) {
 
 		File folder = new File(path);

@@ -3,7 +3,8 @@
 body {
 	margin: 100px auto 0;
 	padding: 0px;
-	width: 1400;
+	width: 1024px;
+	font-family: 'ChosunGu';
 }
 
 ul, li {
@@ -12,13 +13,25 @@ ul, li {
 	padding: 0px;
 }
 
+@font-face {
+	font-family: 'ChosunGu';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
 #title {
 	text-align: center;
 	font-size: 30px;
+	margin-bottom: 70px;
 }
 
 #wholeViewContainer {
 	display: flex;
+	width: 1024px;
+	margin: 0 auto;
 }
 
 #left {
@@ -26,7 +39,16 @@ ul, li {
 }
 
 #middle {
-	width: 70%;
+	width: 640px;
+}
+
+#middle_title {
+	padding-bottom: 15px;
+	border-bottom: 1px solid #e8e8e8;
+}
+
+#whole_category_number {
+	color: #ef402f
 }
 
 #right {
@@ -45,13 +67,15 @@ ul, li {
 	height: 100%;
 	z-index: 1;
 }
-#file_modal_div .file_modal_content{
+
+#file_modal_div .file_modal_content {
 	width: 500px;
 	margin: 0px auto;
 	padding: 20px 10px;
 	background: #fff;
 	border: 2px solid #666;
 }
+
 #file_modal_div .file_modal_layer {
 	position: fixed;
 	top: 0;
@@ -70,13 +94,15 @@ ul, li {
 	height: 100%;
 	z-index: 1;
 }
-#modal_insert .modal_content{
+
+#modal_insert .modal_content {
 	width: 500px;
 	margin: 0px auto;
 	padding: 20px 10px;
 	background: #fff;
 	border: 2px solid #666;
 }
+
 #modal_insert .modal_layer {
 	position: fixed;
 	top: 0;

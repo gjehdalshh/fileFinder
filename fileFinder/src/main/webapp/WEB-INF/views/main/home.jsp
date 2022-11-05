@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=32">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=5">
 
 <div>
 	<div id="title">file finder</div>
@@ -13,20 +13,25 @@
 			<c:forEach var="top_category" items="${category}">
 				<c:set var="cate" value="${top_category.i_category}"></c:set>
 				<c:if test="${top_category.category_order == 1}">
-					<div class="large_category_list">${top_category.category_nm}</div>
+					<div class="large_category_list">${top_category.category_nm}(${top_category.category_count})</div>
 				</c:if>
 				<!-- sub 카테고리 출력 -->
 				<c:forEach var="sub_category" items="${category}">
 					<c:if test="${cate == sub_category.category_top}">
 						<c:if test="${sub_category.category_order == 2}">
-							<div class="small_category_list">${sub_category.category_nm}</div>
+							<div class="small_category_list">${sub_category.category_nm}(${sub_category.category_count})
+							</div>
 						</c:if>
 					</c:if>
 				</c:forEach>
 			</c:forEach>
 			<div onclick="delete_category_open()">카테고리 삭제</div>
 		</div>
-		<div id="middle">여기에 표시</div>
+		<div id="middle">
+			<div>
+				<div id="middle_title">분류 전체보기 <span id="whole_category_number">${totalNumberPosts}</span></div>
+			</div>
+		</div>
 		<div id="right">
 			<div onclick="upload_modal_open()">파일 업로드</div>
 			<select>
@@ -155,5 +160,5 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=42"></script>
+<script defer src="/res/js/main/home.js?ver=68"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=58"></script>

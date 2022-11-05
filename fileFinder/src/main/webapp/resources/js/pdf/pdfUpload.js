@@ -51,7 +51,6 @@ function upload() {
         return
     }
 	
-	
 	let files = fileUpload.files
 	let formData = new FormData()
 	filesArr = Array.prototype.slice.call(files);

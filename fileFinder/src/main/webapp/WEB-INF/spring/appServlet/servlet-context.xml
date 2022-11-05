@@ -81,8 +81,5 @@
 	
 	<!--<beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver" p:order="1"/>
 	-->
-	
-	<!-- pdf라는 뷰 이름이 왔을 때 출력할 뷰를 설정 -->
-	<!-- <beans:bean id="pdf" class="com.kmu.filefinder.pdf.controller.PdfDownView"/>
-	-->
+
 </beans:beans>

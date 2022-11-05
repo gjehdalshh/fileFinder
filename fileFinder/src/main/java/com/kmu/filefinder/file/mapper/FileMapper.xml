@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kmu.filefinder.file.mapper.FileMapper">
+	<!-- read -->
+	<select id="getCategoryPathByIcategory" resultType="string">
+		SELECT
+		category_path FROM category WHERE i_category = #{i_category};
+	</select>
+	<select id="getFileNameList" resultType="string">
+		SELECT file_nm FROM
+		file;
+	</select>
+
+	<!-- create -->
+	<insert id="createFile">
+		INSERT INTO file (file_nm, file_extension,
+		i_category)
+		VALUES (#{file_nm}, #{file_extension}, #{i_category})
+	</insert>
+
+	<!-- update -->
+
+	<!-- delete -->
+</mapper>

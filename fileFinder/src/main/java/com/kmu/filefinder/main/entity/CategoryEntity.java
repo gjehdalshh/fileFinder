@@ -6,7 +6,14 @@ public class CategoryEntity {
 	private int category_order;
 	private int category_top;
 	private String category_path;
+	private int category_count;
 	
+	public int getCategory_count() {
+		return category_count;
+	}
+	public void setCategory_count(int category_count) {
+		this.category_count = category_count;
+	}
 	public String getCategory_path() {
 		return category_path;
 	}
