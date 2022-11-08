@@ -4,7 +4,10 @@ body {
 	margin: 100px auto 0;
 	padding: 0px;
 	width: 1024px;
-	font-family: 'ChosunGu';
+}
+
+form {
+	margin: 0px;
 }
 
 ul, li {
@@ -13,14 +16,6 @@ ul, li {
 	padding: 0px;
 }
 
-@font-face {
-	font-family: 'ChosunGu';
-	src:
-		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunGu.woff')
-		format('woff');
-	font-weight: normal;
-	font-style: normal;
-}
 
 #title {
 	text-align: center;

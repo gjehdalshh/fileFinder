@@ -4,32 +4,26 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.kmu.filefinder.file.service.FileService;
+import com.kmu.filefinder.file.service.FileServiceImpl;
 
 
 @Controller
 public class FileController {
 
 	@Autowired
-	private FileService fileService;
+	private FileServiceImpl fileService;
 	
 	@ResponseBody
 	@PostMapping("/fileUpload")
@@ -44,34 +38,6 @@ public class FileController {
 		fileService.filePath(path);
 	}
 
-	@GetMapping("/pdf")
-	public void pdf(Model model) throws IOException {
-
-		File file = new File("");
-
-		PDDocument document = PDDocument.load(file);
-
-		// document.getPages().getCount() - 전체 페이지 수
-
-		PDFTextStripper s = new PDFTextStripper();
-
-		PDDocument d = new PDDocument();
-		PDPage p = document.getPage(1);
-		d.addPage(p);
-
-		String content = s.getText(d);
-
-		if (content.contains("자바")) {
-			System.out.println("포함");
-		}
-
-		System.out.println("========docx text extractor =========");
-		System.out.println(content);
-		model.addAttribute("content", content);
-
-		document.close();
-	}
-
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/p") // 다운로드 시 다운되는 이름
 	public ResponseEntity<Resource> resourceFileDownload(HttpServletResponse response) {
@@ -80,7 +46,7 @@ public class FileController {
 		BufferedOutputStream bos = null;
 
 		try {
-			String pdfFileName = "";
+			String pdfFileName = "C:\\Users\\User\\Desktop\\계명대학교\\4학년\\2학기\\소프트웨어공학\\강의자료2\\09(a) 설계원리.pdf";
 
 			File pdfFile = new File(pdfFileName);
 

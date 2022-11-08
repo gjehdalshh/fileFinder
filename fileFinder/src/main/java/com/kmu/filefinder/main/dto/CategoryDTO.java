@@ -1,7 +1,15 @@
 package com.kmu.filefinder.main.dto;
 
-import com.kmu.filefinder.main.entity.CategoryEntity;
+import lombok.Builder;
+import lombok.Data;
 
-public class CategoryDTO extends CategoryEntity{
-
+@Builder
+@Data
+public class CategoryDTO{
+	private int i_category;
+	private String category_nm;
+	private int category_order;
+	private int category_top;
+	private String category_path;
+	private int category_count;
 }

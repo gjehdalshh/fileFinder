@@ -1,14 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=5">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=7">
 
 <div>
-	<div id="title">file finder</div>
+	<div id="title" onclick="goHome()">file finder</div>
 	<div id="wholeViewContainer">
 		<div id="left">
 			<div onclick="insert_category_open()">카테고리 등록</div>
-			<div id="whole_category">분류 전체보기(${totalNumberPosts})</div>
+			<form action="/category" method="get">
+				<input type="submit" value="분류 전체보기(${totalNumberPosts})">
+			</form>
 			<!-- top 카테고리 출력 -->
 			<c:forEach var="top_category" items="${category}">
 				<c:set var="cate" value="${top_category.i_category}"></c:set>
@@ -29,7 +31,16 @@
 		</div>
 		<div id="middle">
 			<div>
-				<div id="middle_title">분류 전체보기 <span id="whole_category_number">${totalNumberPosts}</span></div>
+				<div id="middle_title">
+					분류 전체보기 <span id="whole_category_number">${totalNumberPosts}</span>
+				</div>
+				<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
+					<div>
+						<div>${fileCategoryInfoList.file_nm }</div>
+						<div>${fileCategoryInfoList.category_nm }</div>
+						<div>${fileCategoryInfoList.summaryText }</div>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
 		<div id="right">
@@ -160,5 +171,5 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=68"></script>
+<script defer src="/res/js/main/home.js?ver=69"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=58"></script>

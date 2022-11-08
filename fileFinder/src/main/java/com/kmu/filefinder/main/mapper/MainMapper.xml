@@ -4,7 +4,7 @@
 <mapper namespace="com.kmu.filefinder.main.mapper.MainMapper">
 
 	<!-- read -->
-	<select id="getCategoryList" resultType="CategoryDAO">
+	<select id="getCategoryList" resultType="CategoryDTO">
 		SELECT i_category,
 		category_nm, category_order, category_top, category_path,
 		category_count FROM category;
@@ -13,7 +13,7 @@
 		SELECT COUNT(i_file)
 		AS category_count FROM file;
 	</select>
-	<select id="getCategoryByNm" resultType="CategoryDAO">
+	<select id="getCategoryByNm" resultType="CategoryDTO">
 		SELECT i_category,
 		category_nm, category_order FROM category
 		WHERE category_nm = #{nm};
@@ -26,14 +26,14 @@
 		SELECT category_nm
 		FROM category WHERE i_category = #{category_top};
 	</select>
-	<select id="getCategoryByIcategory" resultType="CategoryDAO">
+	<select id="getCategoryByIcategory" resultType="CategoryDTO">
 		SELECT * FROM
 		category WHERE i_category = #{i_category};
 	</select>
 	<select id="getCategoryIcategoryByCategoryTop" resultType="int">
 		SELECT i_category FROM category WHERE i_category = #{category_top};
 	</select>
-	<select id="getCategoryCountByIcategory">
+	<select id="getCategoryCountByIcategory" resultType="int">
 		SELECT category_count FROM category WHERE i_category
 		= #{i_category};
 	</select>

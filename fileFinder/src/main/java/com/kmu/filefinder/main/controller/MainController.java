@@ -1,5 +1,6 @@
 package com.kmu.filefinder.main.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,24 +14,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kmu.filefinder.file.service.FileServiceImpl;
 import com.kmu.filefinder.main.dto.CategoryDTO;
-import com.kmu.filefinder.main.service.CategoryService;
+import com.kmu.filefinder.main.service.CategoryServiceImpl;
 
 @Controller
 public class MainController {
 
 	@Autowired
-	private CategoryService categoryService;
+	private CategoryServiceImpl categoryService;
+	
+	@Autowired
+	private FileServiceImpl fileService;
 
 	@GetMapping("/")
 	public ModelAndView home() {
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("main/home");
-		mv.addObject("category", categoryService.getCategoryList());
-		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
-
-		return mv;
+		
+		return categoryService.homeCategoryInfo(mv);
 	}
 
 	// 카테고리 생성
@@ -42,6 +44,14 @@ public class MainController {
 		val.put("category", categoryService.createCategory(dto));
 
 		return val;
+	}
+	
+	// 전체 카테고리 뿌리기
+	@GetMapping("/category")
+	public ModelAndView entireCategory() throws IOException {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList());
+		return categoryService.homeCategoryInfo(mv);
 	}
 
 	// 소분류 삭제

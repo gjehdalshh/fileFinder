@@ -11,12 +11,19 @@
 		SELECT file_nm FROM
 		file;
 	</select>
+	<select id="getFileCategoryInfoList"
+		resultType="FileCategoryDTO">
+		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category = b.i_category;
+	</select>
 
 	<!-- create -->
 	<insert id="createFile">
 		INSERT INTO file (file_nm, file_extension,
-		i_category)
-		VALUES (#{file_nm}, #{file_extension}, #{i_category})
+		i_category, file_path)
+		VALUES (#{file_nm}, #{file_extension},
+		#{i_category}, #{file_path})
 	</insert>
 
 	<!-- update -->

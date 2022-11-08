@@ -19,6 +19,10 @@ let file_modal_div = document.querySelector('#file_modal_div')
 
 let sub_category_i_cateogry = document.querySelectorAll('#sub_category_i_cateogry')
 
+function goHome() {
+	location.href=`/`
+}
+
 /* --------------- 대/소분류 구분 -------------------*/
 
 large_category.onclick = function() {
