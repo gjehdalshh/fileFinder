@@ -11,12 +11,30 @@
 		SELECT file_nm FROM
 		file;
 	</select>
+	
+	<!-- 전체 보기 -->
 	<select id="getFileCategoryInfoList"
 		resultType="FileCategoryDTO">
 		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
 		category as b ON a.i_category = b.i_category;
 	</select>
+
+	<!-- 대분류 클릭 시 세부 소분류 전체 보기 -->
+	<select id="getIcategoryByCategoryNm" resultType="int">
+		SELECT
+		i_category FROM category WHERE category_nm = #{category_nm};
+	</select>
+	<select id="getIcategoryByCategoryTop" resultType="int">
+		SELECT
+		i_category FROM category where category_top = #{category_top};
+	</select>
+	<select id="getFileInfoList" resultType="FileCategoryDTO">
+		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category = b.i_category WHERE a.i_category = #{i_category};
+	</select>
+
 
 	<!-- create -->
 	<insert id="createFile">

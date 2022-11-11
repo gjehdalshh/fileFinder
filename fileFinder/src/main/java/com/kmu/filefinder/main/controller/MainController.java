@@ -23,7 +23,7 @@ public class MainController {
 
 	@Autowired
 	private CategoryServiceImpl categoryService;
-	
+
 	@Autowired
 	private FileServiceImpl fileService;
 
@@ -31,7 +31,7 @@ public class MainController {
 	public ModelAndView home() {
 
 		ModelAndView mv = new ModelAndView();
-		
+
 		return categoryService.homeCategoryInfo(mv);
 	}
 
@@ -45,12 +45,32 @@ public class MainController {
 
 		return val;
 	}
-	
+
 	// 전체 카테고리 뿌리기
 	@GetMapping("/category")
 	public ModelAndView entireCategory() throws IOException {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList());
+		mv.addObject("currentPath", "entireCategory");
+		return categoryService.homeCategoryInfo(mv);
+	}
+
+	@ResponseBody
+	@GetMapping("/category/{largeCategory}")
+	public ModelAndView largeCategory(@PathVariable("largeCategory") String largeCategory) throws IOException {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("fileCategoryInfoList", fileService.getLargeFileInfoList(largeCategory));
+		mv.addObject("currentPath", "largeCategory");
+		return categoryService.homeCategoryInfo(mv);
+	}
+
+	@ResponseBody
+	@GetMapping("/category/{largeCategory}/{smallCategory}")
+	public ModelAndView smallCategory(@PathVariable("largeCategory") String largeCategory,
+			@PathVariable("smallCategory") String smallCategory) throws IOException {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory));
+		mv.addObject("currentPath", "smallCategory");
 		return categoryService.homeCategoryInfo(mv);
 	}
 

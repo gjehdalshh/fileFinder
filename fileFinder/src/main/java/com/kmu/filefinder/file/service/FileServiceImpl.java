@@ -33,6 +33,7 @@ public class FileServiceImpl implements FileService {
 
 	// @Override
 	public void filePath(String path) {
+		System.out.println(path);
 		this.path = ConvertType.convertStringToInt(path);
 	}
 
@@ -98,18 +99,52 @@ public class FileServiceImpl implements FileService {
 		fileMapper.createFile(dto);
 	}
 
-	// 파일과 카테고리 정보 가져오기
+	// 전체 파일과 카테고리 정보 가져오기
 	public List<FileCategoryDTO> getFileCategoryInfoList() throws IOException {
-
+		System.out.println("aaaaaaaaaaaaaaaa");
 		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList();
 	
-		
 		int i = 0;
 		for (FileCategoryDTO d : list) {
 			String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
 			list.get(i++).setSummaryText(text);
 		}
 
+		return list;
+	}
+	
+	//  대분류 클릭 시 세부 소분류 전체 보기
+	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm) throws IOException {
+		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
+		List<Integer> list_int = fileMapper.getIcategoryByCategoryTop(i_category);
+		
+		List<List<FileCategoryDTO>> l = new ArrayList<List<FileCategoryDTO>>();
+		
+		for (Integer i : list_int) {
+			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i);
+		
+			int index = 0;
+			for (FileCategoryDTO d : list) {
+				String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
+				list.get(index++).setSummaryText(text);
+			}
+			
+			l.add(list);
+		}
+		
+		return l;
+	}
+	
+	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm) throws IOException {
+		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
+		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category);
+		
+		int i = 0;
+		for (FileCategoryDTO d : list) {
+			String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
+			list.get(i++).setSummaryText(text);
+		}
+		
 		return list;
 	}
 

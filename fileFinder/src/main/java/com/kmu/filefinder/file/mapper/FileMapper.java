@@ -14,6 +14,10 @@ public interface FileMapper {
 	public List<String> getFileNameList();
 	public List<FileCategoryDTO> getFileCategoryInfoList();
 	
+	public int getIcategoryByCategoryNm(String category_nm);
+	public List<Integer> getIcategoryByCategoryTop(int category_top);
+	public List<FileCategoryDTO> getFileInfoList(int i_category);
+	
 	/* -------------- create -------------- */
 	public int createFile(FileDTO dto);
 	

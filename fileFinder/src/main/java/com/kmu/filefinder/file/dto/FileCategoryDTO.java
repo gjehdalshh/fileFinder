@@ -1,7 +1,11 @@
 package com.kmu.filefinder.file.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class FileCategoryDTO {
 	private int i_file;

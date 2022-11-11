@@ -1,55 +1,103 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=7">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=11">
 
-<div>
-	<div id="title" onclick="goHome()">file finder</div>
+<div id="title_container">
+	<div id="title" onclick="goHome()">파일 검색기</div>
+	<div class="flex">
+		<div id="file_upload" onclick="upload_modal_open()">파일 업로드</div>
+		<div id="insert_category" onclick="insert_category_open()">카테고리 등록</div>
+		<div id="delete_category" onclick="delete_category_open()">카테고리 삭제</div>
+	</div>
+</div>
+<div id="entire_container">
 	<div id="wholeViewContainer">
-		<div id="left">
-			<div onclick="insert_category_open()">카테고리 등록</div>
-			<form action="/category" method="get">
-				<input type="submit" value="분류 전체보기(${totalNumberPosts})">
-			</form>
-			<!-- top 카테고리 출력 -->
-			<c:forEach var="top_category" items="${category}">
-				<c:set var="cate" value="${top_category.i_category}"></c:set>
-				<c:if test="${top_category.category_order == 1}">
-					<div class="large_category_list">${top_category.category_nm}(${top_category.category_count})</div>
-				</c:if>
-				<!-- sub 카테고리 출력 -->
-				<c:forEach var="sub_category" items="${category}">
-					<c:if test="${cate == sub_category.category_top}">
-						<c:if test="${sub_category.category_order == 2}">
-							<div class="small_category_list">${sub_category.category_nm}(${sub_category.category_count})
-							</div>
-						</c:if>
-					</c:if>
-				</c:forEach>
-			</c:forEach>
-			<div onclick="delete_category_open()">카테고리 삭제</div>
-		</div>
-		<div id="middle">
-			<div>
+		<div id="content_container">
+			<c:if test="${currentPath eq 'entireCategory'}">
 				<div id="middle_title">
-					분류 전체보기 <span id="whole_category_number">${totalNumberPosts}</span>
+					분류 전체보기 <span id="totalNumberPosts">${totalNumberPosts}</span>
 				</div>
-				<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
-					<div>
-						<div>${fileCategoryInfoList.file_nm }</div>
-						<div>${fileCategoryInfoList.category_nm }</div>
-						<div>${fileCategoryInfoList.summaryText }</div>
+			</c:if>
+			<c:if test="${currentPath eq 'largeCategory' }">
+				<div id="middle_title">${largeCategory}</div>
+			</c:if>
+			<c:if test="${currentPath eq 'smallCategory' }">
+				<div id="middle_title">${smallCategory}</div>
+			</c:if>
+			<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
+				<c:if test="${currentPath eq 'entireCategory'}">
+					<div id="middle_content_container">
+						<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+						<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+						<div class="flex">
+							<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+							<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+						</div>
 					</div>
+				</c:if>
+				<c:if test="${currentPath eq 'largeCategory' }">
+					<c:forEach var="fileCategoryInfo" items="${fileCategoryInfoList }">
+						<div id="middle_content_container">
+							<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
+							<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
+							<div class="flex">
+								<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
+								<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
+							</div>
+						</div>
+					</c:forEach>
+				</c:if>
+				<c:if test="${currentPath eq 'smallCategory'}">
+					<div id="middle_content_container">
+						<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+						<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+						<div class="flex">
+							<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+							<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+						</div>
+					</div>
+				</c:if>
+			</c:forEach>
+		</div>
+		<div id="sub_content_container">
+			<div id="search_container">
+				<select class="search_select">
+					<option>=====선택======</option>
+					<option selected="selected">전체</option>
+					<option>분류</option>
+				</select>
+				 <input type="text"> <span>검색</span>
+			</div>
+			<div id="left">
+				<form action="/category" method="get">
+					<input id="entire_categoey_submit" type="submit"
+						value="분류 전체보기 (${totalNumberPosts})">
+				</form>
+				<!-- top 카테고리 출력 -->
+				<c:forEach var="top_category" items="${category}">
+					<c:set var="cate" value="${top_category.i_category}"></c:set>
+					<c:if test="${top_category.category_order == 1}">
+						<form action="/category/${top_category.category_nm}" method="get">
+							<input class="large_category_list" type="submit"
+								value="${top_category.category_nm} (${top_category.category_count})">
+						</form>
+					</c:if>
+					<!-- sub 카테고리 출력 -->
+					<c:forEach var="sub_category" items="${category}">
+						<c:if test="${cate == sub_category.category_top}">
+							<c:if test="${sub_category.category_order == 2}">
+								<form
+									action="/category/${top_category.category_nm}/${sub_category.category_nm}"
+									method="get">
+									<input class="small_category_list" type="submit"
+										value="- ${sub_category.category_nm} (${sub_category.category_count})">
+								</form>
+							</c:if>
+						</c:if>
+					</c:forEach>
 				</c:forEach>
 			</div>
-		</div>
-		<div id="right">
-			<div onclick="upload_modal_open()">파일 업로드</div>
-			<select>
-				<option>=====선택======</option>
-				<option selected="selected">전체</option>
-				<option>분류</option>
-			</select> <input type="text"> <span>검색</span>
 		</div>
 	</div>
 </div>
