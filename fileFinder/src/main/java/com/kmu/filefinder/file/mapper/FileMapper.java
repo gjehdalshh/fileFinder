@@ -3,7 +3,6 @@ package com.kmu.filefinder.file.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 import com.kmu.filefinder.file.dto.FileDTO;
 
@@ -17,7 +16,7 @@ public interface FileMapper {
 	public int getIcategoryByCategoryNm(String category_nm);
 	public List<Integer> getIcategoryByCategoryTop(int category_top);
 	public List<FileCategoryDTO> getFileInfoList(int i_category);
-	
+	public FileCategoryDTO getFileSearchInfoList(String file_nm);
 	/* -------------- create -------------- */
 	public int createFile(FileDTO dto);
 	

@@ -116,42 +116,101 @@ ul, li {
 }
 
 select {
-  -webkit-appearance: none;  /* 네이티브 외형 감추기 */
-  -moz-appearance: none;
-  appearance: none;
-
+	-webkit-appearance: none; /* 네이티브 외형 감추기 */
+	-moz-appearance: none;
+	appearance: none;
 }
 
 /* IE 10, 11의 네이티브 화살표 숨기기 */
-select::-ms-expand { 
-  display: none;
+select::-ms-expand {
+	display: none;
 }
 
 select {
-    background: url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg) no-repeat 95% 50%;
-   width: 150px;
-    height: 35px;
-    padding: 10 0 6 10;
-    border: 1px solid #D9D9D9;
-    border-radius: 3px;
-    font-size: 15px;
+	background:
+		url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg)
+		no-repeat 95% 50%;
+	width: 160px;
+	height: 35px;
+	padding: 10 0 6 10;
+	border: 1px solid #D9D9D9;
+	border-radius: 3px;
+	font-size: 14px;
+}
+
+.search_select {
+	width: 110px;
+	height: 30;
+	padding: 6px 23px 5px 10;
+	border: 1px solid #D9D9D9;
+	border-radius: 3px;
+	font-size: 12;
+	background-size: 20% 70%;
+}
+
+.large_category_input, .small_category_input {
+	width: 160px;
+	height: 35px;
+	padding: 10 0 6 10;
+	border: 1px solid #999595;
+	border-radius: 6px;
+	font-size: 15px;
+	margin: 5 10 10 0;
+}
+
+#search_input {
+	width: 138px;
+	height: 30px;
+	padding: 3;
+	border: 1px solid #999595;
+	border-radius: 3px;
+	font-size: 15px;
+}
+
+#search_btn {
+	padding: 7 7 6;
+	border-radius: 6px;
+	font-size: 13px;
+	border: 1px solid #999595;
+	margin-bottom: 10px;
+	background-color: white;
+}
+
+#search_container {
+	display: flex;
+	margin-bottom: 50px;
+}
+
+#search_result {
+	color : red;
 }
 
 /* ---------------- 파일 업로드 모달창 ------------------ */
 #file_modal_div {
 	display: none;
-	position: relative;
-	width: 100%;
-	height: 100%;
+	position: absolute;
 	z-index: 1;
+	left: 30%;
+	top: 35%;
+}
+
+#file_upload_title {
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+#file_upload_category_container {
+	margin: 20 40;
 }
 
 #file_modal_div .file_modal_content {
-	width: 500px;
+	width: 400px;
+	text-align: center;
 	margin: 0px auto;
-	padding: 20px 10px;
+	padding: 50;
 	background: #fff;
 	border: 2px solid #666;
+	border-radius: 6px;
 }
 
 #file_modal_div .file_modal_layer {
@@ -164,21 +223,69 @@ select {
 	z-index: -1;
 }
 
+#top_category_choice_upload {
+	margin-right: 5px;
+}
+
+#upload, #upload_close {
+	font-size: 16px;
+	border: 0.1px solid darkgray;
+	padding: 8px 0;
+	border-radius: 11px;
+	margin-right: 5px;
+	width: 195px;
+	text-align: center;
+	margin-top: 35px;
+}
+
+.filebox {
+	align-items: center;
+	width: 300px;
+	margin: auto;
+}
+
+.file_name {
+	font-size: 14px;
+	margin-left: 15px;
+}
+
+.filebox label {
+	padding: 7 10;
+	color: #999;
+	background-color: #fdfdfd;
+	cursor: pointer;
+	border: 1px solid darkgray;
+	border-bottom-color: #e2e2e2;
+	border-radius: 0.25em;
+}
+
+.filebox input[type="file"] { /* 파일 필드 숨기기 */
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
 /* ---------------- 카테고리 등록 모달창 ------------------ */
 #modal_insert {
 	display: none;
-	position: relative;
-	width: 100%;
-	height: 100%;
+	position: absolute;
 	z-index: 1;
+	left: 30%;
+	top: 35%;
 }
 
 #modal_insert .modal_content {
-	width: 500px;
+	width: 400px;
 	margin: 0px auto;
-	padding: 20px 10px;
+	padding: 50;
 	background: #fff;
 	border: 2px solid #666;
+	border-radius: 6px;
 }
 
 #modal_insert .modal_layer {
@@ -191,21 +298,52 @@ select {
 	z-index: -1;
 }
 
+#category_insert_title {
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+#large_category, #small_category {
+	padding: 6;
+	font-size: 15px;
+	text-align: center;
+	width: 100px;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	margin: 0 3 10 0;
+}
+
+#large_category {
+	background-color: #d1ebf6;
+}
+
+#insert_category_btn, #insert_Category_close {
+	font-size: 16px;
+	border: 0.1px solid darkgray;
+	padding: 8px 0;
+	border-radius: 11px;
+	margin-right: 5px;
+	width: 195px;
+	text-align: center;
+	margin-top: 35px;
+}
+
 /* ---------------- 카테고리 삭제 모달창 ------------------ */
 #modal_delete {
 	display: none;
-	position: relative;
-	width: 100%;
-	height: 100%;
+	position: absolute;
 	z-index: 1;
+	left: 30%;
+	top: 35%;
 }
 
 #model_delete, .modal_delete_content {
-	width: 500px;
+	width: 400px;
 	margin: 0px auto;
-	padding: 20px 10px;
+	padding: 50;
 	background: #fff;
 	border: 2px solid #666;
+	border-radius: 6px;
 }
 
 #model_delete, .modal_delete_layer {
@@ -238,4 +376,34 @@ select {
 	margin-left: 22px;
 	font-size: 14px;
 	cursor: pointer;
+}
+
+#category_delete_title {
+	font-size: 20px;
+	margin-bottom: 20px;
+}
+
+#large_delete_category, #small_delete_category {
+	padding: 6;
+	font-size: 15px;
+	text-align: center;
+	width: 100px;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	margin: 0 3 10 0;
+}
+
+#large_delete_category {
+	background-color: #d1ebf6;
+}
+
+#delete_category_btn, #delete_category_close {
+	font-size: 16px;
+	border: 0.1px solid darkgray;
+	padding: 8px 0;
+	border-radius: 11px;
+	margin-right: 5px;
+	width: 195px;
+	text-align: center;
+	margin-top: 35px;
 }

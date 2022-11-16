@@ -30,6 +30,11 @@ public class FileServiceImpl implements FileService {
 	private FileExtractionServiceImpl fileExtractionServiceImpl;
 
 	private int path = 0;
+	private int count = 0;
+	
+	public int getCount() {
+		return count;
+	}
 
 	// @Override
 	public void filePath(String path) {
@@ -40,21 +45,25 @@ public class FileServiceImpl implements FileService {
 	// 파일 업로드
 	// @Override
 	public int fileUpload(MultipartHttpServletRequest files) {
+		if(path == 0) {
+			return 2;
+		}
+		
 		String urlPath = fileMapper.getCategoryPathByIcategory(path);
 		String uploadFolder = urlPath + "\\";
 		List<MultipartFile> list = files.getFiles("files");
 
 		if (!checkFileExistence(list)) { // 파일이 존재한다면
-			return 2;
+			return 3;
 		}
 
 		for (int i = 0; i < list.size(); i++) {
 			String fileRealName = list.get(i).getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			increaseFileCount();
-
+			String parseFileName = fileRealName.substring(0, fileRealName.length()-4);
 			String filePath = uploadFolder + fileRealName;
-			createFile(fileRealName, fileExtension, filePath); // DB 저장
+			createFile(parseFileName, fileExtension, filePath); // DB 저장
 			File saveFile = new File(uploadFolder + "\\" + fileRealName);
 			try {
 				list.get(i).transferTo(saveFile); // 로컬 저장
@@ -101,14 +110,8 @@ public class FileServiceImpl implements FileService {
 
 	// 전체 파일과 카테고리 정보 가져오기
 	public List<FileCategoryDTO> getFileCategoryInfoList() throws IOException {
-		System.out.println("aaaaaaaaaaaaaaaa");
 		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList();
-	
-		int i = 0;
-		for (FileCategoryDTO d : list) {
-			String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
-			list.get(i++).setSummaryText(text);
-		}
+		addText(list);
 
 		return list;
 	}
@@ -123,28 +126,27 @@ public class FileServiceImpl implements FileService {
 		for (Integer i : list_int) {
 			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i);
 		
-			int index = 0;
-			for (FileCategoryDTO d : list) {
-				String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
-				list.get(index++).setSummaryText(text);
-			}
-			
+			addText(list);
 			l.add(list);
 		}
-		
 		return l;
 	}
 	
 	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm) throws IOException {
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category);
+		addText(list);
+		
+		return list;
+	}
+	
+	public List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException {
 		
 		int i = 0;
 		for (FileCategoryDTO d : list) {
 			String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
 			list.get(i++).setSummaryText(text);
 		}
-		
 		return list;
 	}
 
@@ -156,5 +158,25 @@ public class FileServiceImpl implements FileService {
 	// 카테고리 넘버로 파일 경로를 가져옴
 	public String getCategoryPathByIcategory(int path) {
 		return fileMapper.getCategoryPathByIcategory(path);
+	}
+
+	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content) {
+		count = 0;
+		List<String> list = fileMapper.getFileNameList();
+		List<FileCategoryDTO> fileList = new ArrayList<FileCategoryDTO>();
+		// 제목 리스트를 불러와 입력한 제목이 포함되어 있다면
+		if(category.equals("title")) {
+			for(String str : list) {
+				String lowerStr = str.toLowerCase(); // 수정해야함
+				if(str.contains(content) || lowerStr.contains(content)) {
+					count++;
+					FileCategoryDTO dto = fileMapper.getFileSearchInfoList(str);
+					fileList.add(dto);
+				}
+			}
+			return fileList;
+		}
+		
+		return null;
 	}
 }

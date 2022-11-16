@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kmu.filefinder.file.service.FileServiceImpl;
 import com.kmu.filefinder.main.dto.CategoryDTO;
+import com.kmu.filefinder.main.dto.SearchDTO;
 import com.kmu.filefinder.main.service.CategoryServiceImpl;
 
 @Controller
@@ -26,12 +28,13 @@ public class MainController {
 
 	@Autowired
 	private FileServiceImpl fileService;
-
+	
 	@GetMapping("/")
-	public ModelAndView home() {
+	public ModelAndView home() throws IOException {
 
 		ModelAndView mv = new ModelAndView();
-
+		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList());
+		mv.addObject("currentPath", "entireCategory");
 		return categoryService.homeCategoryInfo(mv);
 	}
 
@@ -86,5 +89,17 @@ public class MainController {
 	@DeleteMapping("/deleteLargeCategory/{id}")
 	public int deleteLargeCategory(@PathVariable("id") String id) {
 		return categoryService.deleteLargeCategory(id);
+	}
+	
+	@ResponseBody
+	@GetMapping("/search")
+	public ModelAndView test(@RequestParam("category") String category, @RequestParam("content") String content) throws IOException {
+		
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("fileCategoryInfoList", fileService.getFileSearchInfoList(category, content));
+		mv.addObject("currentPath", content);
+		mv.addObject("searchCount", fileService.getCount());
+		
+		return categoryService.homeCategoryInfo(mv);
 	}
 }

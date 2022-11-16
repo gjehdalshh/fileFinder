@@ -37,20 +37,26 @@ function changeCategory() {
 	})
 }
 
+function changeFileName(file) {
+	let fileName = document.querySelector('.file_name')
+	
+	fileName.innerHTML = file[0].name
+}
+
 // 파일 업로드
 function upload() {
 	let fileUpload = document.querySelector('#fileUpload')
 	let top_category_choice_upload = document.querySelector('#top_category_choice_upload')
 
-	if(top_category_choice_upload.value == 0) {
+	if (top_category_choice_upload.value == 0) {
 		alert('카테고리를 선택해주세요.')
 		return
 	}
-	if(!fileUpload.value){
-        alert("파일을 첨부해 주세요.");
-        return
-    }
-	
+	if (!fileUpload.value) {
+		alert("파일을 첨부해 주세요.");
+		return
+	}
+
 	let files = fileUpload.files
 	let formData = new FormData()
 	filesArr = Array.prototype.slice.call(files);
@@ -73,7 +79,9 @@ function upload() {
 			if (text == 1) {
 				alert('파일이 업로드되었습니다.')
 				location.reload()
-			} else if(text == 2) {
+			} else if (text == 2) {
+				alert('카테고리를 선택해주세요.')
+			} else if (text == 3) {
 				alert('파일이 이미 존재합니다.')
 			}
 		})

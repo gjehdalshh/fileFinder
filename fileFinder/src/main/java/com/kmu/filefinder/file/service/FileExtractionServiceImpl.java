@@ -14,28 +14,26 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	@Override 
 	public String extractSummaryTextByPDF(String filePath) throws IOException {
 		File file = new File(filePath);
-
+		
 		PDDocument document = PDDocument.load(file);
 
 		int pdfSize = document.getPages().getCount();
 
 		PDFTextStripper pdfTextStripper = new PDFTextStripper();
 		PDDocument pdDocument = new PDDocument();
+
+		if(pdfSize > 3) {
+			pdfSize = 4;
+		}
 		
-		if (pdfSize > 3) {
-			for (int i = 1; i <= 3; i++) {
-				PDPage p = document.getPage(i);
-				pdDocument.addPage(p);
-			}
-		} else {
-			for (int i = 0; i < pdfSize; i++) {
-				PDPage p = document.getPage(i);
-				pdDocument.addPage(p);
-			}
+		for (int i = 0; i < pdfSize; i++) {
+			PDPage p = document.getPage(i);
+			pdDocument.addPage(p);
 		}
 
 		String text = pdfTextStripper.getText(pdDocument);
 		document.close();
+		pdDocument.close();
 
 		return text;
 	}

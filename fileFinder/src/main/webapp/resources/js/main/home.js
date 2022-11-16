@@ -29,22 +29,34 @@ large_category.onclick = function() {
 	order = 1
 	large_category_div.style.display = 'block'
 	small_category_div.style.display = 'none'
+	
+	large_category.style.backgroundColor = "d1ebf6"
+	small_category.style.backgroundColor = "white"
 }
 small_category.onclick = function() {
 	order = 2
 	large_category_div.style.display = 'none'
 	small_category_div.style.display = 'block'
+	
+	large_category.style.backgroundColor = "white"
+	small_category.style.backgroundColor = "d1ebf6"
 }
 
 large_delete_category.onclick = function() {
 	order = 1
 	large_delete_category_div.style.display = 'block'
 	small_delete_category_div.style.display = 'none'
+	
+	large_delete_category.style.backgroundColor = "d1ebf6"
+	small_delete_category.style.backgroundColor = "white"
 }
 small_delete_category.onclick = function() {
 	order = 2
 	large_delete_category_div.style.display = 'none'
 	small_delete_category_div.style.display = 'block'
+	
+	large_delete_category.style.backgroundColor = "white"
+	small_delete_category.style.backgroundColor = "d1ebf6"
 }
 
 /* --------------- 파일 업로드 모달창 -------------------*/
