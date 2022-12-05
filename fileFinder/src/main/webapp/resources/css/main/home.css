@@ -9,12 +9,6 @@ form {
 	margin: 0px;
 }
 
-ul, li {
-	list-style: none;
-	margin: 0px;
-	padding: 0px;
-}
-
 #entire_container {
 	width: 1024px;
 	margin: auto;
@@ -32,6 +26,10 @@ ul, li {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
+}
+
+.txt-hlight {
+	background: yellow;
 }
 
 #title {
@@ -53,8 +51,14 @@ ul, li {
 	width: 640px;
 }
 
+#category_list_container {
+	border: 0.1px solid #b9b6b6;
+	border-radius: 3px;
+	padding: 20px 20 60 20;
+}
+
 #sub_content_container {
-	margin: 32px 0 0 80px;
+	margin-left: 80px;
 }
 
 #middle_title {
@@ -85,15 +89,15 @@ ul, li {
 	font-size: 13px;
 	/* font-weight: 400; */
 	line-height: 1.53;
-	-webkit-line-clamp: 2;
+	-webkit-line-clamp: 3;
 	overflow: hidden;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 }
 
-.middle_category_nm {
+.middle_category_nm, .middle_extension {
 	margin-right: 14px;
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 1.67;
 	color: #333;
 	text-decoration: none;
@@ -102,7 +106,7 @@ ul, li {
 .middle_r_dt {
 	position: relative;
 	margin-right: 15px;
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 1.67;
 	color: #999;
 }
@@ -124,6 +128,15 @@ select {
 /* IE 10, 11의 네이티브 화살표 숨기기 */
 select::-ms-expand {
 	display: none;
+}
+
+#nullcontentContainer {
+	margin-top: 50px;
+}
+
+#nullcontentContainer ul, li {
+	color: #939090;
+	margin: 10 0;
 }
 
 select {
@@ -182,7 +195,7 @@ select {
 }
 
 #search_result {
-	color : red;
+	color: red;
 }
 
 /* ---------------- 파일 업로드 모달창 ------------------ */
@@ -268,6 +281,48 @@ select {
 	overflow: hidden;
 	clip: rect(0, 0, 0, 0);
 	border: 0;
+}
+
+/* ---------------- docx viewer 모달창 ------------------ */
+#file_modal_docx_div {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 370px;
+	top: 0%;
+}
+
+#file_modal_docx_div .file_modal_docx_content {
+	width: 700px;
+	margin: 0px auto;
+	padding: 30 50 50 50;
+	background: #fff;
+	border: 2px solid #666;
+	border-radius: 6px;
+	white-space: pre-wrap;
+	overflow: scroll;
+	height: 635px;
+	overflow-x: hidden;
+	box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+
+#file_modal_docx_div .file_modal_docx__layer {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: -1;
+}
+
+.file_dcx_title {
+	text-align: center;
+	font-size: 15px;
+}
+
+.file_docx_content {
+	white-space: pre-wrap;
 }
 
 /* ---------------- 카테고리 등록 모달창 ------------------ */

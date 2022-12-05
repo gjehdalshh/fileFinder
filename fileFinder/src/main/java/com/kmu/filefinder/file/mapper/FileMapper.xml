@@ -37,13 +37,27 @@
 		category as b ON a.i_category =
 		b.i_category WHERE a.i_category = #{i_category};
 	</select>
-	<select id="getFileSearchInfoList" resultType="FileCategoryDTO">
+	<select id="getFileSearchInfoListByFileName" resultType="FileCategoryDTO">
 		SELECT a.i_file,
 		a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path,
 		b.category_nm FROM file as a LEFT JOIN
 		category as b ON a.i_category =
 		b.i_category WHERE a.file_nm = #{file_nm};
+	</select>
+	<select id="getFilePathByFileName" resultType="string">
+		SELECT file_path FROM file WHERE file_nm = #{file_nm};
+	</select>
+	<select id="getExtensionByFileName" resultType="string">
+		SELECT file_extension FROM file WHERE file_nm = #{file_nm};
+	</select>
+	<select id="getFilePath" resultType="string">
+		SELECT file_path FROM file;
+	</select>
+	<select id="getFileSearchInfoList" resultType="FileCategoryDTO">
+		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category = b.i_category;
 	</select>
 
 	<!-- create -->

@@ -1,15 +1,23 @@
 package com.kmu.filefinder.file.service;
 
 import java.io.File;
+
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.common.io.Files;
 import com.kmu.filefinder.common.utils.ConvertType;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 import com.kmu.filefinder.file.dto.FileDTO;
@@ -31,9 +39,17 @@ public class FileServiceImpl implements FileService {
 
 	private int path = 0;
 	private int count = 0;
-	
+
 	public int getCount() {
 		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public void increaseCount() {
+		this.count++;
 	}
 
 	// @Override
@@ -45,10 +61,10 @@ public class FileServiceImpl implements FileService {
 	// 파일 업로드
 	// @Override
 	public int fileUpload(MultipartHttpServletRequest files) {
-		if(path == 0) {
+		if (path == 0) {
 			return 2;
 		}
-		
+
 		String urlPath = fileMapper.getCategoryPathByIcategory(path);
 		String uploadFolder = urlPath + "\\";
 		List<MultipartFile> list = files.getFiles("files");
@@ -61,7 +77,7 @@ public class FileServiceImpl implements FileService {
 			String fileRealName = list.get(i).getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			increaseFileCount();
-			String parseFileName = fileRealName.substring(0, fileRealName.length()-4);
+			String parseFileName = fileRealName.substring(0, fileRealName.length() - 4);
 			String filePath = uploadFolder + fileRealName;
 			createFile(parseFileName, fileExtension, filePath); // DB 저장
 			File saveFile = new File(uploadFolder + "\\" + fileRealName);
@@ -112,39 +128,39 @@ public class FileServiceImpl implements FileService {
 	public List<FileCategoryDTO> getFileCategoryInfoList() throws IOException {
 		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList();
 		addText(list);
-
 		return list;
 	}
-	
-	//  대분류 클릭 시 세부 소분류 전체 보기
+
+	// 대분류 클릭 시 세부 소분류 전체 보기
 	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm) throws IOException {
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		List<Integer> list_int = fileMapper.getIcategoryByCategoryTop(i_category);
-		
+
 		List<List<FileCategoryDTO>> l = new ArrayList<List<FileCategoryDTO>>();
-		
+
 		for (Integer i : list_int) {
 			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i);
-		
+
 			addText(list);
 			l.add(list);
 		}
 		return l;
 	}
-	
-	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm) throws IOException {
+
+	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm) throws IOException { // 소분류 클릭 시 소분류 리스트 보기
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category);
 		addText(list);
 		
 		return list;
 	}
-	
-	public List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException {
-		
+
+	@Override
+	public List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException { // 간단한 내용 담기
+
 		int i = 0;
 		for (FileCategoryDTO d : list) {
-			String text = fileExtractionServiceImpl.extractSummaryTextByPDF(d.getFile_path());
+			String text = fileExtractionServiceImpl.extractSummary(d);
 			list.get(i++).setSummaryText(text);
 		}
 		return list;
@@ -160,23 +176,76 @@ public class FileServiceImpl implements FileService {
 		return fileMapper.getCategoryPathByIcategory(path);
 	}
 
-	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content) {
+	/* 검색을 통한 리스트 불러오기 */
+	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content) throws IOException {
 		count = 0;
-		List<String> list = fileMapper.getFileNameList();
+
 		List<FileCategoryDTO> fileList = new ArrayList<FileCategoryDTO>();
 		// 제목 리스트를 불러와 입력한 제목이 포함되어 있다면
-		if(category.equals("title")) {
-			for(String str : list) {
-				String lowerStr = str.toLowerCase(); // 수정해야함
-				if(str.contains(content) || lowerStr.contains(content)) {
-					count++;
-					FileCategoryDTO dto = fileMapper.getFileSearchInfoList(str);
-					fileList.add(dto);
-				}
-			}
-			return fileList;
+		if (category.equals("searchTitle")) {
+			return getSearchByTitle(fileList, content);
+		} else if (category.equals("searchCategory")) {
+			return getSearchByContent(fileList, content);
 		}
-		
-		return null;
+		return fileList;
+	}
+
+	public List<FileCategoryDTO> getSearchByTitle(List<FileCategoryDTO> fileList, String content) throws IOException {
+		List<String> list = fileMapper.getFileNameList();
+
+		for (String str : list) {
+			String lowerStr = str.toLowerCase();
+			String upperStr = str.toUpperCase();
+			if (str.contains(content) || lowerStr.contains(content) || upperStr.contains(content)) { // 대소문자 가능
+				count++;
+				FileCategoryDTO dto = fileMapper.getFileSearchInfoListByFileName(str);
+				fileList.add(dto);
+				addText(fileList);
+			}
+		}
+		return fileList;
+	}
+
+	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content) throws IOException {
+
+		fileList = fileMapper.getFileSearchInfoList(); // 모든 file을 가져옴
+		List<FileCategoryDTO> temp = new ArrayList<FileCategoryDTO>();
+		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
+
+		for (FileCategoryDTO file : fileList) {
+			temp = fileExtractionServiceImpl.extractContent(file, content);
+			for (FileCategoryDTO dto : temp) {
+				list.add(dto);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName) throws IOException {
+
+		String filePath = fileMapper.getFilePathByFileName(fileName);
+		String extension = fileMapper.getExtensionByFileName(fileName);
+		if (extension.equals(".pdf")) {
+			fileOpenPdf(resp, filePath);
+		} else if (extension.equals(".docx")) {
+			fileOpenDocx(resp, filePath);
+		}
+	}
+
+	public void fileOpenPdf(HttpServletResponse resp, String filePath) {
+		File file = new File(filePath);
+		resp.setHeader("Content-Type", "application/pdf");
+		resp.setHeader("Content-Length", String.valueOf(file.length()));
+		resp.setHeader("Content-Disposition", "inline");
+
+		try {
+			Files.copy(file, resp.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void fileOpenDocx(HttpServletResponse resp, String filePath) throws IOException {
 	}
 }

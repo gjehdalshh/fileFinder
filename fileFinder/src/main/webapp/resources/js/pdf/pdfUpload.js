@@ -60,11 +60,11 @@ function upload() {
 	let files = fileUpload.files
 	let formData = new FormData()
 	filesArr = Array.prototype.slice.call(files);
-
+	console.log('불가')
 	for (var i = 0; i < filesArr.length; i++) {
 		formData.append('files', filesArr[i]);
 	}
-
+	console.log('불가2')
 	fetch(`/fileUpload`, {
 		method: 'POST',
 		headers: {

@@ -1,6 +1,5 @@
 package com.kmu.filefinder.main.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kmu.filefinder.main.dto.CategoryDTO;

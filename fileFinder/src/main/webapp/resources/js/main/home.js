@@ -19,9 +19,35 @@ let file_modal_div = document.querySelector('#file_modal_div')
 
 let sub_category_i_cateogry = document.querySelectorAll('#sub_category_i_cateogry')
 
+changeColor()
+
 function goHome() {
-	location.href=`/`
+	location.href = `/`
 }
+
+function changeColor() { // 검색 시 특정 문자 색 변경
+	let contentValue = document.querySelector('#contentValue').value
+	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
+	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
+	let summary = "<span style='color:red;font-size:15px';>"+contentValue+"</span>"
+	let nm = "<span style='color:red;font-size:17px';>"+contentValue+"</span>"
+	
+	for(let i = 0; i < middle_summary_text.length; i++) {
+		middle_summary_text[i].innerHTML = middle_summary_text[i].innerHTML.replace(contentValue, summary);
+		middle_file_nm[i].innerHTML = middle_file_nm[i].innerHTML.replace(contentValue, nm);		
+	}
+}
+ 
+
+$('#search_input').keyup(function () { // 검색 시 글자에 따라 실시간 색 변경
+    var search = $('#search_input').val();
+    $(".middle_summary_text:contains('"+search+"')").each(function () {
+        var regex = new RegExp(search,'gi');
+        $(this).html( $(this).text().replace(regex, "<span class='txt-hlight'>"+search+"</span>") );
+    });
+});
+
+
 
 /* --------------- 대/소분류 구분 -------------------*/
 
@@ -29,7 +55,7 @@ large_category.onclick = function() {
 	order = 1
 	large_category_div.style.display = 'block'
 	small_category_div.style.display = 'none'
-	
+
 	large_category.style.backgroundColor = "d1ebf6"
 	small_category.style.backgroundColor = "white"
 }
@@ -37,7 +63,7 @@ small_category.onclick = function() {
 	order = 2
 	large_category_div.style.display = 'none'
 	small_category_div.style.display = 'block'
-	
+
 	large_category.style.backgroundColor = "white"
 	small_category.style.backgroundColor = "d1ebf6"
 }
@@ -46,7 +72,7 @@ large_delete_category.onclick = function() {
 	order = 1
 	large_delete_category_div.style.display = 'block'
 	small_delete_category_div.style.display = 'none'
-	
+
 	large_delete_category.style.backgroundColor = "d1ebf6"
 	small_delete_category.style.backgroundColor = "white"
 }
@@ -54,7 +80,7 @@ small_delete_category.onclick = function() {
 	order = 2
 	large_delete_category_div.style.display = 'none'
 	small_delete_category_div.style.display = 'block'
-	
+
 	large_delete_category.style.backgroundColor = "white"
 	small_delete_category.style.backgroundColor = "d1ebf6"
 }
@@ -201,6 +227,5 @@ function delete_category() {
 			})
 		})
 	}
-
 }
 

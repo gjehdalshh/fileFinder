@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=20">
-
+<link rel="stylesheet" href="/res/css/main/home.css?ver=25">
+<input id="contentValue" type="hidden" value="${param.content}">
 <div id="title_container">
 	<div id="title" onclick="goHome()">파일 검색기</div>
 	<div class="flex">
@@ -30,63 +30,166 @@
 				</c:when>
 				<c:otherwise>
 					<div id="middle_title">
-						<span id="search_result">'${currentPath}'</span>의 검색 결과 ${searchCount }
+						<span id="search_result">'${currentPath}'</span>의 검색 결과
+						${searchCount }
 					</div>
+					<c:if test="${searchCount == 0}">
+						<div id="nullcontentContainer">
+							<ul>
+								<li>입력하신 단어의 철자가 정확한지 확인해 보세요.</li>
+								<li>보다 일반적인 단어로 검색해 보세요.</li>
+								<li>두 단어 이상의 키워드로 검색 하신 경우, 정확하게 띄어쓰기를 한 후 검색해 보세요.</li>
+							</ul>
+						</div>
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 			<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
 				<c:choose>
-					<c:when test="${currentPath eq 'entireCategory'}">
-						<div id="middle_content_container">
-							<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-							<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-							<div class="flex">
-								<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-								<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+					<c:when
+						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.pdf'}">
+						<form class="file_open_form" action="/fileOpen" method="get"
+							onclick="fileOpen(this)">
+							<div id="middle_content_container">
+								<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+								<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+								<div class="flex">
+									<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+									<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+									<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+								</div>
+								<input id="middle_file_nm_input" name="fileName" type="hidden"
+									value="${fileCategoryInfoList.file_nm }">
+							</div>
+						</form>
+					</c:when>
+					<c:when
+						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.docx'}">
+						<div class="file_open_modal" onclick="file_open_modal()">
+							<div id="middle_content_container">
+								<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+								<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+								<div class="flex">
+									<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+									<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+									<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+								</div>
+								<input id="middle_file_nm_input" name="fileName" type="hidden"
+									value="${fileCategoryInfoList.file_nm }"> <input
+									id="middle_summary_text_input" name="middle_summary_text_input"
+									type="hidden" value="${fileCategoryInfoList.summaryText }">
 							</div>
 						</div>
 					</c:when>
-					<c:when test="${currentPath eq 'largeCategory' }">
+					<c:when test="${currentPath eq 'largeCategory'}">
 						<c:forEach var="fileCategoryInfo" items="${fileCategoryInfoList }">
-							<div id="middle_content_container">
-								<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
-								<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
-								<div class="flex">
-									<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
-									<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
+							<c:if test="${fileCategoryInfo.file_extension eq '.pdf' }">
+								<form class="file_open_form" action="/fileOpen" method="get"
+									onclick="fileOpen(this)">
+									<div id="middle_content_container">
+										<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
+										<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
+										<div class="flex">
+											<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
+											<div class="middle_extension">${fileCategoryInfo.file_extension }</div>
+											<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
+										</div>
+										<input id="middle_file_nm_input" name="fileName" type="hidden"
+											value="${fileCategoryInfo.file_nm }">
+									</div>
+								</form>
+							</c:if>
+							<c:if test="${fileCategoryInfo.file_extension eq '.docx' }">
+								<div class="file_open_modal" onclick="file_open_modal()">
+									<div id="middle_content_container">
+										<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
+										<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
+										<div class="flex">
+											<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
+											<div class="middle_extension">${fileCategoryInfo.file_extension }</div>
+											<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
+										</div>
+										<input id="middle_file_nm_input" name="fileName" type="hidden"
+											value="${fileCategoryInfo.file_nm }"> <input
+											id="middle_summary_text_input"
+											name="middle_summary_text_input" type="hidden"
+											value="${fileCategoryInfo.summaryText }">
+									</div>
 								</div>
-							</div>
+							</c:if>
 						</c:forEach>
 					</c:when>
 					<c:when test="${currentPath eq 'smallCategory'}">
-						<div id="middle_content_container">
-							<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-							<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-							<div class="flex">
-								<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-								<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf' }">
+							<form class="file_open_form" action="/fileOpen" method="get"
+								onclick="fileOpen(this)">
+								<div id="middle_content_container">
+									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+									<div class="flex">
+										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+									</div>
+									<input id="middle_file_nm_input" name="fileName" type="hidden"
+										value="${fileCategoryInfoList.file_nm }">
+								</div>
+							</form>
+						</c:if>
+						<c:if test="${fileCategoryInfoList.file_extension eq '.docx' }">
+							<div class="file_open_modal" onclick="file_open_modal()">
+								<div id="middle_content_container">
+									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+									<div class="flex">
+										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+									</div>
+									<input id="middle_file_nm_input" name="fileName" type="hidden"
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_summary_text_input"
+										name="middle_summary_text_input" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+								</div>
 							</div>
-						</div>
-					</c:when>
-					<c:when test="${currentPath eq 'smallCategory'}">
-						<div id="middle_content_container">
-							<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-							<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-							<div class="flex">
-								<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-								<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
-							</div>
-						</div>
+						</c:if>
 					</c:when>
 					<c:otherwise>
-						<div id="middle_content_container">
-							<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-							<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-							<div class="flex">
-								<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-								<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf'}">
+							<form class="file_open_form" action="/fileOpen" method="get"
+								onclick="fileOpen(this)">
+								<div id="middle_content_container">
+									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+									<div class="flex">
+										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+									</div>
+									<input id="middle_file_nm_input" name="fileName" type="hidden"
+										value="${fileCategoryInfoList.file_nm }">
+								</div>
+							</form>
+						</c:if>
+						<c:if test="${fileCategoryInfoList.file_extension eq '.docx'}">
+							<div class="file_open_modal" onclick="file_open_modal()">
+								<div id="middle_content_container">
+									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+									<div class="flex">
+										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+									</div>
+									<input id="middle_file_nm_input" name="fileName" type="hidden"
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_summary_text_input"
+										name="middle_summary_text_input" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+								</div>
 							</div>
-						</div>
+						</c:if>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
@@ -95,14 +198,13 @@
 			<div id="search_container">
 				<form action="/search" method="get">
 					<select name="category" class="search_select">
-						<option value="all" selected="selected">전체</option>
-						<option value="title">제목</option>
-						<option value="category">분류</option>
+						<option value="searchTitle" selected="selected">제목</option>
+						<option value="searchCategory">내용</option>
 					</select> <input id="search_input" type="text" name="content"> <input
 						type="submit" id="search_btn" value="검색">
 				</form>
 			</div>
-			<div id="left">
+			<div id="category_list_container">
 				<form action="/category" method="get">
 					<input id="entire_categoey_submit" type="submit"
 						value="분류 전체보기 (${totalNumberPosts})">
@@ -134,6 +236,15 @@
 		</div>
 	</div>
 </div>
+
+<div id="file_modal_docx_div">
+	<div class="file_modal_docx_content">
+		<div class="file_dcx_title"></div>
+		<div class="file_docx_content"></div>
+	</div>
+	<div onclick="file_modal_docx_close()" class="file_modal_docx__layer"></div>
+</div>
+
 
 <!-- 파일 업로드 모달창 -->
 <div id="file_modal_div">
@@ -259,5 +370,7 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=73"></script>
+<script defer src="/res/js/main/home.js?ver=75"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=64"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script defer src="/res/js/pdf/fileOpen.js?ver=13"></script>
