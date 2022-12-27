@@ -112,8 +112,73 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	@Override
 	public List<FileCategoryDTO> extractSearchSentence(String[] strArr, FileCategoryDTO dto, String content) {
 
-		String temp = "";
+		String text = "";
 		int size = 0, firstIndex = 0, lastIndex = 0;
+
+		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
+		for (int i = 0; i < strArr.length; i++) {
+			size = 0;
+			
+			if (strArr[i].toLowerCase().contains(content.toLowerCase())) {
+				firstIndex = i;
+				lastIndex = i;
+				text = "";
+				if (checkIfEnglishDocument(strArr)) { // 영문 문서
+					String lowerCaseTextString = strArr[i].toLowerCase();
+					String lowerCaseWord = content.toLowerCase();
+					
+					int index = lowerCaseTextString.indexOf(lowerCaseWord);
+					while (index != -1) {
+						System.out.println("test");
+						if (index < 150) { // 첫 문장
+							if (strArr[i].length() < 300) { // 문장이 300자 이하
+								text = strArr[i].substring(0, strArr[i].length());
+							} else { // 문장이 300자 이상
+								text = strArr[i].substring(0, 300);
+							}
+						} else { // 중간 or 마지막 문장
+							if (strArr[i].length() - index < 150) { // 마지막 문장
+								text = strArr[i].substring(index - 130, strArr[i].length());
+								createFileCategoryDTO(list, dto, text);
+								break;
+							} else { // 중간 문장
+								text = strArr[i].substring(index - 150, index + 150);
+							}
+						}
+						createFileCategoryDTO(list, dto, text);
+						index = lowerCaseTextString.indexOf(lowerCaseWord, index + content.length());
+					}
+				} else { // 한글 문서
+					text = strArr[i];
+					while (size < 180) {
+						System.out.println("test");
+						if (firstIndex != 0) {
+							text = strArr[--firstIndex] + text;
+						}
+						if (lastIndex != strArr.length - 1) {
+							text += strArr[++lastIndex];
+						}
+						size = text.length();
+					}
+					createFileCategoryDTO(list, dto, text);
+				}
+			}
+		}
+		return list;
+	}
+
+	public void createFileCategoryDTO(List<FileCategoryDTO> list, FileCategoryDTO dto, String text) {
+
+		FileCategoryDTO tempDTO = FileCategoryDTO.builder().category_nm(dto.getCategory_nm())
+				.file_extension(dto.getFile_extension()).file_nm(dto.getFile_nm()).file_path(dto.getFile_path())
+				.r_dt(dto.getR_dt()).i_cateogry(dto.getI_cateogry()).i_file(dto.getI_file()).build();
+
+		tempDTO.setSummaryText(text);
+		list.add(tempDTO);
+		fileServiceImpl.increaseCount();
+	}
+
+	public boolean checkIfEnglishDocument(String[] strArr) { // 한글 문서, 영문 문서 판별
 
 		String charCheck = "";
 		for (String s : strArr) {
@@ -131,47 +196,9 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 			}
 		}
 
-		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
-		for (int i = 0; i < strArr.length; i++) {
-			size = 0;
-
-			if (strArr[i].contains(content) || strArr[i].toLowerCase().contains(content)
-					|| strArr[i].toUpperCase().contains(content)) {
-				System.out.println("확인 : " + strArr[i]);
-				firstIndex = i;
-				lastIndex = i;
-				temp = "";
-				if (en > ko) {
-					if (strArr[i].indexOf(content) > 150) {
-						System.out.println("test1");
-						temp += strArr[i].substring(strArr[i].indexOf(content) - 150, strArr[i].indexOf(content) + 150);
-					} else {
-						System.out.println("test2");
-						temp += strArr[i].substring(0, strArr[i].length());
-					}
-				} else {
-					temp = strArr[i];
-					while (size < 180) {
-						if (firstIndex != 0) {
-							temp = strArr[--firstIndex] + temp;
-						}
-						if (lastIndex != strArr.length - 1) {
-							temp += strArr[++lastIndex];
-						}
-						size = temp.length();
-					}
-				}
-				System.out.println("test : " + temp);
-
-				FileCategoryDTO tempDTO = FileCategoryDTO.builder().category_nm(dto.getCategory_nm())
-						.file_extension(dto.getFile_extension()).file_nm(dto.getFile_nm()).file_path(dto.getFile_path())
-						.r_dt(dto.getR_dt()).i_cateogry(dto.getI_cateogry()).i_file(dto.getI_file()).build();
-
-				tempDTO.setSummaryText(temp);
-				list.add(tempDTO);
-				fileServiceImpl.increaseCount();
-			}
+		if (en > ko) {
+			return true;
 		}
-		return list;
+		return false;
 	}
 }

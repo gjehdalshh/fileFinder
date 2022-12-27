@@ -1,9 +1,10 @@
 package com.kmu.filefinder.file.service;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 
 import java.io.IOException;
-
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,7 +78,11 @@ public class FileServiceImpl implements FileService {
 			String fileRealName = list.get(i).getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			increaseFileCount();
-			String parseFileName = fileRealName.substring(0, fileRealName.length() - 4);
+			int extensionLength = 4;
+			if(fileExtension.equals(".docx")) {
+				extensionLength = 5;
+			}
+			String parseFileName = fileRealName.substring(0, fileRealName.length() - extensionLength);
 			String filePath = uploadFolder + fileRealName;
 			createFile(parseFileName, fileExtension, filePath); // DB 저장
 			File saveFile = new File(uploadFolder + "\\" + fileRealName);
@@ -98,8 +103,16 @@ public class FileServiceImpl implements FileService {
 		List<String> dao = fileMapper.getFileNameList();
 		List<String> fileNameList = new ArrayList<String>();
 		for (MultipartFile item : list) { // 문자열 리스트
-			fileNameList.add(item.getOriginalFilename());
+			String fileRealName = item.getOriginalFilename();
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			int extensionLength = 4; // pdf
+			if(fileExtension.equals(".docx")) {
+				extensionLength = 5;
+			}
+			String parseFileName = fileRealName.substring(0, fileRealName.length() - extensionLength);
+			fileNameList.add(parseFileName);
 		}
+
 		for (String item : fileNameList) { // 존재 유무 확인
 			if (dao.contains(item)) {
 				return false;
@@ -190,6 +203,7 @@ public class FileServiceImpl implements FileService {
 		return fileList;
 	}
 
+	// 제목으로 검색
 	public List<FileCategoryDTO> getSearchByTitle(List<FileCategoryDTO> fileList, String content) throws IOException {
 		List<String> list = fileMapper.getFileNameList();
 
@@ -223,12 +237,14 @@ public class FileServiceImpl implements FileService {
 
 	@Override
 	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName) throws IOException {
-
+		System.out.println("test1");
 		String filePath = fileMapper.getFilePathByFileName(fileName);
 		String extension = fileMapper.getExtensionByFileName(fileName);
 		if (extension.equals(".pdf")) {
+			System.out.println("test2");
 			fileOpenPdf(resp, filePath);
 		} else if (extension.equals(".docx")) {
+			System.out.println("test3");
 			fileOpenDocx(resp, filePath);
 		}
 	}
@@ -247,5 +263,21 @@ public class FileServiceImpl implements FileService {
 	}
 
 	public void fileOpenDocx(HttpServletResponse resp, String filePath) throws IOException {
+	}
+
+	public int fileDownload() {
+		File file = new File("d:\\example\\file.txt");
+		 
+        try {
+            if (file.createNewFile()) {
+                System.out.println("File created");
+            } else {
+                System.out.println("File already exists");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+		return 0;
 	}
 }

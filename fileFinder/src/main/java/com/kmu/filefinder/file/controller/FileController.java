@@ -20,8 +20,6 @@ import com.kmu.filefinder.file.service.FileServiceImpl;
 @Controller
 public class FileController {
 
-	
-	
 	@Autowired
 	private FileServiceImpl fileService;
 
@@ -48,5 +46,13 @@ public class FileController {
 	@GetMapping("/fileOpen")
 	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, @RequestParam("fileName") String fileName) throws IOException  {
 		fileService.fileOpen(req, resp, fileName);
+	}
+	
+	@ResponseBody
+	@PostMapping()
+	public int fileDownload() {
+		
+		
+		return fileService.fileDownload();
 	}
 }

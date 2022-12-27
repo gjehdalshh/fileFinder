@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<link rel="stylesheet" href="/res/css/main/home.css?ver=25">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+<link rel="stylesheet" href="/resources/css/main/home.css?ver=26">
+
 <input id="contentValue" type="hidden" value="${param.content}">
 <div id="title_container">
 	<div id="title" onclick="goHome()">파일 검색기</div>
@@ -65,8 +68,14 @@
 					</c:when>
 					<c:when
 						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.docx'}">
-						<div class="file_open_modal" onclick="file_open_modal()">
-							<div id="middle_content_container">
+						<div class="file_open_modal">
+							<div class="middle_file_download" onclick="file_download(this)">
+								<input id="middle_summary_text_download" type="hidden"
+									value="${fileCategoryInfoList.summaryText }">
+								<button class="download_btn">다운로드</button>
+							</div>
+							<div id="middle_content_container"
+								onclick="file_open_modal(this)">
 								<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
 								<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
 								<div class="flex">
@@ -79,6 +88,7 @@
 									id="middle_summary_text_input" name="middle_summary_text_input"
 									type="hidden" value="${fileCategoryInfoList.summaryText }">
 							</div>
+
 						</div>
 					</c:when>
 					<c:when test="${currentPath eq 'largeCategory'}">
@@ -100,8 +110,14 @@
 								</form>
 							</c:if>
 							<c:if test="${fileCategoryInfo.file_extension eq '.docx' }">
-								<div class="file_open_modal" onclick="file_open_modal()">
-									<div id="middle_content_container">
+								<div class="file_open_modal">
+									<div class="middle_file_download" onclick="file_download(this)">
+										<input id="middle_summary_text_download" type="hidden"
+											value="${fileCategoryInfo.summaryText }">
+										<button class="download_btn">다운로드</button>
+									</div>
+									<div id="middle_content_container"
+										onclick="file_open_modal(this)">
 										<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
 										<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
 										<div class="flex">
@@ -137,8 +153,14 @@
 							</form>
 						</c:if>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.docx' }">
-							<div class="file_open_modal" onclick="file_open_modal()">
-								<div id="middle_content_container">
+							<div class="file_open_modal">
+								<div class="middle_file_download" onclick="file_download(this)">
+									<input id="middle_summary_text_download" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+									<button class="download_btn">다운로드</button>
+								</div>
+								<div id="middle_content_container"
+									onclick="file_open_modal(this)">
 									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
 									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
 									<div class="flex">
@@ -173,8 +195,14 @@
 							</form>
 						</c:if>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.docx'}">
-							<div class="file_open_modal" onclick="file_open_modal()">
-								<div id="middle_content_container">
+							<div class="file_open_modal">
+								<div class="middle_file_download" onclick="file_download(this)">
+									<input id="middle_summary_text_download" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+									<button class="download_btn">다운로드</button>
+								</div>
+								<div id="middle_content_container"
+									onclick="file_open_modal(this)">
 									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
 									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
 									<div class="flex">
@@ -370,7 +398,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=75"></script>
-<script defer src="/res/js/pdf/pdfUpload.js?ver=64"></script>
+<script defer src="/resources/js/main/home.js?ver=78"></script>
+<script defer src="/resources/js/pdf/pdfUpload.js?ver=67"></script>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script defer src="/res/js/pdf/fileOpen.js?ver=13"></script>
+<script defer src="/resources/js/pdf/fileOpen.js?ver=19"></script>
+<script defer src="/resources/js/pdf/fileDownload.js?ver=20"></script>

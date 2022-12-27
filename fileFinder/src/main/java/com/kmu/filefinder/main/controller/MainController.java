@@ -30,6 +30,8 @@ import com.kmu.filefinder.file.service.FileServiceImpl;
 import com.kmu.filefinder.main.dto.CategoryDTO;
 import com.kmu.filefinder.main.service.CategoryServiceImpl;
 
+import lombok.extern.log4j.Log4j;
+
 @Controller
 public class MainController {
 

@@ -29,22 +29,36 @@ function changeColor() { // 검색 시 특정 문자 색 변경
 	let contentValue = document.querySelector('#contentValue').value
 	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
 	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
-	let summary = "<span style='color:red;font-size:15px';>"+contentValue+"</span>"
-	let nm = "<span style='color:red;font-size:17px';>"+contentValue+"</span>"
-	
-	for(let i = 0; i < middle_summary_text.length; i++) {
-		middle_summary_text[i].innerHTML = middle_summary_text[i].innerHTML.replace(contentValue, summary);
-		middle_file_nm[i].innerHTML = middle_file_nm[i].innerHTML.replace(contentValue, nm);		
+	let nm = "<span style='color:red;font-size:17px';>" + contentValue + "</span>"
+	var arr = [];
+	for (let i = 0; i < middle_summary_text.length; i++) {
+		let index = middle_summary_text[i].innerHTML.toLowerCase().indexOf(contentValue.toLowerCase())
+		let temp = middle_summary_text[i].innerHTML.slice(index,  index + contentValue.length)
+		arr[i] = temp;
+	}
+
+	let set = new Set(arr);
+	arr = Array.from(set);
+	let summary = [];
+	for (let i = 0; i < arr.length; i++) {
+		summary[i] = "<span style='color:red;font-size:15px';>" + arr[i] + "</span>"
+	}
+
+	for (let i = 0; i < middle_summary_text.length; i++) {
+		for (let j = 0; j < arr.length; j++) {
+			middle_summary_text[i].innerHTML = middle_summary_text[i].innerHTML.replaceAll(arr[j], summary[j]);
+		}
+		middle_file_nm[i].innerHTML = middle_file_nm[i].innerHTML.replaceAll(contentValue, nm);
 	}
 }
- 
 
-$('#search_input').keyup(function () { // 검색 시 글자에 따라 실시간 색 변경
-    var search = $('#search_input').val();
-    $(".middle_summary_text:contains('"+search+"')").each(function () {
-        var regex = new RegExp(search,'gi');
-        $(this).html( $(this).text().replace(regex, "<span class='txt-hlight'>"+search+"</span>") );
-    });
+
+$('#search_input').keyup(function() { // 검색 시 글자에 따라 실시간 색 변경
+	var search = $('#search_input').val();
+	$(".middle_summary_text:contains('" + search + "')").each(function() {
+		var regex = new RegExp(search, 'gi');
+		$(this).html($(this).text().replace(regex, "<span class='txt-hlight'>" + search + "</span>"));
+	});
 });
 
 
