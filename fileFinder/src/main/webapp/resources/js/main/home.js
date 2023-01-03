@@ -19,6 +19,10 @@ let file_modal_div = document.querySelector('#file_modal_div')
 
 let sub_category_i_cateogry = document.querySelectorAll('#sub_category_i_cateogry')
 
+let currentPath = document.querySelector('#currentPath').value
+let largeCategory = document.querySelector('#largeCategory').value
+let smallCategory = document.querySelector('#smallCategory').value
+
 changeColor()
 
 function goHome() {
@@ -33,7 +37,7 @@ function changeColor() { // 검색 시 특정 문자 색 변경
 	var arr = [];
 	for (let i = 0; i < middle_summary_text.length; i++) {
 		let index = middle_summary_text[i].innerHTML.toLowerCase().indexOf(contentValue.toLowerCase())
-		let temp = middle_summary_text[i].innerHTML.slice(index,  index + contentValue.length)
+		let temp = middle_summary_text[i].innerHTML.slice(index, index + contentValue.length)
 		arr[i] = temp;
 	}
 
@@ -175,6 +179,8 @@ function insert_cateogry() {
 }
 
 /* --------------- 카테고리 삭제 -------------------*/
+
+
 /* --------------- 카테고리 분류 뿌리기 -------------------*/
 function top_categoryChange(e) {
 	let sub_category_top = document.querySelectorAll('.sub_category_top')
@@ -240,6 +246,20 @@ function delete_category() {
 				}
 			})
 		})
+	}
+}
+
+function movePage(pageNumber) {
+	console.log('aaa')
+
+	if (currentPath == "mainCategory") {
+		location.href = `/?page=` + pageNumber
+	} else if (currentPath == "entireCategory") {
+		location.href = `/category?page=` + pageNumber
+	} else if (currentPath == "largeCategory") {
+		location.href = `/category/` + largeCategory + `?page=` + pageNumber
+	} else if (currentPath == "smallCategory") {
+		location.href = `/category/` + largeCategory + `/` + smallCategory + `?page=` + pageNumber
 	}
 }
 

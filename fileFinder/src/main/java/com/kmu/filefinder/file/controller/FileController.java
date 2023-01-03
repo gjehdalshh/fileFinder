@@ -48,6 +48,7 @@ public class FileController {
 		fileService.fileOpen(req, resp, fileName);
 	}
 	
+	// 파일 다운로드 기능 - 구현중
 	@ResponseBody
 	@PostMapping()
 	public int fileDownload() {

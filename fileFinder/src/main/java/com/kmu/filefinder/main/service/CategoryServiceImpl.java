@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.common.utils.ConvertType;
 import com.kmu.filefinder.common.utils.Verification;
 import com.kmu.filefinder.main.dto.CategoryDTO;

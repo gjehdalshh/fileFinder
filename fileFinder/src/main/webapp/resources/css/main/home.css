@@ -65,6 +65,13 @@ form {
 	padding: 20px 20 60 20;
 }
 
+.page_value_list {
+	padding: 7 12;
+    border: 0.1px solid darkgray;
+    border-radius: 3px;
+    text-align: center;
+}
+
 #sub_content_container {
 	margin-left: 80px;
 }

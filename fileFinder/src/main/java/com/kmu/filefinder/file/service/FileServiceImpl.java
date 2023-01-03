@@ -1,24 +1,23 @@
 package com.kmu.filefinder.file.service;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.google.common.io.Files;
+import com.kmu.filefinder.common.dto.PagingVO;
+import com.kmu.filefinder.common.paging.Pagination;
+import com.kmu.filefinder.common.paging.PagingResponse;
 import com.kmu.filefinder.common.utils.ConvertType;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 import com.kmu.filefinder.file.dto.FileDTO;
@@ -138,31 +137,44 @@ public class FileServiceImpl implements FileService {
 	}
 
 	// 전체 파일과 카테고리 정보 가져오기
-	public List<FileCategoryDTO> getFileCategoryInfoList() throws IOException {
-		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList();
+	public List<FileCategoryDTO> getFileCategoryInfoList(PagingVO pagingVo) throws IOException {
+		
+		int count = mainMapper.getTotalNumberPosts();
+		if(count < 1) {
+			return null;
+		}
+		Pagination pagination = new Pagination(count, pagingVo);
+		pagingVo.setPagination(pagination);
+		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList(pagingVo);
 		addText(list);
+	
 		return list;
 	}
 
-	// 대분류 클릭 시 세부 소분류 전체 보기
-	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm) throws IOException {
+	// 대분류 카테고리 정보 가져오기
+	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		List<Integer> list_int = fileMapper.getIcategoryByCategoryTop(i_category);
-
 		List<List<FileCategoryDTO>> l = new ArrayList<List<FileCategoryDTO>>();
-
+		int count = mainMapper.getTotalNumberPosts();
+		Pagination pagination = new Pagination(count, pagingVo);
+		pagingVo.setPagination(pagination);
 		for (Integer i : list_int) {
-			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i);
-
+			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i, pagingVo);
+			System.out.println("테스트");
 			addText(list);
 			l.add(list);
 		}
 		return l;
 	}
 
-	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm) throws IOException { // 소분류 클릭 시 소분류 리스트 보기
+	// 소분류 카테고리 정보 가져오기
+	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm, PagingVO pagingVo) throws IOException { // 소분류 클릭 시 소분류 리스트 보기
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
-		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category);
+		int count = mainMapper.getTotalNumberPosts();
+		Pagination pagination = new Pagination(count, pagingVo);
+		pagingVo.setPagination(pagination);
+		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category, pagingVo);
 		addText(list);
 		
 		return list;
@@ -220,6 +232,7 @@ public class FileServiceImpl implements FileService {
 		return fileList;
 	}
 
+	// 내용으로 검색
 	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content) throws IOException {
 
 		fileList = fileMapper.getFileSearchInfoList(); // 모든 file을 가져옴
@@ -235,20 +248,19 @@ public class FileServiceImpl implements FileService {
 		return list;
 	}
 
+	// 파일 열기
 	@Override
 	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName) throws IOException {
-		System.out.println("test1");
 		String filePath = fileMapper.getFilePathByFileName(fileName);
 		String extension = fileMapper.getExtensionByFileName(fileName);
 		if (extension.equals(".pdf")) {
-			System.out.println("test2");
 			fileOpenPdf(resp, filePath);
 		} else if (extension.equals(".docx")) {
-			System.out.println("test3");
 			fileOpenDocx(resp, filePath);
 		}
 	}
 
+	// pdf로 열기
 	public void fileOpenPdf(HttpServletResponse resp, String filePath) {
 		File file = new File(filePath);
 		resp.setHeader("Content-Type", "application/pdf");
@@ -262,9 +274,11 @@ public class FileServiceImpl implements FileService {
 		}
 	}
 
+	// docx로 열기
 	public void fileOpenDocx(HttpServletResponse resp, String filePath) throws IOException {
 	}
 
+	// 파일 다운로드 기능 - 구현중
 	public int fileDownload() {
 		File file = new File("d:\\example\\file.txt");
 		 

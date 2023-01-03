@@ -6,6 +6,11 @@
 <link rel="stylesheet" href="/resources/css/main/home.css?ver=26">
 
 <input id="contentValue" type="hidden" value="${param.content}">
+
+<input id="currentPath" type="hidden" value="${currentPath}">
+<input id="largeCategory" type="hidden" value="${largeCategory}">
+<input id="largeCategory" type="hidden" value="${smallCategory}">
+
 <div id="title_container">
 	<div id="title" onclick="goHome()">파일 검색기</div>
 	<div class="flex">
@@ -20,6 +25,11 @@
 	<div id="wholeViewContainer">
 		<div id="content_container">
 			<c:choose>
+				<c:when test="${currentPath eq 'mainCategory' }">
+					<div id="middle_title">
+						분류 전체보기 <span id="totalNumberPosts">${totalNumberPosts}</span>
+					</div>
+				</c:when>
 				<c:when test="${currentPath eq 'entireCategory'}">
 					<div id="middle_title">
 						분류 전체보기 <span id="totalNumberPosts">${totalNumberPosts}</span>
@@ -49,6 +59,7 @@
 			</c:choose>
 			<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
 				<c:choose>
+					<%-- 전체 카테고리 --%>
 					<c:when
 						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.pdf'}">
 						<form class="file_open_form" action="/fileOpen" method="get"
@@ -88,9 +99,9 @@
 									id="middle_summary_text_input" name="middle_summary_text_input"
 									type="hidden" value="${fileCategoryInfoList.summaryText }">
 							</div>
-
 						</div>
 					</c:when>
+					<%-- 대분류 --%>
 					<c:when test="${currentPath eq 'largeCategory'}">
 						<c:forEach var="fileCategoryInfo" items="${fileCategoryInfoList }">
 							<c:if test="${fileCategoryInfo.file_extension eq '.pdf' }">
@@ -135,6 +146,7 @@
 							</c:if>
 						</c:forEach>
 					</c:when>
+					<%-- 소분류 --%>
 					<c:when test="${currentPath eq 'smallCategory'}">
 						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf' }">
 							<form class="file_open_form" action="/fileOpen" method="get"
@@ -177,6 +189,7 @@
 							</div>
 						</c:if>
 					</c:when>
+					<%-- 메인화면 전체카테고리 --%>
 					<c:otherwise>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf'}">
 							<form class="file_open_form" action="/fileOpen" method="get"
@@ -221,7 +234,25 @@
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
+			<div class="flex">
+				<c:if test="${pagingVO.pagination.existPrevPage == true}">
+					<div onclick="movePage(1)">첫 페이지</div>
+					<div onclick="movePage(${pagingVO.pagination.startPage - 1})">이전
+						페이지</div>
+				</c:if>
+				<c:forEach var="page" begin="${pagingVO.pagination.startPage}"
+					end="${pagingVO.pagination.endPage}">
+					<div class="page_value_list" onclick="movePage(${page})">${page}</div>
+				</c:forEach>
+				<c:if test="${pagingVO.pagination.existNextPage == true}">
+					<div onclick="movePage(${pagingVO.pagination.endPage + 1})">다음
+						페이지</div>
+					<div onclick="movePage(${pagingVO.pagination.totalPageCount})">마지막
+						페이지</div>
+				</c:if>
+			</div>
 		</div>
+
 		<div id="sub_content_container">
 			<div id="search_container">
 				<form action="/search" method="get">
@@ -398,8 +429,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/resources/js/main/home.js?ver=78"></script>
+<script defer src="/resources/js/main/home.js?ver=82"></script>
 <script defer src="/resources/js/pdf/pdfUpload.js?ver=67"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
 <script defer src="/resources/js/pdf/fileOpen.js?ver=19"></script>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script defer src="/resources/js/pdf/fileDownload.js?ver=20"></script>

@@ -5,13 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.docx4j.Docx4J;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,11 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.file.service.FileServiceImpl;
 import com.kmu.filefinder.main.dto.CategoryDTO;
 import com.kmu.filefinder.main.service.CategoryServiceImpl;
-
-import lombok.extern.log4j.Log4j;
 
 @Controller
 public class MainController {
@@ -42,12 +42,12 @@ public class MainController {
 	private FileServiceImpl fileService;
 
 	@GetMapping("/")
-	public ModelAndView home() throws IOException {
-
+	public ModelAndView home(@ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList());
-		mv.addObject("currentPath", "entireCategory");
+		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
+		mv.addObject("currentPath", "mainCategory");
 		return categoryService.homeCategoryInfo(mv);
+		
 	}
 
 	// 카테고리 생성
@@ -63,28 +63,30 @@ public class MainController {
 
 	// 전체 카테고리 뿌리기
 	@GetMapping("/category")
-	public ModelAndView entireCategory() throws IOException {
+	public ModelAndView entireCategory(@ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList());
+		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "entireCategory");
 		return categoryService.homeCategoryInfo(mv);
 	}
 
+	// 대분류 카테고리 뿌리기
 	@ResponseBody
 	@GetMapping("/category/{largeCategory}")
-	public ModelAndView largeCategory(@PathVariable("largeCategory") String largeCategory) throws IOException {
+	public ModelAndView largeCategory(@PathVariable("largeCategory") String largeCategory, @ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getLargeFileInfoList(largeCategory));
+		mv.addObject("fileCategoryInfoList", fileService.getLargeFileInfoList(largeCategory, pagingVo));
 		mv.addObject("currentPath", "largeCategory");
 		return categoryService.homeCategoryInfo(mv);
 	}
 
+	// 소분류 카테고리 뿌리기
 	@ResponseBody
 	@GetMapping("/category/{largeCategory}/{smallCategory}")
 	public ModelAndView smallCategory(@PathVariable("largeCategory") String largeCategory,
-			@PathVariable("smallCategory") String smallCategory) throws IOException {
+			@PathVariable("smallCategory") String smallCategory, @ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory));
+		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory, pagingVo));
 		mv.addObject("currentPath", "smallCategory");
 		return categoryService.homeCategoryInfo(mv);
 	}
@@ -105,7 +107,7 @@ public class MainController {
 
 	@ResponseBody
 	@GetMapping("/search")
-	public ModelAndView test(@RequestParam("category") String category, @RequestParam("content") String content)
+	public ModelAndView test(@RequestParam("category") String category, @RequestParam("content") String content, @ModelAttribute("params") final PagingVO pagingVo)
 			throws IOException {
 
 		ModelAndView mv = new ModelAndView();
@@ -117,6 +119,8 @@ public class MainController {
 	}
 
 	@GetMapping("/pdf")
+	
+	
 	public static void createWordDocument() {
 		
 		String doc = "C:\\pdf\\테스트\\ㅁㄴㅇ\\Japan's reign of terror in Korea.docx";

@@ -11,7 +11,7 @@
 	</select>
 	<select id="getTotalNumberPosts" resultType="int">
 		SELECT COUNT(i_file)
-		AS category_count FROM file;
+		AS category_count FROM test;
 	</select>
 	<select id="getCategoryByNm" resultType="CategoryDTO">
 		SELECT i_category,

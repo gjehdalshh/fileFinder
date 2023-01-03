@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.main.dto.CategoryDTO;
 
 @Mapper

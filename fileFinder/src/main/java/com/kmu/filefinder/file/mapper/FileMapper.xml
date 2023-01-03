@@ -16,8 +16,8 @@
 	<select id="getFileCategoryInfoList"
 		resultType="FileCategoryDTO">
 		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
-		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
-		category as b ON a.i_category = b.i_category;
+		a.i_category, a.file_path, b.category_nm FROM test as a LEFT JOIN
+		category as b ON a.i_category = b.i_category limit #{pagination.limitStart}, #{recordSize} ;
 	</select>
 
 	<!-- 대분류 클릭 시 세부 소분류 전체 보기 -->
@@ -29,19 +29,19 @@
 		SELECT
 		i_category FROM category where category_top = #{category_top};
 	</select>
-	<select id="getFileInfoList" resultType="FileCategoryDTO">
+	<select id="getFileInfoList" resultType="FileCategoryDTO" parameterType="map">
 		SELECT a.i_file,
 		a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path,
-		b.category_nm FROM file as a LEFT JOIN
+		b.category_nm FROM test as a LEFT JOIN
 		category as b ON a.i_category =
-		b.i_category WHERE a.i_category = #{i_category};
+		b.i_category WHERE a.i_category = #{i_category} limit #{pagingVO.pagination.limitStart}, #{pagingVO.recordSize} ;
 	</select>
 	<select id="getFileSearchInfoListByFileName" resultType="FileCategoryDTO">
 		SELECT a.i_file,
 		a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path,
-		b.category_nm FROM file as a LEFT JOIN
+		b.category_nm FROM test as a LEFT JOIN
 		category as b ON a.i_category =
 		b.i_category WHERE a.file_nm = #{file_nm};
 	</select>
@@ -56,7 +56,7 @@
 	</select>
 	<select id="getFileSearchInfoList" resultType="FileCategoryDTO">
 		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
-		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
+		a.i_category, a.file_path, b.category_nm FROM test as a LEFT JOIN
 		category as b ON a.i_category = b.i_category;
 	</select>
 
