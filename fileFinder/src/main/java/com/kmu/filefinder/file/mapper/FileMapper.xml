@@ -7,17 +7,30 @@
 		SELECT
 		category_path FROM category WHERE i_category = #{i_category};
 	</select>
-	<select id="getFileNameList" resultType="string">
-		SELECT file_nm FROM
-		file;
+	
+	<!-- 제목으로 검색 -->
+	<select id="getFileListByName" resultType="FileCategoryDTO">
+		SELECT a.i_file,
+		a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path,
+		b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category =
+		b.i_category where file_nm LIKE CONCAT('%',#{content},'%') ORDER BY r_dt limit
+		#{pagingVO.pagination.limitStart}, #{pagingVO.recordSize};
 	</select>
-
+	<select id="getFileListCountByName" resultType="int">
+		SELECT count(*) FROM file as a LEFT JOIN
+		category as b ON a.i_category =
+		b.i_category where file_nm LIKE CONCAT('%',#{content},'%');
+	</select>
+	
 	<!-- 전체 보기 -->
 	<select id="getFileCategoryInfoList"
 		resultType="FileCategoryDTO">
 		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
-		a.i_category, a.file_path, b.category_nm FROM test as a LEFT JOIN
-		category as b ON a.i_category = b.i_category limit #{pagination.limitStart}, #{recordSize} ;
+		a.i_category, a.file_path, b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category = b.i_category limit
+		#{pagination.limitStart}, #{recordSize} ;
 	</select>
 
 	<!-- 대분류 클릭 시 세부 소분류 전체 보기 -->
@@ -29,35 +42,66 @@
 		SELECT
 		i_category FROM category where category_top = #{category_top};
 	</select>
-	<select id="getFileInfoList" resultType="FileCategoryDTO" parameterType="map">
+	<select id="getFileLargeInfoList" resultType="FileCategoryDTO"
+		parameterType="map">
 		SELECT a.i_file,
 		a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path,
-		b.category_nm FROM test as a LEFT JOIN
+		b.category_nm FROM file as a LEFT JOIN
 		category as b ON a.i_category =
-		b.i_category WHERE a.i_category = #{i_category} limit #{pagingVO.pagination.limitStart}, #{pagingVO.recordSize} ;
+		b.i_category WHERE b.category_top = #{i_category} ORDER BY r_dt DESC limit
+		#{pagingVO.pagination.limitStart}, #{pagingVO.recordSize};
 	</select>
-	<select id="getFileSearchInfoListByFileName" resultType="FileCategoryDTO">
+	<select id="getFileSmallInfoList" resultType="FileCategoryDTO"
+		parameterType="map">
 		SELECT a.i_file,
 		a.file_nm, a.file_extension, a.r_dt,
 		a.i_category, a.file_path,
-		b.category_nm FROM test as a LEFT JOIN
+		b.category_nm FROM file as a LEFT JOIN
 		category as b ON a.i_category =
-		b.i_category WHERE a.file_nm = #{file_nm};
+		b.i_category WHERE a.i_category =
+		#{i_category} limit
+		#{pagingVO.pagination.limitStart},
+		#{pagingVO.recordSize};
+	</select>
+	<select id="getFileSearchPdfInfoByFileName"
+		resultType="FileCategoryDTO">
+		SELECT a.i_file,
+		a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path,
+		b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category =
+		b.i_category WHERE a.file_nm =
+		#{file_nm} and a.file_extension = ".pdf";
+	</select>
+	<select id="getFileSearchDocxInfoByFileName"
+		resultType="FileCategoryDTO">
+		SELECT a.i_file,
+		a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path,
+		b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category =
+		b.i_category WHERE a.file_nm =
+		#{file_nm} and a.file_extension = ".docx";
+	</select>
+	<select id="getFileNameList" resultType="string">
+		SELECT file_nm FROM
+		file
 	</select>
 	<select id="getFilePathByFileName" resultType="string">
-		SELECT file_path FROM file WHERE file_nm = #{file_nm};
-	</select>
-	<select id="getExtensionByFileName" resultType="string">
-		SELECT file_extension FROM file WHERE file_nm = #{file_nm};
+		SELECT file_path
+		FROM file WHERE file_nm = #{file_nm} and file_extension = ".pdf";
 	</select>
 	<select id="getFilePath" resultType="string">
 		SELECT file_path FROM file;
 	</select>
 	<select id="getFileSearchInfoList" resultType="FileCategoryDTO">
-		SELECT a.i_file, a.file_nm, a.file_extension, a.r_dt,
-		a.i_category, a.file_path, b.category_nm FROM test as a LEFT JOIN
-		category as b ON a.i_category = b.i_category;
+		SELECT a.i_file,
+		a.file_nm, a.file_extension, a.r_dt,
+		a.i_category, a.file_path,
+		b.category_nm FROM file as a LEFT JOIN
+		category as b ON a.i_category =
+		b.i_category;
 	</select>
 
 	<!-- create -->

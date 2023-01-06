@@ -11,7 +11,14 @@
 	</select>
 	<select id="getTotalNumberPosts" resultType="int">
 		SELECT COUNT(i_file)
-		AS category_count FROM test;
+		AS category_count FROM file;
+	</select>
+	<select id="getLargeNumberPosts" resultType="int">
+		SELECT category_count FROM category WHERE i_category = #{i_category};
+	</select>
+	<select id="getSmallNumberPosts" resultType="int">
+		SELECT COUNT(i_file)
+		AS category_count FROM file WHERE i_category = #{i_category};
 	</select>
 	<select id="getCategoryByNm" resultType="CategoryDTO">
 		SELECT i_category,

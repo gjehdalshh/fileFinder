@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.kmu.filefinder.file.dto.FileCategoryDTO;
 import com.kmu.filefinder.file.service.FileServiceImpl;
+import com.kmu.filefinder.main.dto.CategoryDTO;
 
 @Controller
 public class FileController {
@@ -44,15 +46,14 @@ public class FileController {
 	}
 
 	@GetMapping("/fileOpen")
-	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, @RequestParam("fileName") String fileName) throws IOException  {
-		fileService.fileOpen(req, resp, fileName);
+	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, @RequestParam("fileName") String fileName, @RequestParam("extension") String extension) throws IOException  {
+		fileService.fileOpen(req, resp, fileName, extension);
 	}
 	
 	// 파일 다운로드 기능 - 구현중
 	@ResponseBody
-	@PostMapping()
+	@PostMapping("")
 	public int fileDownload() {
-		
 		
 		return fileService.fileDownload();
 	}

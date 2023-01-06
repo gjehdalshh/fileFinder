@@ -153,7 +153,6 @@ public class CategoryServiceImpl implements CategoryService {
 		
 		mv.setViewName("main/home");
 		mv.addObject("category", getCategoryList());
-		mv.addObject("totalNumberPosts", getTotalNumberPosts());
 		
 		return mv;
 	}

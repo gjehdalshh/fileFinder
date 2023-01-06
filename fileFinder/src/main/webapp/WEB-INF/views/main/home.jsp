@@ -3,13 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<link rel="stylesheet" href="/resources/css/main/home.css?ver=26">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=1">
 
 <input id="contentValue" type="hidden" value="${param.content}">
 
 <input id="currentPath" type="hidden" value="${currentPath}">
+<input id="searchContent" type="hidden" value="${content}">
 <input id="largeCategory" type="hidden" value="${largeCategory}">
-<input id="largeCategory" type="hidden" value="${smallCategory}">
+<input id="smallCategory" type="hidden" value="${smallCategory}">
 
 <div id="title_container">
 	<div id="title" onclick="goHome()">파일 검색기</div>
@@ -43,7 +44,7 @@
 				</c:when>
 				<c:otherwise>
 					<div id="middle_title">
-						<span id="search_result">'${currentPath}'</span>의 검색 결과
+						<span id="search_result">'${searchContent}'</span>의 검색 결과
 						${searchCount }
 					</div>
 					<c:if test="${searchCount == 0}">
@@ -73,7 +74,8 @@
 									<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
 								</div>
 								<input id="middle_file_nm_input" name="fileName" type="hidden"
-									value="${fileCategoryInfoList.file_nm }">
+									value="${fileCategoryInfoList.file_nm }"> <input id="middle_file_extension_input" name="extension"
+									type="hidden" value="${fileCategoryInfoList.file_extension }">
 							</div>
 						</form>
 					</c:when>
@@ -117,6 +119,8 @@
 										</div>
 										<input id="middle_file_nm_input" name="fileName" type="hidden"
 											value="${fileCategoryInfo.file_nm }">
+											<input id="middle_file_extension_input" name="extension" type="hidden"
+									value="${fileCategoryInfo.file_extension }">
 									</div>
 								</form>
 							</c:if>
@@ -161,6 +165,8 @@
 									</div>
 									<input id="middle_file_nm_input" name="fileName" type="hidden"
 										value="${fileCategoryInfoList.file_nm }">
+										<input id="middle_file_extension_input" name="extension" type="hidden"
+									value="${fileCategoryInfoList.file_extension }">
 								</div>
 							</form>
 						</c:if>
@@ -204,6 +210,8 @@
 									</div>
 									<input id="middle_file_nm_input" name="fileName" type="hidden"
 										value="${fileCategoryInfoList.file_nm }">
+										<input id="middle_file_extension_input" name="extension" type="hidden"
+									value="${fileCategoryInfoList.file_extension }">
 								</div>
 							</form>
 						</c:if>
@@ -255,13 +263,12 @@
 
 		<div id="sub_content_container">
 			<div id="search_container">
-				<form action="/search" method="get">
+				
 					<select name="category" class="search_select">
-						<option value="searchTitle" selected="selected">제목</option>
-						<option value="searchCategory">내용</option>
-					</select> <input id="search_input" type="text" name="content"> <input
-						type="submit" id="search_btn" value="검색">
-				</form>
+						<option value="searchTitle" selected="selected" name="searchTitle">제목</option>
+						<option value="searchCategory" name="searchCategory">내용</option>
+					</select> <input id="search_input" type="text" name="content"> <span id="search_btn" onclick="searchForm()">전송</span>
+				
 			</div>
 			<div id="category_list_container">
 				<form action="/category" method="get">
@@ -429,8 +436,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/resources/js/main/home.js?ver=82"></script>
-<script defer src="/resources/js/pdf/pdfUpload.js?ver=67"></script>
-<script defer src="/resources/js/pdf/fileOpen.js?ver=19"></script>
+<script defer src="/res/js/main/home.js?ver=30"></script>
+<script defer src="/res/js/pdf/pdfUpload.js?ver=1"></script>
+<script defer src="/res/js/pdf/fileOpen.js?ver=1"></script>
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script defer src="/resources/js/pdf/fileDownload.js?ver=20"></script>
+<script defer src="/res/js/pdf/fileDownload.js?ver=1"></script>

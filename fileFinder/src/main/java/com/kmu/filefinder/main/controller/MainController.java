@@ -46,15 +46,15 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "mainCategory");
+		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
+
 		return categoryService.homeCategoryInfo(mv);
-		
 	}
 
 	// 카테고리 생성
 	@ResponseBody
 	@PostMapping("/createCategory")
 	public Map<String, Object> createCategory(@RequestBody CategoryDTO dto) {
-
 		Map<String, Object> val = new HashMap<String, Object>();
 		val.put("category", categoryService.createCategory(dto));
 
@@ -67,16 +67,21 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "entireCategory");
+		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
+
 		return categoryService.homeCategoryInfo(mv);
 	}
 
 	// 대분류 카테고리 뿌리기
 	@ResponseBody
 	@GetMapping("/category/{largeCategory}")
-	public ModelAndView largeCategory(@PathVariable("largeCategory") String largeCategory, @ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
+	public ModelAndView largeCategory(@PathVariable("largeCategory") String largeCategory,
+			@ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getLargeFileInfoList(largeCategory, pagingVo));
 		mv.addObject("currentPath", "largeCategory");
+		mv.addObject("totalNumberPosts", fileService.getCount());
+
 		return categoryService.homeCategoryInfo(mv);
 	}
 
@@ -84,10 +89,13 @@ public class MainController {
 	@ResponseBody
 	@GetMapping("/category/{largeCategory}/{smallCategory}")
 	public ModelAndView smallCategory(@PathVariable("largeCategory") String largeCategory,
-			@PathVariable("smallCategory") String smallCategory, @ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
+			@PathVariable("smallCategory") String smallCategory, @ModelAttribute("pagingVO") PagingVO pagingVo)
+			throws IOException {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory, pagingVo));
 		mv.addObject("currentPath", "smallCategory");
+		mv.addObject("totalNumberPosts", fileService.getCount());
+
 		return categoryService.homeCategoryInfo(mv);
 	}
 
@@ -105,42 +113,42 @@ public class MainController {
 		return categoryService.deleteLargeCategory(id);
 	}
 
+	// 검색으로 찾기
 	@ResponseBody
-	@GetMapping("/search")
-	public ModelAndView test(@RequestParam("category") String category, @RequestParam("content") String content, @ModelAttribute("params") final PagingVO pagingVo)
-			throws IOException {
-
+	@GetMapping("/search/{category}/{content}")
+	public ModelAndView searchFile(@PathVariable("category") String category, @PathVariable("content") String content,
+			@ModelAttribute("pagingVO") PagingVO pagingVo) throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getFileSearchInfoList(category, content));
-		mv.addObject("currentPath", content);
+		mv.addObject("fileCategoryInfoList", fileService.getFileSearchInfoList(category, content, pagingVo));
+		mv.addObject("currentPath", category);
+		mv.addObject("searchContent", content);
 		mv.addObject("searchCount", fileService.getCount());
+		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
 
 	@GetMapping("/pdf")
-	
-	
 	public static void createWordDocument() {
-		
+
 		String doc = "C:\\pdf\\테스트\\ㅁㄴㅇ\\Japan's reign of terror in Korea.docx";
 		String pdf = "C:\\pdf\\테스트\\ㅁㄴㅇ\\Japan's reign of terror in Korea.pdf";
-		
-		try {
-            InputStream templateInputStream = new FileInputStream(doc);
-            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(templateInputStream);
-            MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 
-            String outputfilepath = pdf;
-            FileOutputStream os = new FileOutputStream(outputfilepath);
-            Docx4J.toPDF(wordMLPackage,os);
-            os.flush();
-            os.close();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+		try {
+			InputStream templateInputStream = new FileInputStream(doc);
+			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(templateInputStream);
+			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+
+			String outputfilepath = pdf;
+			FileOutputStream os = new FileOutputStream(outputfilepath);
+			Docx4J.toPDF(wordMLPackage, os);
+			os.flush();
+			os.close();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	@GetMapping("/p")
 	public void aa() throws IOException {
 		File file = new File("C:\\Users\\User\\Desktop\\계명대학교\\4학년\\2학기\\소프트웨어공학\\강의자료2\\09(a) 설계원리.pdf");
@@ -149,9 +157,9 @@ public class MainController {
 		System.out.println("test");
 		PDFTextStripper pdfTextStripper = new PDFTextStripper();
 		PDDocument pdDocument = new PDDocument();
-		
+
 		String text = pdfTextStripper.getText(pdDocument);
-		
+
 		System.out.println(text);
 	}
 }

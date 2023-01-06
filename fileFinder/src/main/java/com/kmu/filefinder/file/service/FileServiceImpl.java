@@ -44,10 +44,6 @@ public class FileServiceImpl implements FileService {
 		return count;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
-	}
-
 	public void increaseCount() {
 		this.count++;
 	}
@@ -78,7 +74,7 @@ public class FileServiceImpl implements FileService {
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			increaseFileCount();
 			int extensionLength = 4;
-			if(fileExtension.equals(".docx")) {
+			if (fileExtension.equals(".docx")) {
 				extensionLength = 5;
 			}
 			String parseFileName = fileRealName.substring(0, fileRealName.length() - extensionLength);
@@ -105,7 +101,7 @@ public class FileServiceImpl implements FileService {
 			String fileRealName = item.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
 			int extensionLength = 4; // pdf
-			if(fileExtension.equals(".docx")) {
+			if (fileExtension.equals(".docx")) {
 				extensionLength = 5;
 			}
 			String parseFileName = fileRealName.substring(0, fileRealName.length() - extensionLength);
@@ -138,45 +134,47 @@ public class FileServiceImpl implements FileService {
 
 	// 전체 파일과 카테고리 정보 가져오기
 	public List<FileCategoryDTO> getFileCategoryInfoList(PagingVO pagingVo) throws IOException {
-		
+
 		int count = mainMapper.getTotalNumberPosts();
-		if(count < 1) {
+		if (count < 1) {
 			return null;
 		}
 		Pagination pagination = new Pagination(count, pagingVo);
 		pagingVo.setPagination(pagination);
 		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList(pagingVo);
 		addText(list);
-	
+
 		return list;
 	}
 
 	// 대분류 카테고리 정보 가져오기
 	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
-		List<Integer> list_int = fileMapper.getIcategoryByCategoryTop(i_category);
 		List<List<FileCategoryDTO>> l = new ArrayList<List<FileCategoryDTO>>();
-		int count = mainMapper.getTotalNumberPosts();
+
+		int count = mainMapper.getLargeNumberPosts(i_category);
+		this.count = count;
 		Pagination pagination = new Pagination(count, pagingVo);
 		pagingVo.setPagination(pagination);
-		for (Integer i : list_int) {
-			List<FileCategoryDTO> list = fileMapper.getFileInfoList(i, pagingVo);
-			System.out.println("테스트");
-			addText(list);
-			l.add(list);
-		}
+
+		List<FileCategoryDTO> list = fileMapper.getFileLargeInfoList(i_category, pagingVo);
+
+		addText(list);
+		l.add(list);
+
 		return l;
 	}
 
 	// 소분류 카테고리 정보 가져오기
-	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm, PagingVO pagingVo) throws IOException { // 소분류 클릭 시 소분류 리스트 보기
+	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
-		int count = mainMapper.getTotalNumberPosts();
+		int count = mainMapper.getSmallNumberPosts(i_category);
+		this.count = count;
 		Pagination pagination = new Pagination(count, pagingVo);
 		pagingVo.setPagination(pagination);
-		List<FileCategoryDTO> list = fileMapper.getFileInfoList(i_category, pagingVo);
+		List<FileCategoryDTO> list = fileMapper.getFileSmallInfoList(i_category, pagingVo);
 		addText(list);
-		
+
 		return list;
 	}
 
@@ -202,57 +200,67 @@ public class FileServiceImpl implements FileService {
 	}
 
 	/* 검색을 통한 리스트 불러오기 */
-	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content) throws IOException {
-		count = 0;
-
+	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content, PagingVO pagingVo)
+			throws IOException {
 		List<FileCategoryDTO> fileList = new ArrayList<FileCategoryDTO>();
+
 		// 제목 리스트를 불러와 입력한 제목이 포함되어 있다면
 		if (category.equals("searchTitle")) {
-			return getSearchByTitle(fileList, content);
+			return getSearchByTitle(fileList, content, pagingVo);
 		} else if (category.equals("searchCategory")) {
-			return getSearchByContent(fileList, content);
+			return getSearchByContent(fileList, content, pagingVo);
 		}
 		return fileList;
 	}
 
 	// 제목으로 검색
-	public List<FileCategoryDTO> getSearchByTitle(List<FileCategoryDTO> fileList, String content) throws IOException {
-		List<String> list = fileMapper.getFileNameList();
+	public List<FileCategoryDTO> getSearchByTitle(List<FileCategoryDTO> fileList, String content, PagingVO pagingVo)
+			throws IOException {
+		int count = fileMapper.getFileListCountByName(content);
+		this.count = count;
+		Pagination pagination = new Pagination(count, pagingVo);
+		pagingVo.setPagination(pagination);
+		List<FileCategoryDTO> list = fileMapper.getFileListByName(content, pagingVo);
 
-		for (String str : list) {
-			String lowerStr = str.toLowerCase();
-			String upperStr = str.toUpperCase();
-			if (str.contains(content) || lowerStr.contains(content) || upperStr.contains(content)) { // 대소문자 가능
-				count++;
-				FileCategoryDTO dto = fileMapper.getFileSearchInfoListByFileName(str);
-				fileList.add(dto);
-				addText(fileList);
-			}
-		}
-		return fileList;
+		addText(list);
+		
+		return list;
 	}
 
 	// 내용으로 검색
-	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content) throws IOException {
-
+	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content, PagingVO pagingVo) throws IOException {
+		
 		fileList = fileMapper.getFileSearchInfoList(); // 모든 file을 가져옴
 		List<FileCategoryDTO> temp = new ArrayList<FileCategoryDTO>();
 		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
 
 		for (FileCategoryDTO file : fileList) {
-			temp = fileExtractionServiceImpl.extractContent(file, content);
+			temp = fileExtractionServiceImpl.extractContent(file, content, pagingVo);
 			for (FileCategoryDTO dto : temp) {
 				list.add(dto);
 			}
 		}
-		return list;
+		this.count = list.size();
+		Pagination pagination = new Pagination(list.size(), pagingVo);
+		pagingVo.setPagination(pagination);
+		
+		System.out.println("전체 : " + list.size());
+		System.out.println("현재 페이지 : " + pagingVo.getPage());
+		System.out.println("출력 개수 : " + pagingVo.getRecordSize());
+		System.out.println("시작점 : " + pagingVo.getPagination().getLimitStart());
+		System.out.println("시작 페이지 : " + pagingVo.getPagination().getStartPage());
+		System.out.println("끝 페이지 : " + pagingVo.getPagination().getEndPage());
+		
+		return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getLimitStart()+10);
 	}
 
 	// 파일 열기
 	@Override
-	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName) throws IOException {
+	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName, String extension)
+			throws IOException {
 		String filePath = fileMapper.getFilePathByFileName(fileName);
-		String extension = fileMapper.getExtensionByFileName(fileName);
+		// 현재 docx 파일은 모달창으로 오픈하기 때문에 구현을 하지 않음
+		// 무조건 pdf만 들어갈 것
 		if (extension.equals(".pdf")) {
 			fileOpenPdf(resp, filePath);
 		} else if (extension.equals(".docx")) {
@@ -281,17 +289,17 @@ public class FileServiceImpl implements FileService {
 	// 파일 다운로드 기능 - 구현중
 	public int fileDownload() {
 		File file = new File("d:\\example\\file.txt");
-		 
-        try {
-            if (file.createNewFile()) {
-                System.out.println("File created");
-            } else {
-                System.out.println("File already exists");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+
+		try {
+			if (file.createNewFile()) {
+				System.out.println("File created");
+			} else {
+				System.out.println("File already exists");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		return 0;
 	}
 }

@@ -21,5 +21,5 @@ public interface FileService {
 
 	List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException;
 
-	void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName) throws FileNotFoundException, IOException;
+	void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName, String extension) throws FileNotFoundException, IOException;
 }

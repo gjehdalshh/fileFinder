@@ -15,6 +15,8 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kmu.filefinder.common.dto.PagingVO;
+import com.kmu.filefinder.common.paging.Pagination;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 
 @Service
@@ -76,7 +78,7 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	}
 
 	@Override
-	public List<FileCategoryDTO> extractContent(FileCategoryDTO dto, String content) throws IOException {
+	public List<FileCategoryDTO> extractContent(FileCategoryDTO dto, String content, PagingVO pagingVo) throws IOException {
 		File file = new File(dto.getFile_path());
 		String text = "";
 		XWPFWordExtractor xw;
@@ -97,7 +99,7 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 			}
 		}
 
-		String[] strArr = text.split("\n");
+		String[] strArr = text.split("\n"); // 한 줄씩 배열에 담음
 
 		for (int i = 0; i < strArr.length; i++) {
 			strArr[i] = strArr[i].replaceAll("(\r\n|\r|\n|\n\r)", " ");
@@ -127,9 +129,9 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 					String lowerCaseTextString = strArr[i].toLowerCase();
 					String lowerCaseWord = content.toLowerCase();
 					
-					int index = lowerCaseTextString.indexOf(lowerCaseWord);
+					int index = lowerCaseTextString
+							.indexOf(lowerCaseWord);
 					while (index != -1) {
-						System.out.println("test");
 						if (index < 150) { // 첫 문장
 							if (strArr[i].length() < 300) { // 문장이 300자 이하
 								text = strArr[i].substring(0, strArr[i].length());
@@ -151,7 +153,6 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 				} else { // 한글 문서
 					text = strArr[i];
 					while (size < 180) {
-						System.out.println("test");
 						if (firstIndex != 0) {
 							text = strArr[--firstIndex] + text;
 						}
@@ -168,14 +169,13 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	}
 
 	public void createFileCategoryDTO(List<FileCategoryDTO> list, FileCategoryDTO dto, String text) {
-
+		fileServiceImpl.increaseCount();
 		FileCategoryDTO tempDTO = FileCategoryDTO.builder().category_nm(dto.getCategory_nm())
 				.file_extension(dto.getFile_extension()).file_nm(dto.getFile_nm()).file_path(dto.getFile_path())
 				.r_dt(dto.getR_dt()).i_cateogry(dto.getI_cateogry()).i_file(dto.getI_file()).build();
 
 		tempDTO.setSummaryText(text);
 		list.add(tempDTO);
-		fileServiceImpl.increaseCount();
 	}
 
 	public boolean checkIfEnglishDocument(String[] strArr) { // 한글 문서, 영문 문서 판별

@@ -23,13 +23,16 @@ let currentPath = document.querySelector('#currentPath').value
 let largeCategory = document.querySelector('#largeCategory').value
 let smallCategory = document.querySelector('#smallCategory').value
 
-changeColor()
+window.onload = function() {
+	changeColor()	
+}
 
 function goHome() {
 	location.href = `/`
 }
 
 function changeColor() { // 검색 시 특정 문자 색 변경
+
 	let contentValue = document.querySelector('#contentValue').value
 	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
 	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
@@ -248,9 +251,25 @@ function delete_category() {
 		})
 	}
 }
+function searchForm() {
+	let search_select = document.querySelector('.search_select')
+	let search_input = document.querySelector('#search_input').value
+	search_select = search_select.options[search_select.selectedIndex].value
+	console.log(search_select)
+	console.log(search_input)
+	if(search_input == '') {
+		alert('내용을 입력해주세요')
+		return
+	}
+	 
+	location.href =`/search/`+search_select+`/`+ search_input
+}
 
 function movePage(pageNumber) {
-	console.log('aaa')
+	let searchContent = document.querySelector('#searchContent').value
+	console.log(currentPath)
+	console.log(searchContent)
+	
 
 	if (currentPath == "mainCategory") {
 		location.href = `/?page=` + pageNumber
@@ -259,7 +278,9 @@ function movePage(pageNumber) {
 	} else if (currentPath == "largeCategory") {
 		location.href = `/category/` + largeCategory + `?page=` + pageNumber
 	} else if (currentPath == "smallCategory") {
-		location.href = `/category/` + largeCategory + `/` + smallCategory + `?page=` + pageNumber
+		location.href = `/category/` + largeCateory + `/` + smallCategory + `?page=` + pageNumber
+	} else if(currentPath == "searchTitle" || currentPath == "searchCategory") {
+		location.href = `/search/` + currentPath + `/` + searchContent + `?page=` + pageNumber
 	}
 }
 

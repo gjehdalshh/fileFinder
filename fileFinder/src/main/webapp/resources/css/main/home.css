@@ -188,6 +188,7 @@ select {
 
 .search_select {
 	width: 110px;
+	margin-right: 5px;
 	height: 30;
 	padding: 6px 23px 5px 10;
 	border: 1px solid #D9D9D9;
@@ -208,6 +209,7 @@ select {
 
 #search_input {
 	width: 138px;
+	margin-right: 5px;
 	height: 30px;
 	padding: 3;
 	border: 1px solid #999595;

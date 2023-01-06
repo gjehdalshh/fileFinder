@@ -15,6 +15,8 @@ public interface MainMapper {
 	public String getCategoryNmByTop(int category_top);
 	public String getCategoryPathByIcategory(int i_category);
 	public int getTotalNumberPosts();
+	public int getLargeNumberPosts(int i_category);
+	public int getSmallNumberPosts(int i_category);
 	public CategoryDTO getCategoryByIcategory(int i_category);
 	public int getCategoryIcategoryByCategoryTop(int category_top);
 	
