@@ -20,6 +20,7 @@ public interface FileService {
 	boolean checkFileExistence(List<MultipartFile> list);
 
 	List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException;
+	List<FileCategoryDTO> addTextBySearch(List<FileCategoryDTO> list) throws IOException;
 
 	void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName, String extension) throws FileNotFoundException, IOException;
 }

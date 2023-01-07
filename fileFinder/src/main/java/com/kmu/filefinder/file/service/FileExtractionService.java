@@ -7,9 +7,9 @@ import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 
 public interface FileExtractionService {
-	String extractSummary(FileCategoryDTO dto) throws IOException;
-	String extractSummaryTextByPDF(String filePath) throws IOException;
-	String extractSummaryTextByDOCX(String filePath) throws IOException;
+	String extractText(FileCategoryDTO dto) throws IOException;
+	String extractTextByPDF(String filePath) throws IOException;
+	String extractTextByDOCX(String filePath) throws IOException;
 	List<FileCategoryDTO> extractSearchSentence(String[] strArr, FileCategoryDTO dto, String content);
-	List<FileCategoryDTO> extractContent(FileCategoryDTO dto, String content, PagingVO pagingVo) throws IOException;
+	List<FileCategoryDTO> extractSummaryText(FileCategoryDTO dto, String content) throws IOException;
 }

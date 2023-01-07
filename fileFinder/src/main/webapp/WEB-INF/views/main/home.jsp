@@ -8,7 +8,7 @@
 <input id="contentValue" type="hidden" value="${param.content}">
 
 <input id="currentPath" type="hidden" value="${currentPath}">
-<input id="searchContent" type="hidden" value="${content}">
+<input id="searchContent" type="hidden" value="${searchContent}">
 <input id="largeCategory" type="hidden" value="${largeCategory}">
 <input id="smallCategory" type="hidden" value="${smallCategory}">
 
@@ -37,10 +37,14 @@
 					</div>
 				</c:when>
 				<c:when test="${currentPath eq 'largeCategory' }">
-					<div id="middle_title">${largeCategory}</div>
+					<div id="middle_title">${largeCategory}
+						<span id="largeCategoryCount">${largeCategoryCount }</span>
+					</div>
 				</c:when>
 				<c:when test="${currentPath eq 'smallCategory' }">
-					<div id="middle_title">${smallCategory}</div>
+					<div id="middle_title">${smallCategory}
+						<span id="smallCategoryCount">${smallCategoryCount }</span>
+					</div>
 				</c:when>
 				<c:otherwise>
 					<div id="middle_title">
@@ -74,8 +78,9 @@
 									<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
 								</div>
 								<input id="middle_file_nm_input" name="fileName" type="hidden"
-									value="${fileCategoryInfoList.file_nm }"> <input id="middle_file_extension_input" name="extension"
-									type="hidden" value="${fileCategoryInfoList.file_extension }">
+									value="${fileCategoryInfoList.file_nm }"> <input
+									id="middle_file_extension_input" name="extension" type="hidden"
+									value="${fileCategoryInfoList.file_extension }">
 							</div>
 						</form>
 					</c:when>
@@ -100,6 +105,7 @@
 									value="${fileCategoryInfoList.file_nm }"> <input
 									id="middle_summary_text_input" name="middle_summary_text_input"
 									type="hidden" value="${fileCategoryInfoList.summaryText }">
+									<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfo.fullText }" >
 							</div>
 						</div>
 					</c:when>
@@ -118,9 +124,9 @@
 											<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
 										</div>
 										<input id="middle_file_nm_input" name="fileName" type="hidden"
-											value="${fileCategoryInfo.file_nm }">
-											<input id="middle_file_extension_input" name="extension" type="hidden"
-									value="${fileCategoryInfo.file_extension }">
+											value="${fileCategoryInfo.file_nm }"> <input
+											id="middle_file_extension_input" name="extension"
+											type="hidden" value="${fileCategoryInfo.file_extension }">
 									</div>
 								</form>
 							</c:if>
@@ -145,6 +151,7 @@
 											id="middle_summary_text_input"
 											name="middle_summary_text_input" type="hidden"
 											value="${fileCategoryInfo.summaryText }">
+											<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfo.fullText }" >
 									</div>
 								</div>
 							</c:if>
@@ -164,9 +171,9 @@
 										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
 									</div>
 									<input id="middle_file_nm_input" name="fileName" type="hidden"
-										value="${fileCategoryInfoList.file_nm }">
-										<input id="middle_file_extension_input" name="extension" type="hidden"
-									value="${fileCategoryInfoList.file_extension }">
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_file_extension_input" name="extension"
+										type="hidden" value="${fileCategoryInfoList.file_extension }">
 								</div>
 							</form>
 						</c:if>
@@ -191,11 +198,13 @@
 										id="middle_summary_text_input"
 										name="middle_summary_text_input" type="hidden"
 										value="${fileCategoryInfoList.summaryText }">
+										<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfoList.fullText }" >
 								</div>
 							</div>
 						</c:if>
 					</c:when>
 					<%-- 메인화면 전체카테고리 --%>
+					<%-- 검색 시에도 이 카테고리가 뿌려짐 --%>
 					<c:otherwise>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf'}">
 							<form class="file_open_form" action="/fileOpen" method="get"
@@ -209,9 +218,9 @@
 										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
 									</div>
 									<input id="middle_file_nm_input" name="fileName" type="hidden"
-										value="${fileCategoryInfoList.file_nm }">
-										<input id="middle_file_extension_input" name="extension" type="hidden"
-									value="${fileCategoryInfoList.file_extension }">
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_file_extension_input" name="extension"
+										type="hidden" value="${fileCategoryInfoList.file_extension }">
 								</div>
 							</form>
 						</c:if>
@@ -236,6 +245,7 @@
 										id="middle_summary_text_input"
 										name="middle_summary_text_input" type="hidden"
 										value="${fileCategoryInfoList.summaryText }">
+										<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfoList.fullText }" >
 								</div>
 							</div>
 						</c:if>
@@ -263,12 +273,13 @@
 
 		<div id="sub_content_container">
 			<div id="search_container">
-				
-					<select name="category" class="search_select">
-						<option value="searchTitle" selected="selected" name="searchTitle">제목</option>
-						<option value="searchCategory" name="searchCategory">내용</option>
-					</select> <input id="search_input" type="text" name="content"> <span id="search_btn" onclick="searchForm()">전송</span>
-				
+
+				<select name="category" class="search_select">
+					<option value="searchTitle" selected="selected" name="searchTitle">제목</option>
+					<option value="searchCategory" name="searchCategory">내용</option>
+				</select> <input id="search_input" type="text" name="content"
+					onkeyup="enterkey()"> <span id="search_btn"
+					onclick="searchForm()">전송</span>
 			</div>
 			<div id="category_list_container">
 				<form action="/category" method="get">
@@ -436,8 +447,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=30"></script>
+<script defer src="/res/js/main/home.js?ver=46"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=1"></script>
-<script defer src="/res/js/pdf/fileOpen.js?ver=1"></script>
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script defer src="/res/js/pdf/fileOpen.js?ver=15"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script defer src="/res/js/pdf/fileDownload.js?ver=1"></script>

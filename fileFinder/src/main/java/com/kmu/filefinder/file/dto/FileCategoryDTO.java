@@ -18,4 +18,5 @@ public class FileCategoryDTO {
 	private String file_path;
 	private String category_nm;
 	private String summaryText;
+	private String fullText;
 }

@@ -32,12 +32,16 @@ function goHome() {
 }
 
 function changeColor() { // 검색 시 특정 문자 색 변경
+	console.log('호출')
 
-	let contentValue = document.querySelector('#contentValue').value
+	let contentValue = document.querySelector('#searchContent').value
 	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
 	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
+	
 	let nm = "<span style='color:red;font-size:17px';>" + contentValue + "</span>"
 	var arr = [];
+	return
+
 	for (let i = 0; i < middle_summary_text.length; i++) {
 		let index = middle_summary_text[i].innerHTML.toLowerCase().indexOf(contentValue.toLowerCase())
 		let temp = middle_summary_text[i].innerHTML.slice(index, index + contentValue.length)
@@ -251,12 +255,18 @@ function delete_category() {
 		})
 	}
 }
+
+function enterkey() {
+	if (window.event.keyCode == 13) {
+    	searchForm()
+    }
+}
+
 function searchForm() {
 	let search_select = document.querySelector('.search_select')
 	let search_input = document.querySelector('#search_input').value
 	search_select = search_select.options[search_select.selectedIndex].value
-	console.log(search_select)
-	console.log(search_input)
+
 	if(search_input == '') {
 		alert('내용을 입력해주세요')
 		return
@@ -267,9 +277,6 @@ function searchForm() {
 
 function movePage(pageNumber) {
 	let searchContent = document.querySelector('#searchContent').value
-	console.log(currentPath)
-	console.log(searchContent)
-	
 
 	if (currentPath == "mainCategory") {
 		location.href = `/?page=` + pageNumber

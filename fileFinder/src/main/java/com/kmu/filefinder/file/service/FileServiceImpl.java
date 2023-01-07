@@ -178,13 +178,26 @@ public class FileServiceImpl implements FileService {
 		return list;
 	}
 
+	// 텍스트 추출 후 담기
 	@Override
-	public List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException { // 간단한 내용 담기
+	public List<FileCategoryDTO> addText(List<FileCategoryDTO> list) throws IOException {
 
 		int i = 0;
 		for (FileCategoryDTO d : list) {
-			String text = fileExtractionServiceImpl.extractSummary(d);
+			String text = fileExtractionServiceImpl.extractText(d);
 			list.get(i++).setSummaryText(text);
+		}
+		return list;
+	}
+	
+	// 내용 검색 시 텍스트 추출 후 담기
+	@Override
+	public List<FileCategoryDTO> addTextBySearch(List<FileCategoryDTO> list) throws IOException {
+
+		int i = 0;
+		for (FileCategoryDTO d : list) {
+			String text = fileExtractionServiceImpl.extractText(d);
+			list.get(i++).setFullText(text);
 		}
 		return list;
 	}
@@ -223,35 +236,30 @@ public class FileServiceImpl implements FileService {
 		List<FileCategoryDTO> list = fileMapper.getFileListByName(content, pagingVo);
 
 		addText(list);
-		
+
 		return list;
 	}
 
 	// 내용으로 검색
-	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content, PagingVO pagingVo) throws IOException {
-		
+	public List<FileCategoryDTO> getSearchByContent(List<FileCategoryDTO> fileList, String content, PagingVO pagingVo)
+			throws IOException {
+
 		fileList = fileMapper.getFileSearchInfoList(); // 모든 file을 가져옴
 		List<FileCategoryDTO> temp = new ArrayList<FileCategoryDTO>();
 		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
 
 		for (FileCategoryDTO file : fileList) {
-			temp = fileExtractionServiceImpl.extractContent(file, content, pagingVo);
+			temp = fileExtractionServiceImpl.extractSummaryText(file, content);
 			for (FileCategoryDTO dto : temp) {
 				list.add(dto);
 			}
 		}
+		addTextBySearch(list);
 		this.count = list.size();
 		Pagination pagination = new Pagination(list.size(), pagingVo);
 		pagingVo.setPagination(pagination);
-		
-		System.out.println("전체 : " + list.size());
-		System.out.println("현재 페이지 : " + pagingVo.getPage());
-		System.out.println("출력 개수 : " + pagingVo.getRecordSize());
-		System.out.println("시작점 : " + pagingVo.getPagination().getLimitStart());
-		System.out.println("시작 페이지 : " + pagingVo.getPagination().getStartPage());
-		System.out.println("끝 페이지 : " + pagingVo.getPagination().getEndPage());
-		
-		return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getLimitStart()+10);
+
+		return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getLimitStart() + 10);
 	}
 
 	// 파일 열기

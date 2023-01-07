@@ -26,17 +26,17 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	private FileServiceImpl fileServiceImpl;
 
 	@Override
-	public String extractSummary(FileCategoryDTO dto) throws IOException {
+	public String extractText(FileCategoryDTO dto) throws IOException {
 		if (dto.getFile_extension().equals(".pdf")) {
-			return extractSummaryTextByPDF(dto.getFile_path());
+			return extractTextByPDF(dto.getFile_path());
 		} else if (dto.getFile_extension().equals(".docx")) {
-			return extractSummaryTextByDOCX(dto.getFile_path());
+			return extractTextByDOCX(dto.getFile_path());
 		}
 		return null;
 	}
 
 	@Override
-	public String extractSummaryTextByPDF(String filePath) throws IOException {
+	public String extractTextByPDF(String filePath) throws IOException {
 
 		File file = new File(filePath);
 
@@ -62,7 +62,7 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	}
 
 	@Override
-	public String extractSummaryTextByDOCX(String filePath) throws IOException {
+	public String extractTextByDOCX(String filePath) throws IOException {
 		XWPFWordExtractor xw;
 
 		try {
@@ -78,7 +78,7 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 	}
 
 	@Override
-	public List<FileCategoryDTO> extractContent(FileCategoryDTO dto, String content, PagingVO pagingVo) throws IOException {
+	public List<FileCategoryDTO> extractSummaryText(FileCategoryDTO dto, String content) throws IOException {
 		File file = new File(dto.getFile_path());
 		String text = "";
 		XWPFWordExtractor xw;

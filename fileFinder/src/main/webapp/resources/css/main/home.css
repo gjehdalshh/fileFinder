@@ -84,7 +84,7 @@ form {
 	font-weight: 600;
 }
 
-#totalNumberPosts {
+#totalNumberPosts, #largeCategoryCount, #smallCategoryCount {
 	color: #ef402f;
 }
 

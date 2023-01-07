@@ -46,7 +46,6 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "mainCategory");
-		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
@@ -67,7 +66,6 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "entireCategory");
-		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
@@ -80,7 +78,7 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getLargeFileInfoList(largeCategory, pagingVo));
 		mv.addObject("currentPath", "largeCategory");
-		mv.addObject("totalNumberPosts", fileService.getCount());
+		mv.addObject("largeCategoryCount", fileService.getCount());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
@@ -94,7 +92,7 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory, pagingVo));
 		mv.addObject("currentPath", "smallCategory");
-		mv.addObject("totalNumberPosts", fileService.getCount());
+		mv.addObject("smallCategoryCount", fileService.getCount());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
@@ -123,7 +121,6 @@ public class MainController {
 		mv.addObject("currentPath", category);
 		mv.addObject("searchContent", content);
 		mv.addObject("searchCount", fileService.getCount());
-		mv.addObject("totalNumberPosts", categoryService.getTotalNumberPosts());
 
 		return categoryService.homeCategoryInfo(mv);
 	}
