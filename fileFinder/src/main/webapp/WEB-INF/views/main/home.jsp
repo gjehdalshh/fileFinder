@@ -447,8 +447,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=46"></script>
+<script defer src="/res/js/main/home.js?ver=93"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=1"></script>
-<script defer src="/res/js/pdf/fileOpen.js?ver=15"></script>
+<script defer src="/res/js/pdf/fileOpen.js?ver=18"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script defer src="/res/js/pdf/fileDownload.js?ver=1"></script>

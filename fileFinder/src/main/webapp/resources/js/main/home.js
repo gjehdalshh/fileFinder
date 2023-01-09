@@ -24,7 +24,7 @@ let largeCategory = document.querySelector('#largeCategory').value
 let smallCategory = document.querySelector('#smallCategory').value
 
 window.onload = function() {
-	changeColor()	
+	changeColor()
 }
 
 function goHome() {
@@ -32,25 +32,33 @@ function goHome() {
 }
 
 function changeColor() { // 검색 시 특정 문자 색 변경
-	console.log('호출')
-
+	if(currentPath == "searchTitle") {
+		return
+	}
+	console.log("확인")
 	let contentValue = document.querySelector('#searchContent').value
-	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
-	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
+	if (contentValue == '') {
+		return
+	}
 	
+	let middle_summary_text = document.querySelectorAll('.middle_summary_text')
+
+	let middle_file_nm = document.querySelectorAll('.middle_file_nm')
+
 	let nm = "<span style='color:red;font-size:17px';>" + contentValue + "</span>"
-	var arr = [];
-	return
+	let arr = []
+	let summary = []
 
 	for (let i = 0; i < middle_summary_text.length; i++) {
 		let index = middle_summary_text[i].innerHTML.toLowerCase().indexOf(contentValue.toLowerCase())
 		let temp = middle_summary_text[i].innerHTML.slice(index, index + contentValue.length)
-		arr[i] = temp;
+		arr[i] = temp; // 대소문자 관계없이 해당 글자를 그대로 가져옴, Japan, japan 등
 	}
 
-	let set = new Set(arr);
-	arr = Array.from(set);
-	let summary = [];
+	// 중복 제거
+	let set = new Set(arr)
+	arr = Array.from(set)
+
 	for (let i = 0; i < arr.length; i++) {
 		summary[i] = "<span style='color:red;font-size:15px';>" + arr[i] + "</span>"
 	}
@@ -61,6 +69,30 @@ function changeColor() { // 검색 시 특정 문자 색 변경
 		}
 		middle_file_nm[i].innerHTML = middle_file_nm[i].innerHTML.replaceAll(contentValue, nm);
 	}
+
+	// 전체 텍스트 검색 색상 변경
+	let j = 0
+	let fullArr = []
+	let fullText = []
+	
+	let firstIndex = middle_text.toLowerCase().indexOf(contentValue)
+	fullArr[j] = middle_text.slice(firstIndex, firstIndex + contentValue.length)
+	while (firstIndex != -1) {
+		fullArr[j++] = middle_text.slice(firstIndex, firstIndex + contentValue.length)
+		firstIndex = middle_text.toLowerCase().indexOf(contentValue, firstIndex + contentValue.length);
+	}
+
+	set = new Set(fullArr)
+	fullArr = Array.from(set)
+
+	for (let i = 0; i < fullArr.length; i++) {
+		fullText[i] = "<span style='color:red;font-size:15px';>" + fullArr[i] + "</span>"
+	}
+
+	for (let i = 0; i < fullArr.length; i++) {
+		middle_text = middle_text.replaceAll(fullArr[i], fullText[i])
+	}
+	file_docx_content.innerHTML = middle_text
 }
 
 
@@ -71,8 +103,6 @@ $('#search_input').keyup(function() { // 검색 시 글자에 따라 실시간 �
 		$(this).html($(this).text().replace(regex, "<span class='txt-hlight'>" + search + "</span>"));
 	});
 });
-
-
 
 /* --------------- 대/소분류 구분 -------------------*/
 
@@ -258,8 +288,8 @@ function delete_category() {
 
 function enterkey() {
 	if (window.event.keyCode == 13) {
-    	searchForm()
-    }
+		searchForm()
+	}
 }
 
 function searchForm() {
@@ -267,12 +297,12 @@ function searchForm() {
 	let search_input = document.querySelector('#search_input').value
 	search_select = search_select.options[search_select.selectedIndex].value
 
-	if(search_input == '') {
+	if (search_input == '') {
 		alert('내용을 입력해주세요')
 		return
 	}
-	 
-	location.href =`/search/`+search_select+`/`+ search_input
+
+	location.href = `/search/` + search_select + `/` + search_input
 }
 
 function movePage(pageNumber) {
@@ -286,7 +316,7 @@ function movePage(pageNumber) {
 		location.href = `/category/` + largeCategory + `?page=` + pageNumber
 	} else if (currentPath == "smallCategory") {
 		location.href = `/category/` + largeCateory + `/` + smallCategory + `?page=` + pageNumber
-	} else if(currentPath == "searchTitle" || currentPath == "searchCategory") {
+	} else if (currentPath == "searchTitle" || currentPath == "searchCategory") {
 		location.href = `/search/` + currentPath + `/` + searchContent + `?page=` + pageNumber
 	}
 }

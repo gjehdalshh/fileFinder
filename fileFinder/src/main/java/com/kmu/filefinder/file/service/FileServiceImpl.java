@@ -258,7 +258,11 @@ public class FileServiceImpl implements FileService {
 		this.count = list.size();
 		Pagination pagination = new Pagination(list.size(), pagingVo);
 		pagingVo.setPagination(pagination);
-
+		
+		// 마지막 페이지가 10개가 안된다면
+		if(pagingVo.getPagination().getTotalRecordCount() < pagingVo.getPagination().getLimitStart() + 10) {
+			return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getTotalRecordCount());
+		}
 		return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getLimitStart() + 10);
 	}
 
