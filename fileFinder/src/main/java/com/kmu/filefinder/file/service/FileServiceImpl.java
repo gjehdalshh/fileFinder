@@ -3,13 +3,12 @@ package com.kmu.filefinder.file.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.common.io.Files;
 import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.common.paging.Pagination;
-import com.kmu.filefinder.common.paging.PagingResponse;
 import com.kmu.filefinder.common.utils.ConvertType;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 import com.kmu.filefinder.file.dto.FileDTO;
@@ -36,12 +34,28 @@ public class FileServiceImpl implements FileService {
 
 	@Autowired
 	private FileExtractionServiceImpl fileExtractionServiceImpl;
+	
+	@Value("${local.pdf.path}")
+	private String localPath;
 
 	private int path = 0;
 	private int count = 0;
+	private String currentCategoryName = "";
+	private String searchCategoryName = "";
+	private String searchContent = "";
 
 	public int getCount() {
 		return count;
+	}
+	
+	public String getCurrentCategoryName() {
+		return currentCategoryName;
+	}
+	public String getSearchCategoryName() {
+		return searchCategoryName;
+	}
+	public String getSearchContent() {
+		return searchContent;
 	}
 
 	public void increaseCount() {
@@ -50,7 +64,6 @@ public class FileServiceImpl implements FileService {
 
 	// @Override
 	public void filePath(String path) {
-		System.out.println(path);
 		this.path = ConvertType.convertStringToInt(path);
 	}
 
@@ -149,6 +162,9 @@ public class FileServiceImpl implements FileService {
 
 	// 대분류 카테고리 정보 가져오기
 	public List<List<FileCategoryDTO>> getLargeFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
+		// 파일 전체 다운로드 시 사용
+		this.currentCategoryName = category_nm;
+		
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		List<List<FileCategoryDTO>> l = new ArrayList<List<FileCategoryDTO>>();
 
@@ -167,6 +183,9 @@ public class FileServiceImpl implements FileService {
 
 	// 소분류 카테고리 정보 가져오기
 	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
+		// 파일 전체 다운로드 시 사용
+		this.currentCategoryName = category_nm;
+		
 		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
 		int count = mainMapper.getSmallNumberPosts(i_category);
 		this.count = count;
@@ -189,7 +208,7 @@ public class FileServiceImpl implements FileService {
 		}
 		return list;
 	}
-	
+
 	// 내용 검색 시 텍스트 추출 후 담기
 	@Override
 	public List<FileCategoryDTO> addTextBySearch(List<FileCategoryDTO> list) throws IOException {
@@ -215,6 +234,9 @@ public class FileServiceImpl implements FileService {
 	/* 검색을 통한 리스트 불러오기 */
 	public List<FileCategoryDTO> getFileSearchInfoList(String category, String content, PagingVO pagingVo)
 			throws IOException {
+		this.searchCategoryName = category;
+		this.searchContent = content;
+		
 		List<FileCategoryDTO> fileList = new ArrayList<FileCategoryDTO>();
 
 		// 제목 리스트를 불러와 입력한 제목이 포함되어 있다면
@@ -258,25 +280,25 @@ public class FileServiceImpl implements FileService {
 		this.count = list.size();
 		Pagination pagination = new Pagination(list.size(), pagingVo);
 		pagingVo.setPagination(pagination);
-		
+
 		// 마지막 페이지가 10개가 안된다면
-		if(pagingVo.getPagination().getTotalRecordCount() < pagingVo.getPagination().getLimitStart() + 10) {
-			return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getTotalRecordCount());
+		if (pagingVo.getPagination().getTotalRecordCount() < pagingVo.getPagination().getLimitStart() + 10) {
+			return list.subList(pagingVo.getPagination().getLimitStart(),
+					pagingVo.getPagination().getTotalRecordCount());
 		}
 		return list.subList(pagingVo.getPagination().getLimitStart(), pagingVo.getPagination().getLimitStart() + 10);
 	}
 
 	// 파일 열기
 	@Override
-	public void fileOpen(HttpServletRequest req, HttpServletResponse resp, String fileName, String extension)
-			throws IOException {
+	public void fileOpen(HttpServletResponse resp, String fileName, String extension) throws IOException {
 		String filePath = fileMapper.getFilePathByFileName(fileName);
 		// 현재 docx 파일은 모달창으로 오픈하기 때문에 구현을 하지 않음
 		// 무조건 pdf만 들어갈 것
 		if (extension.equals(".pdf")) {
 			fileOpenPdf(resp, filePath);
 		} else if (extension.equals(".docx")) {
-			fileOpenDocx(resp, filePath);
+			fileOpenDocx(filePath);
 		}
 	}
 
@@ -295,23 +317,30 @@ public class FileServiceImpl implements FileService {
 	}
 
 	// docx로 열기
-	public void fileOpenDocx(HttpServletResponse resp, String filePath) throws IOException {
-	}
-
-	// 파일 다운로드 기능 - 구현중
-	public int fileDownload() {
-		File file = new File("d:\\example\\file.txt");
-
-		try {
-			if (file.createNewFile()) {
-				System.out.println("File created");
-			} else {
-				System.out.println("File already exists");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void fileOpenDocx(String filePath) throws IOException {}
+	
+	
+	// 파일 삭제
+	public int fileDelete(int i_file) {
+		
+		// 로컬 파일 삭제
+		FileCategoryDTO dto = fileMapper.getFileByIFile(i_file);
+		System.out.println("dto : " + dto);
+		CategoryDTO cateDTO = mainMapper.getCategoryByIcategory(dto.getI_category());
+		System.out.println("cateDTO : " + cateDTO);
+		int iCategory = mainMapper.getCategoryIcategoryByCategoryTop(cateDTO.getCategory_top());
+		System.out.println("i_cate : " + iCategory);
+		mainMapper.decreaseFileCountByFileDelete(cateDTO.getI_category());
+		mainMapper.decreaseFileCountByFileDelete(iCategory);
+		
+		String deleteFilePath = dto.getFile_path();
+		File file = new File(deleteFilePath);
+		if(file.exists()) { // 파일이 존재하면
+			file.delete(); // 파일 삭제	
+			System.out.println("파일이 삭제됨");
 		}
-
-		return 0;
+		
+		// db 파일 삭제
+		return fileMapper.fileDelete(i_file);
 	}
 }

@@ -1,0 +1,124 @@
+@charset "UTF-8";
+
+body {
+	padding: 0px;
+	font-family: monospace;
+	width: 1024px;
+	margin: auto;
+}
+
+form {
+	margin: 0px;
+}
+
+.flex {
+	display: flex;
+}
+
+#title_container {
+	margin: 40 0 70;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #e8e8e8;
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	width: 1024px;
+}
+
+.flex_title {
+	display: flex;
+	align-items: baseline;
+}
+
+#title {
+	font-size: 22px;
+	cursor: pointer;
+}
+
+#entire_container {
+	width: 1024px;
+	margin: auto;
+}
+
+#wholeViewContainer {
+	display: flex;
+	width: 1024px;
+	margin: 0 auto;
+}
+
+#content_container {
+	width: 640px;
+	line-break: anywhere;
+}
+
+#middle_title {
+	padding-bottom: 15px;
+	border-bottom: 1px solid #e8e8e8;
+	margin-bottom: 28px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.user_info_list_div {
+	display: flex;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	padding: 20 10;
+	margin-bottom: 10px;
+}
+
+.user_id_div {
+	width: 130px;
+}
+
+.user_nm_div {
+	width: 110px;
+}
+
+.user_email_div {
+	width: 200px;
+}
+
+.user_department_div {
+	width: 110px;
+}
+.approval_div {
+	width: 80px;
+	margin: auto;
+}
+
+.approval, .unapproval {
+	width: 80px;
+	margin: 3 0;
+	background-color: white;
+    border: 0.1px solid darkgray;
+    border-radius: 2px;
+}
+
+.user_id_div, .user_nm_div, .user_email_div, .user_department_div {
+	margin: 0 5px;
+}
+
+.user_title_id, .user_title_nm, .user_title_email, .user_title_department {
+	font-weight: bold;
+	font-size: 15px;
+	margin-bottom: 5px;
+}
+
+#sub_content_container {
+	margin-left: 80px;
+}
+
+#category_list_container {
+	border: 0.1px solid #b9b6b6;
+	border-radius: 3px;
+	padding: 20px 20 60 20;
+}
+
+.management_category {
+	background-color: white;
+	border: none;
+	font-size: 15px;
+	padding: 11 0 0;
+	cursor: pointer;
+}

@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: monospace;
+}
+
+#main_container {
+	width: 500px;
+	position: relative;
+	margin: auto;
+	top: 180px;
+}
+
+#login_contanier {
+	
+}
+
+#title {
+	margin: 40 0 50;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #e8e8e8;
+	width: 500px;
+	text-align: center;
+	font-size: 25px;
+	cursor: pointer;
+}
+
+#content {
+	text-align: center;
+}
+
+#login_btn {
+	margin: auto;
+	box-sizing: border-box;
+	background-color: #3aff3a;
+}
+
+#login_id, #login_pw, #login_btn {
+	padding: 10 10px 10;
+	font-size: 15px;
+	border: 0.1px solid darkgray;
+	border-radius: 5px;
+	margin-bottom: 5px;
+	width: 400px;
+}

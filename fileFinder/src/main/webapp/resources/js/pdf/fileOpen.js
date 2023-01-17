@@ -2,6 +2,9 @@ let file_docx_content = ''
 let middle_text = ''
 
 function fileOpen(file_open_form) {
+	if(user_session == '') { // 로그인 시 이용 가능
+		return
+	}
 	file_open_form.encoding  = "multipart/form-data"
 	file_open_form.submit()
 }
@@ -10,6 +13,9 @@ function fileOpen(file_open_form) {
 let file_modal_docx_div = document.querySelector('#file_modal_docx_div')
 
 function file_open_modal(e) {
+	if(user_session == '') { // 로그인 시 이용 가능
+		return
+	}
 	file_modal_docx_div.style.display = 'block';
 	middle_text = e.querySelector('#middle_full_text').value
 

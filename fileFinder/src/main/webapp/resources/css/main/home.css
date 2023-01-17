@@ -11,6 +11,24 @@ form {
 	margin: 0px;
 }
 
+a {
+	text-decoration: none;
+}
+
+#user_login, #user_join {
+	font-size: 14px;
+	padding: 0 20;
+}
+
+#title_user_nm {
+	margin-left: 20px;
+}
+
+#user_logout a {
+	margin-left: 20px;
+	color: black;
+}
+
 #entire_container {
 	width: 1024px;
 	margin: auto;
@@ -18,6 +36,11 @@ form {
 
 .flex {
 	display: flex;
+}
+
+.flex_title {
+	display: flex;
+	align-items: baseline;
 }
 
 .flex_align {
@@ -42,11 +65,13 @@ form {
 
 #title {
 	font-size: 22px;
+	cursor: pointer;
 }
 
-#file_upload, #insert_category, #delete_category {
-	font-size: 14px;
-	padding: 0 20;
+#file_upload, #insert_category, #delete_category, #user_management {
+	font-size: 13;
+    padding: 0 10;
+    cursor: pointer;
 }
 
 #wholeViewContainer {
@@ -67,9 +92,10 @@ form {
 
 .page_value_list {
 	padding: 7 12;
-    border: 0.1px solid darkgray;
-    border-radius: 3px;
-    text-align: center;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	text-align: center;
+	cursor: pointer;
 }
 
 #sub_content_container {
@@ -90,6 +116,7 @@ form {
 
 #middle_content_container {
 	margin-bottom: 28px;
+	cursor: pointer;
 }
 
 .file_open_modal {
@@ -132,18 +159,36 @@ form {
 
 .middle_file_download {
 	position: absolute;
-    top: 0;
-    right: 0;
+	top: 0;
+	right: 65;
 }
-.download_btn {
+
+.middle_file_delete {
+	position: absolute;
+	top: 0;
+	right: 0px;
+}
+
+.download_btn, .category_delete_btn {
 	background-color: white;
-    width: 55px;
-    font-size: 12px;
-    height: 30px;
-    padding: 0px;
-    margin: 0px;
-    border: 0.1px solid darkgray;
-    border-radius: 3px;
+	width: 55px;
+	font-size: 11px;
+	height: 30px;
+	padding: 0px;
+	margin: 0px;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.totalDownload_btn {
+	float: right;
+	background-color: white;
+	font-size: 12px;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	padding: 5px;
+	cursor: pointer;
 }
 
 #entire_categoey_submit {
@@ -224,6 +269,7 @@ select {
 	border: 1px solid #999595;
 	margin-bottom: 10px;
 	background-color: white;
+	cursor: pointer;
 }
 
 #search_container {

@@ -27,6 +27,7 @@ public interface MainMapper {
 	public void increaseSmallFileCount(int i_category);
 	public void increaseLargeFileCount(int i_category);
 	public void decreaseLargeFileCount(CategoryDTO dao);
+	public void decreaseFileCountByFileDelete(int i_category);
 	
 	/* -------------- delete -------------- */
 	public int deleteSmallCategory(int i_category);

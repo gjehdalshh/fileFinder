@@ -15,6 +15,8 @@ let small_delete_category_div = document.querySelector('#small_delete_category_d
 
 let order = 1;
 
+let user_session = document.querySelector('#user_session').value
+
 let file_modal_div = document.querySelector('#file_modal_div')
 
 let sub_category_i_cateogry = document.querySelectorAll('#sub_category_i_cateogry')
@@ -35,7 +37,6 @@ function changeColor() { // 검색 시 특정 문자 색 변경
 	if(currentPath == "searchTitle") {
 		return
 	}
-	console.log("확인")
 	let contentValue = document.querySelector('#searchContent').value
 	if (contentValue == '') {
 		return
@@ -286,6 +287,24 @@ function delete_category() {
 	}
 }
 
+/* ------------------------ 파일 삭제 --------------- */
+function file_delete(e) {
+	let i_file = e.querySelector('#middle_file_i_file').value
+	
+	fetch('/fileDelete/' + i_file, {
+			method: 'DELETE',
+		}).then(function(res) {
+			res.text().then(function(text) {
+				if(text == 1) {
+					alert('파일이 삭제되었습니다.')
+					location.reload()
+				}
+			})
+		})
+}
+
+
+
 function enterkey() {
 	if (window.event.keyCode == 13) {
 		searchForm()
@@ -319,5 +338,15 @@ function movePage(pageNumber) {
 	} else if (currentPath == "searchTitle" || currentPath == "searchCategory") {
 		location.href = `/search/` + currentPath + `/` + searchContent + `?page=` + pageNumber
 	}
+}
+
+function move_join() {
+	location.href=`/user/join`
+}
+function move_login() {
+	location.href=`/user/login`
+}
+function move_user_management() {
+	location.href=`/user/management`
 }
 

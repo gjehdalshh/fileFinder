@@ -6,21 +6,41 @@
 <link rel="stylesheet" href="/res/css/main/home.css?ver=1">
 
 <input id="contentValue" type="hidden" value="${param.content}">
-
+<input id="user_session" type="hidden" value="${user}">
 <input id="currentPath" type="hidden" value="${currentPath}">
 <input id="searchContent" type="hidden" value="${searchContent}">
 <input id="largeCategory" type="hidden" value="${largeCategory}">
 <input id="smallCategory" type="hidden" value="${smallCategory}">
 
 <div id="title_container">
-	<div id="title" onclick="goHome()">파일 검색기</div>
-	<div class="flex">
-		<div id="file_upload" onclick="upload_modal_open()">파일 업로드</div>
-		<div id="insert_category" onclick="insert_category_open()">카테고리
-			등록</div>
-		<div id="delete_category" onclick="delete_category_open()">카테고리
-			삭제</div>
+	<div class="flex_title">
+		<div id="title" onclick="goHome()">Gale Document Finder</div>
+		<c:if test="${not empty user}">
+			<div class="flex">
+				<div id="title_user_nm">${user.user_nm}</div>
+				<div id="user_logout">
+					<a href="/user/logout">logout</a>
+				</div>
+			</div>
+		</c:if>
 	</div>
+	<c:if test="${empty user}">
+		<div class="flex">
+			<div id="user_login" onclick="move_login()">Login</div>
+			<div id="user_join" onclick="move_join()">Sign Up</div>
+		</div>
+	</c:if>
+	<c:if test="${user.user_authority eq 0}">
+		<div class="flex">
+			<div id="user_management" onclick="move_user_management()">Member
+				Management</div>
+			<div id="file_upload" onclick="upload_modal_open()">File Upload</div>
+			<div id="insert_category" onclick="insert_category_open()">Add
+				Category</div>
+			<div id="delete_category" onclick="delete_category_open()">Delete
+				Category</div>
+		</div>
+	</c:if>
 </div>
 <div id="entire_container">
 	<div id="wholeViewContainer">
@@ -28,28 +48,58 @@
 			<c:choose>
 				<c:when test="${currentPath eq 'mainCategory' }">
 					<div id="middle_title">
-						분류 전체보기 <span id="totalNumberPosts">${totalNumberPosts}</span>
+						Total Cateogry <span id="totalNumberPosts">${totalNumberPosts}</span>
+						<c:if test="${not empty user}">
+							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
+								Download</span>
+						</c:if>
+						<input id="currentPathForDownload" type="hidden"
+							value="${currentPath }">
 					</div>
 				</c:when>
 				<c:when test="${currentPath eq 'entireCategory'}">
 					<div id="middle_title">
-						분류 전체보기 <span id="totalNumberPosts">${totalNumberPosts}</span>
+						Total Category <span id="totalNumberPosts">${totalNumberPosts}</span>
+						<c:if test="${not empty user}">
+							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
+								Download</span>
+						</c:if>
+						<input id="currentPathForDownload" type="hidden"
+							value="${currentPath }">
 					</div>
 				</c:when>
 				<c:when test="${currentPath eq 'largeCategory' }">
 					<div id="middle_title">${largeCategory}
 						<span id="largeCategoryCount">${largeCategoryCount }</span>
+						<c:if test="${not empty user}">
+							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
+								Download</span>
+						</c:if>
+						<input id="currentPathForDownload" type="hidden"
+							value="${currentPath }">
 					</div>
 				</c:when>
 				<c:when test="${currentPath eq 'smallCategory' }">
 					<div id="middle_title">${smallCategory}
 						<span id="smallCategoryCount">${smallCategoryCount }</span>
+						<c:if test="${not empty user}">
+							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
+								Download</span>
+						</c:if>
+						<input id="currentPathForDownload" type="hidden"
+							value="${currentPath }">
 					</div>
 				</c:when>
 				<c:otherwise>
 					<div id="middle_title">
 						<span id="search_result">'${searchContent}'</span>의 검색 결과
 						${searchCount }
+						<c:if test="${not empty user}">
+							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
+								Download</span>
+						</c:if>
+						<input id="currentPathForDownload" type="hidden"
+							value="${currentPath }">
 					</div>
 					<c:if test="${searchCount == 0}">
 						<div id="nullcontentContainer">
@@ -64,33 +114,67 @@
 			</c:choose>
 			<c:forEach var="fileCategoryInfoList" items="${fileCategoryInfoList}">
 				<c:choose>
-					<%-- 전체 카테고리 --%>
+					<%-- 분류 전체보기 --%>
 					<c:when
 						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.pdf'}">
-						<form class="file_open_form" action="/fileOpen" method="get"
-							onclick="fileOpen(this)">
-							<div id="middle_content_container">
-								<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-								<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-								<div class="flex">
-									<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-									<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
-									<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
-								</div>
-								<input id="middle_file_nm_input" name="fileName" type="hidden"
+						<div class="file_open_modal">
+							<div class="middle_file_download" onclick="file_download(this)">
+								<input id="middle_file_nm_download" type="hidden"
 									value="${fileCategoryInfoList.file_nm }"> <input
-									id="middle_file_extension_input" name="extension" type="hidden"
-									value="${fileCategoryInfoList.file_extension }">
+									id="middle_extension" type="hidden"
+									value="${fileCategoryInfoList.file_extension}"> <input
+									id="middle_summary_text_download" type="hidden"
+									value="${fileCategoryInfoList.summaryText}">
+								<c:if test="${not empty user}">
+									<button class="download_btn">download</button>
+								</c:if>
 							</div>
-						</form>
+							<div class="middle_file_delete" onclick="file_delete(this)">
+								<c:if test="${user.user_authority eq 0 }">
+									<button class="category_delete_btn">Delete</button>
+								</c:if>
+								<input id="middle_file_i_file" type="hidden"
+									value=${fileCategoryInfoList.i_file }>
+							</div>
+							<form class="file_open_form" action="/fileOpen" method="get"
+								onclick="fileOpen(this)">
+								<div id="middle_content_container">
+									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+									<div class="flex">
+										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+									</div>
+									<input id="middle_file_nm_input" name="fileName" type="hidden"
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_file_extension_input" name="extension"
+										type="hidden" value="${fileCategoryInfoList.file_extension }">
+								</div>
+							</form>
+						</div>
 					</c:when>
 					<c:when
 						test="${currentPath eq 'entireCategory' && fileCategoryInfoList.file_extension eq '.docx'}">
 						<div class="file_open_modal">
 							<div class="middle_file_download" onclick="file_download(this)">
-								<input id="middle_summary_text_download" type="hidden"
+								<input id="middle_file_nm_download" type="hidden"
+									value="${fileCategoryInfoList.file_nm }"> <input
+									id="middle_extension" type="hidden"
+									value="${fileCategoryInfoList.file_extension}"> <input
+									id="middle_summary_text_download" type="hidden"
 									value="${fileCategoryInfoList.summaryText }">
-								<button class="download_btn">다운로드</button>
+								<c:if test="${not empty user}">
+									<button class="download_btn">download</button>
+								</c:if>
+
+							</div>
+							<div class="middle_file_delete" onclick="file_delete(this)">
+								<c:if test="${user.user_authority eq 0 }">
+									<button class="category_delete_btn">Delete</button>
+								</c:if>
+								<input id="middle_file_i_file" type="hidden"
+									value=${fileCategoryInfoList.i_file }>
 							</div>
 							<div id="middle_content_container"
 								onclick="file_open_modal(this)">
@@ -105,7 +189,8 @@
 									value="${fileCategoryInfoList.file_nm }"> <input
 									id="middle_summary_text_input" name="middle_summary_text_input"
 									type="hidden" value="${fileCategoryInfoList.summaryText }">
-									<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfo.fullText }" >
+								<input id="middle_full_text" type="hidden"
+									name="middle_full_text" value="${fileCategoryInfo.fullText }">
 							</div>
 						</div>
 					</c:when>
@@ -113,29 +198,64 @@
 					<c:when test="${currentPath eq 'largeCategory'}">
 						<c:forEach var="fileCategoryInfo" items="${fileCategoryInfoList }">
 							<c:if test="${fileCategoryInfo.file_extension eq '.pdf' }">
-								<form class="file_open_form" action="/fileOpen" method="get"
-									onclick="fileOpen(this)">
-									<div id="middle_content_container">
-										<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
-										<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
-										<div class="flex">
-											<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
-											<div class="middle_extension">${fileCategoryInfo.file_extension }</div>
-											<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
-										</div>
-										<input id="middle_file_nm_input" name="fileName" type="hidden"
+								<div class="file_open_modal">
+									<div class="middle_file_download" onclick="file_download(this)">
+										<input id="middle_file_nm_download" type="hidden"
 											value="${fileCategoryInfo.file_nm }"> <input
-											id="middle_file_extension_input" name="extension"
-											type="hidden" value="${fileCategoryInfo.file_extension }">
+											id="middle_extension" type="hidden"
+											value="${fileCategoryInfo.file_extension}"> <input
+											id="middle_summary_text_download" type="hidden"
+											value="${fileCategoryInfo.summaryText }">
+										<c:if test="${not empty user}">
+											<button class="download_btn">download</button>
+										</c:if>
+
 									</div>
-								</form>
+									<div class="middle_file_delete" onclick="file_delete(this)">
+										<c:if test="${user.user_authority eq 0 }">
+											<button class="category_delete_btn">Delete</button>
+										</c:if>
+										<input id="middle_file_i_file" type="hidden"
+											value=${fileCategoryInfo.i_file }>
+									</div>
+									<form class="file_open_form" action="/fileOpen" method="get"
+										onclick="fileOpen(this)">
+										<div id="middle_content_container">
+											<div class="middle_file_nm">${fileCategoryInfo.file_nm }</div>
+											<div class="middle_summary_text">${fileCategoryInfo.summaryText }</div>
+											<div class="flex">
+												<div class="middle_category_nm">${fileCategoryInfo.category_nm }</div>
+												<div class="middle_extension">${fileCategoryInfo.file_extension }</div>
+												<div class="middle_r_dt">${fileCategoryInfo.r_dt }</div>
+											</div>
+											<input id="middle_file_nm_input" name="fileName"
+												type="hidden" value="${fileCategoryInfo.file_nm }">
+											<input id="middle_file_extension_input" name="extension"
+												type="hidden" value="${fileCategoryInfo.file_extension }">
+										</div>
+									</form>
+								</div>
 							</c:if>
 							<c:if test="${fileCategoryInfo.file_extension eq '.docx' }">
 								<div class="file_open_modal">
 									<div class="middle_file_download" onclick="file_download(this)">
-										<input id="middle_summary_text_download" type="hidden"
+										<input id="middle_file_nm_download" type="hidden"
+											value="${fileCategoryInfo.file_nm }"> <input
+											id="middle_extension" type="hidden"
+											value="${fileCategoryInfo.file_extension}"> <input
+											id="middle_summary_text_download" type="hidden"
 											value="${fileCategoryInfo.summaryText }">
-										<button class="download_btn">다운로드</button>
+										<c:if test="${not empty user}">
+											<button class="download_btn">download</button>
+										</c:if>
+
+									</div>
+									<div class="middle_file_delete" onclick="file_delete(this)">
+										<c:if test="${user.user_authority eq 0 }">
+											<button class="category_delete_btn">Delete</button>
+										</c:if>
+										<input id="middle_file_i_file" type="hidden"
+											value=${fileCategoryInfo.i_file }>
 									</div>
 									<div id="middle_content_container"
 										onclick="file_open_modal(this)">
@@ -150,8 +270,9 @@
 											value="${fileCategoryInfo.file_nm }"> <input
 											id="middle_summary_text_input"
 											name="middle_summary_text_input" type="hidden"
-											value="${fileCategoryInfo.summaryText }">
-											<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfo.fullText }" >
+											value="${fileCategoryInfo.summaryText }"> <input
+											id="middle_full_text" type="hidden" name="middle_full_text"
+											value="${fileCategoryInfo.fullText }">
 									</div>
 								</div>
 							</c:if>
@@ -160,29 +281,64 @@
 					<%-- 소분류 --%>
 					<c:when test="${currentPath eq 'smallCategory'}">
 						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf' }">
-							<form class="file_open_form" action="/fileOpen" method="get"
-								onclick="fileOpen(this)">
-								<div id="middle_content_container">
-									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-									<div class="flex">
-										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
-										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
-									</div>
-									<input id="middle_file_nm_input" name="fileName" type="hidden"
+							<div class="file_open_modal">
+								<div class="middle_file_download" onclick="file_download(this)">
+									<input id="middle_file_nm_download" type="hidden"
 										value="${fileCategoryInfoList.file_nm }"> <input
-										id="middle_file_extension_input" name="extension"
-										type="hidden" value="${fileCategoryInfoList.file_extension }">
+										id="middle_extension" type="hidden"
+										value="${fileCategoryInfoList.file_extension}"> <input
+										id="middle_summary_text_download" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+									<c:if test="${not empty user}">
+										<button class="download_btn">download</button>
+									</c:if>
+
 								</div>
-							</form>
+								<div class="middle_file_delete" onclick="file_delete(this)">
+									<c:if test="${user.user_authority eq 0 }">
+										<button class="category_delete_btn">Delete</button>
+									</c:if>
+									<input id="middle_file_i_file" type="hidden"
+										value=${fileCategoryInfoList.i_file }>
+								</div>
+								<form class="file_open_form" action="/fileOpen" method="get"
+									onclick="fileOpen(this)">
+									<div id="middle_content_container">
+										<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+										<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+										<div class="flex">
+											<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+											<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+											<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+										</div>
+										<input id="middle_file_nm_input" name="fileName" type="hidden"
+											value="${fileCategoryInfoList.file_nm }"> <input
+											id="middle_file_extension_input" name="extension"
+											type="hidden" value="${fileCategoryInfoList.file_extension }">
+									</div>
+								</form>
+							</div>
 						</c:if>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.docx' }">
 							<div class="file_open_modal">
 								<div class="middle_file_download" onclick="file_download(this)">
-									<input id="middle_summary_text_download" type="hidden"
+									<input id="middle_file_nm_download" type="hidden"
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_extension" type="hidden"
+										value="${fileCategoryInfoList.file_extension}"> <input
+										id="middle_summary_text_download" type="hidden"
 										value="${fileCategoryInfoList.summaryText }">
-									<button class="download_btn">다운로드</button>
+									<c:if test="${not empty user}">
+										<button class="download_btn">download</button>
+									</c:if>
+
+								</div>
+								<div class="middle_file_delete" onclick="file_delete(this)">
+									<c:if test="${user.user_authority eq 0 }">
+										<button class="category_delete_btn">Delete</button>
+									</c:if>
+									<input id="middle_file_i_file" type="hidden"
+										value=${fileCategoryInfoList.i_file }>
 								</div>
 								<div id="middle_content_container"
 									onclick="file_open_modal(this)">
@@ -197,8 +353,9 @@
 										value="${fileCategoryInfoList.file_nm }"> <input
 										id="middle_summary_text_input"
 										name="middle_summary_text_input" type="hidden"
-										value="${fileCategoryInfoList.summaryText }">
-										<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfoList.fullText }" >
+										value="${fileCategoryInfoList.summaryText }"> <input
+										id="middle_full_text" type="hidden" name="middle_full_text"
+										value="${fileCategoryInfoList.fullText }">
 								</div>
 							</div>
 						</c:if>
@@ -207,29 +364,66 @@
 					<%-- 검색 시에도 이 카테고리가 뿌려짐 --%>
 					<c:otherwise>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.pdf'}">
-							<form class="file_open_form" action="/fileOpen" method="get"
-								onclick="fileOpen(this)">
-								<div id="middle_content_container">
-									<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
-									<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
-									<div class="flex">
-										<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
-										<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
-										<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
-									</div>
-									<input id="middle_file_nm_input" name="fileName" type="hidden"
+							<div class="file_open_modal">
+								<div class="middle_file_download" onclick="file_download(this)">
+									<input id="middle_file_nm_download" type="hidden"
 										value="${fileCategoryInfoList.file_nm }"> <input
-										id="middle_file_extension_input" name="extension"
-										type="hidden" value="${fileCategoryInfoList.file_extension }">
+										id="middle_extension" type="hidden"
+										value="${fileCategoryInfoList.file_extension}"> <input
+										id="middle_summary_text_download" type="hidden"
+										value="${fileCategoryInfoList.summaryText }">
+									<c:if test="${not empty user}">
+										<button class="download_btn">download</button>
+									</c:if>
+
 								</div>
-							</form>
+								<div class="middle_file_delete" onclick="file_delete(this)">
+									<c:if test="${user.user_authority eq 0 }">
+										<button class="category_delete_btn">Delete</button>
+									</c:if>
+									<input id="middle_file_i_file" type="hidden"
+										value=${fileCategoryInfoList.i_file }>
+								</div>
+								<form class="file_open_form" action="/fileOpen" method="get"
+									onclick="fileOpen(this)">
+									<div id="middle_content_container">
+										<div class="middle_file_nm">${fileCategoryInfoList.file_nm }</div>
+										<div class="middle_summary_text">${fileCategoryInfoList.summaryText }</div>
+										<div class="flex">
+											<div class="middle_category_nm">${fileCategoryInfoList.category_nm }</div>
+											<div class="middle_extension">${fileCategoryInfoList.file_extension }</div>
+											<div class="middle_r_dt">${fileCategoryInfoList.r_dt }</div>
+										</div>
+										<input id="middle_file_nm_input" name="fileName" type="hidden"
+											value="${fileCategoryInfoList.file_nm }"> <input
+											id="middle_file_extension_input" name="extension"
+											type="hidden" value="${fileCategoryInfoList.file_extension }">
+									</div>
+								</form>
+							</div>
 						</c:if>
 						<c:if test="${fileCategoryInfoList.file_extension eq '.docx'}">
 							<div class="file_open_modal">
 								<div class="middle_file_download" onclick="file_download(this)">
-									<input id="middle_summary_text_download" type="hidden"
-										value="${fileCategoryInfoList.summaryText }">
-									<button class="download_btn">다운로드</button>
+									<input id="middle_file_nm_download" type="hidden"
+										value="${fileCategoryInfoList.file_nm }"> <input
+										id="middle_extension" type="hidden"
+										value="${fileCategoryInfoList.file_extension}"> <input
+										id="middle_summary_text_download" type="hidden"
+										value="${fileCategoryInfoList.summaryText }"> <input
+										id="middle_full_text" type="hidden" name="middle_full_text"
+										value="${fileCategoryInfoList.fullText }">
+									<c:if test="${not empty user}">
+										<button class="download_btn">download</button>
+									</c:if>
+
+								</div>
+								<div class="middle_file_delete" onclick="file_delete(this)">
+									<c:if test="${user.user_authority eq 0 }">
+										<button class="category_delete_btn">Delete</button>
+									</c:if>
+									<input id="middle_file_i_file" type="hidden"
+										value=${fileCategoryInfoList.i_file }>
 								</div>
 								<div id="middle_content_container"
 									onclick="file_open_modal(this)">
@@ -244,8 +438,9 @@
 										value="${fileCategoryInfoList.file_nm }"> <input
 										id="middle_summary_text_input"
 										name="middle_summary_text_input" type="hidden"
-										value="${fileCategoryInfoList.summaryText }">
-										<input id="middle_full_text" type="hidden" name="middle_full_text" value="${fileCategoryInfoList.fullText }" >
+										value="${fileCategoryInfoList.summaryText }"> <input
+										id="middle_full_text" type="hidden" name="middle_full_text"
+										value="${fileCategoryInfoList.fullText }">
 								</div>
 							</div>
 						</c:if>
@@ -273,18 +468,17 @@
 
 		<div id="sub_content_container">
 			<div id="search_container">
-
 				<select name="category" class="search_select">
-					<option value="searchTitle" selected="selected" name="searchTitle">제목</option>
-					<option value="searchCategory" name="searchCategory">내용</option>
+					<option value="searchTitle" selected="selected" name="searchTitle">Title</option>
+					<option value="searchCategory" name="searchCategory">Content</option>
 				</select> <input id="search_input" type="text" name="content"
 					onkeyup="enterkey()"> <span id="search_btn"
-					onclick="searchForm()">전송</span>
+					onclick="searchForm()">Submit</span>
 			</div>
 			<div id="category_list_container">
 				<form action="/category" method="get">
 					<input id="entire_categoey_submit" type="submit"
-						value="분류 전체보기 (${totalNumberPosts})">
+						value="Total Category (${totalNumberPosts})">
 				</form>
 				<!-- top 카테고리 출력 -->
 				<c:forEach var="top_category" items="${category}">
@@ -447,8 +641,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=93"></script>
+<script defer src="/res/js/main/home.js?ver=5"></script>
 <script defer src="/res/js/pdf/pdfUpload.js?ver=1"></script>
 <script defer src="/res/js/pdf/fileOpen.js?ver=18"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script defer src="/res/js/pdf/fileDownload.js?ver=1"></script>
+<script defer src="/res/js/pdf/fileDownload.js?ver=23"></script>

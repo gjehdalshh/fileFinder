@@ -65,6 +65,9 @@
 		UPDATE category SET category_count = category_count -
 		${category_count} where i_category = #{category_top}
 	</update>
+	<update id="decreaseFileCountByFileDelete">
+		UPDATE category SET category_count = (category_count - 1) WHERE i_category = #{i_category};
+	</update>
 
 	<!-- delete -->
 	<delete id="deleteSmallCategory">

@@ -14,9 +14,10 @@ public class FileCategoryDTO {
 	private String file_nm;
 	private String file_extension;
 	private String r_dt;
-	private int i_cateogry;
+	private int i_category;
 	private String file_path;
 	private String category_nm;
 	private String summaryText;
 	private String fullText;
+	private String currentPath;
 }

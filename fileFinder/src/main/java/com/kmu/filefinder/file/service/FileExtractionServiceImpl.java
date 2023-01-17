@@ -15,8 +15,6 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kmu.filefinder.common.dto.PagingVO;
-import com.kmu.filefinder.common.paging.Pagination;
 import com.kmu.filefinder.file.dto.FileCategoryDTO;
 
 @Service
@@ -172,7 +170,7 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 		fileServiceImpl.increaseCount();
 		FileCategoryDTO tempDTO = FileCategoryDTO.builder().category_nm(dto.getCategory_nm())
 				.file_extension(dto.getFile_extension()).file_nm(dto.getFile_nm()).file_path(dto.getFile_path())
-				.r_dt(dto.getR_dt()).i_cateogry(dto.getI_cateogry()).i_file(dto.getI_file()).build();
+				.r_dt(dto.getR_dt()).i_category(dto.getI_category()).i_file(dto.getI_file()).build();
 
 		tempDTO.setSummaryText(text);
 		list.add(tempDTO);

@@ -24,14 +24,17 @@ public interface FileMapper {
 	public List<FileCategoryDTO> getFileSmallInfoList(@Param("i_category") int i_category, @Param("pagingVO") PagingVO pagingVo);
 	public FileCategoryDTO getFileSearchPdfInfoByFileName(String file_nm);
 	public FileCategoryDTO getFileSearchDocxInfoByFileName(String file_nm);
+	public List<FileCategoryDTO> getFileSearchDocxInfo();
 	public String getFilePathByFileName(String file_nm);
 	public String getExtensionByFileName(String file_nm);
 	public List<String> getFilePath();
 	public List<FileCategoryDTO> getFileSearchInfoList();
+	public FileCategoryDTO getFileByIFile(int i_file);
 	/* -------------- create -------------- */
 	public int createFile(FileDTO dto);
 	
 	/* -------------- update -------------- */
 	
 	/* -------------- delete -------------- */
+	public int fileDelete(int i_file);
 }
