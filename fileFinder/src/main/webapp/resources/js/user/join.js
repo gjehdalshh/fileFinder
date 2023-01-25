@@ -52,17 +52,17 @@ function join() {
 	}).then(function(data) {
 		switch (data) {
 			case 1:
-				alert('회원가입에 성공하였습니다.')
+				alert("Successfully registered as a member, Please wait for the manager's approval")
 				location.href = `/`
 				break;
 			case 2:
-				alert('아이디가 이미 존재합니다.')
+				alert('ID already exists')
 				break;
 			case 3:
-				alert('이메일이 이미 존재합니다.')
+				alert('e-mail already exists')
 				break;
 			case 4:
-				alert('이메일 형식으로 작성해주세요.')
+				alert('Please fill it out in the form of e-mail')
 				break;
 		}
 	})

@@ -20,10 +20,10 @@ function downloadAjax(param) {
 	}).then(function(data) {
 		switch (data) {
 			case 1:
-				alert('다운로드에 성공하였습니다.')
+				alert('Download Successful')
 				break
 			case 2:
-				alert('다운로드에 실패하였습니다.')
+				alert('Download failed')
 				break
 		}
 	})
@@ -57,10 +57,10 @@ function file_download(e) {
 	}).then(function(data) {
 		switch (data) {
 			case 1:
-				alert('다운로드에 성공하였습니다.')
+				alert('Download Successful')
 				break
 			case 2:
-				alert('다운로드에 실패하였습니다.')
+				alert('Download failed')
 				break
 		}
 	})

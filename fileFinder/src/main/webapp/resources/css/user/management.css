@@ -11,6 +11,10 @@ form {
 	margin: 0px;
 }
 
+select {
+	appearance: none;
+}
+
 .flex {
 	display: flex;
 }
@@ -60,28 +64,66 @@ form {
 }
 
 .user_info_list_div {
-	display: flex;
 	border: 0.1px solid darkgray;
+	align-items: end;
 	border-radius: 3px;
-	padding: 20 10;
+	padding: 15px 10;
 	margin-bottom: 10px;
+	display: flex;
 }
 
 .user_id_div {
-	width: 130px;
+	width: 100px;
 }
 
 .user_nm_div {
-	width: 110px;
+	width: 100px;
 }
 
 .user_email_div {
-	width: 200px;
+	width: 145px;
 }
 
 .user_department_div {
-	width: 110px;
+	width: 105px;
 }
+
+.user_authority_div {
+	width: 105px;
+}
+
+.select_div {
+	
+}
+
+.change_btn {
+	padding: 7px 10;
+	border: 0.1px solid darkgray;
+	border-radius: 3px;
+	width: 75px;
+	margin-top: 10;
+	text-align: center;
+	font-size: 13;
+	box-sizing: border-box;
+}
+
+.selectUserAuthority {
+	height: 30;
+	width: 75px;
+	padding: 4px 23px 6px 7px;
+	border: 1px solid #D9D9D9;
+	border-radius: 3px;
+	font-size: 11;
+	background:
+		url(https://farm1.staticflickr.com/379/19928272501_4ef877c265_t.jpg)
+		no-repeat 95% 50%;
+	background-size: 20px;
+}
+
+.select_sub_div {
+	width: 80;
+}
+
 .approval_div {
 	width: 80px;
 	margin: auto;
@@ -91,15 +133,19 @@ form {
 	width: 80px;
 	margin: 3 0;
 	background-color: white;
-    border: 0.1px solid darkgray;
-    border-radius: 2px;
+	border: 0.1px solid darkgray;
+	border-radius: 2px;
 }
 
-.user_id_div, .user_nm_div, .user_email_div, .user_department_div {
+.user_id_div, .user_nm_div, .user_email_div, .user_department_div,
+	.user_authority_div {
 	margin: 0 5px;
+	height: 55px;
+	text-align: center;
 }
 
-.user_title_id, .user_title_nm, .user_title_email, .user_title_department {
+.user_title_id, .user_title_nm, .user_title_email,
+	.user_title_department, .user_title_authority {
 	font-weight: bold;
 	font-size: 15px;
 	margin-bottom: 5px;
@@ -121,4 +167,12 @@ form {
 	font-size: 15px;
 	padding: 11 0 0;
 	cursor: pointer;
+}
+
+.sub_category {
+	background-color: white;
+	border: 0.1px solid darkgray;
+	width: 160px;
+	border-radius: 5px;
+	padding: 5 0;
 }

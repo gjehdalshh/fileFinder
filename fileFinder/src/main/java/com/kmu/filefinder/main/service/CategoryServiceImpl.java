@@ -55,7 +55,11 @@ public class CategoryServiceImpl implements CategoryService {
 
 	// 카테고리 생성
 	public int createCategory(CategoryDTO dto) {
+		System.out.println("확인 : " + dto.getCategory_order());
 		if (!validateFolderNameExistence(dto.getCategory_nm())) {
+			if(dto.getCategory_order() == 2) {
+				return 4;
+			}
 			return 2;
 		}
 		if (dto.getCategory_nm().equals("")) {

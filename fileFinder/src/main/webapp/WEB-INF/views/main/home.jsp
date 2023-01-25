@@ -14,7 +14,7 @@
 
 <div id="title_container">
 	<div class="flex_title">
-		<div id="title" onclick="goHome()">Gale Document Finder</div>
+		<div id="title" onclick="goHome()">Gale Papers</div>
 		<c:if test="${not empty user}">
 			<div class="flex">
 				<div id="title_user_nm">${user.user_nm}</div>
@@ -641,8 +641,8 @@
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=5"></script>
-<script defer src="/res/js/pdf/pdfUpload.js?ver=1"></script>
+<script defer src="/res/js/main/home.js?ver=21"></script>
+<script defer src="/res/js/pdf/pdfUpload.js?ver=2"></script>
 <script defer src="/res/js/pdf/fileOpen.js?ver=18"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script defer src="/res/js/pdf/fileDownload.js?ver=23"></script>

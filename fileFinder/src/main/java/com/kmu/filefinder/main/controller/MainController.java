@@ -90,7 +90,7 @@ public class MainController {
 			@PathVariable("smallCategory") String smallCategory, @ModelAttribute("pagingVO") PagingVO pagingVo)
 			throws IOException {
 		ModelAndView mv = new ModelAndView();
-		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(smallCategory, pagingVo));
+		mv.addObject("fileCategoryInfoList", fileService.getSmallFileInfoList(largeCategory ,smallCategory, pagingVo));
 		mv.addObject("currentPath", "smallCategory");
 		mv.addObject("smallCategoryCount", fileService.getCount());
 

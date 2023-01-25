@@ -34,6 +34,10 @@
 	</select>
 
 	<!-- 대분류 클릭 시 세부 소분류 전체 보기 -->
+	<select id="getIcategorySmallByCategoryNm" resultType="int">
+		SELECT
+		i_category FROM category WHERE category_nm = #{category_nm} and category_top = #{large_i_category};
+	</select>
 	<select id="getIcategoryByCategoryNm" resultType="int">
 		SELECT
 		i_category FROM category WHERE category_nm = #{category_nm};

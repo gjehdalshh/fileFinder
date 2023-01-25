@@ -182,12 +182,15 @@ public class FileServiceImpl implements FileService {
 	}
 
 	// 소분류 카테고리 정보 가져오기
-	public List<FileCategoryDTO> getSmallFileInfoList(String category_nm, PagingVO pagingVo) throws IOException {
+	public List<FileCategoryDTO> getSmallFileInfoList(String largeCateogryNm, String category_nm, PagingVO pagingVo) throws IOException {
 		// 파일 전체 다운로드 시 사용
 		this.currentCategoryName = category_nm;
-		
-		int i_category = fileMapper.getIcategoryByCategoryNm(category_nm);
+		System.out.println("category_nm : " + category_nm);
+		int large_i_category = fileMapper.getIcategoryByCategoryNm(largeCateogryNm);
+		int i_category = fileMapper.getIcategorySmallByCategoryNm(large_i_category, category_nm);
+		System.out.println("들어오나");
 		int count = mainMapper.getSmallNumberPosts(i_category);
+		System.out.println("확인");
 		this.count = count;
 		Pagination pagination = new Pagination(count, pagingVo);
 		pagingVo.setPagination(pagination);

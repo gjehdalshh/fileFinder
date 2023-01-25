@@ -185,7 +185,7 @@ function insert_cateogry() {
 		category_top = category_choice.options[category_choice.selectedIndex].value
 		category_input = small_category_input
 	}
-
+	modal_insert.style.display = 'none';
 	let param = {
 		category_nm: category_input.value,
 		category_order: order,
@@ -203,15 +203,18 @@ function insert_cateogry() {
 	}).then(function(data) {
 		switch (data.category) {
 			case 1:
-				alert('카테고리가 등록되었습니다.')
-				modal_insert.style.display = 'none';
+				alert('category has been registered')
 				location.reload()
 				break;
 			case 2:
-				alert('이미 존재하는 카테고리입니다.')
+				alert('This category already exists')
 				break;
 			case 3:
-				alert('이름을 입력해주세요.')
+				alert('Please enter a category title')
+				break
+			case 4:
+				alert('Cannot use the same title as the main category')
+				break
 		}
 	})
 }
@@ -253,34 +256,32 @@ function delete_category() {
 			res.text().then(function(text) {
 				console.log(text)
 				if (text == 1) {
-					alert('카테고리가 삭제되었습니다.')
+					alert('Category has been removed')
 					location.reload()
 				} else if (text == 2) {
-					alert('카테고리를 선택해주세요.')
+					alert('Please select a category')
 				}
 			})
 		})
 	}
 	if (order == 2) {
-		console.log(small_category_choice.options.length)
-		console.log(small_category_choice.length)
 		if (small_category_choice.length == 0) {
-			alert('소분류가 존재하지 않습니다.')
+			alert('There are no subcategories')
 			return
 		}
 
 		id = small_category_choice.options[small_category_choice.selectedIndex].value
-
+		console.log("id : " + id)
 		fetch('/deleteSmallCategory/' + id, {
 			method: 'DELETE',
 		}).then(function(res) {
 			res.text().then(function(text) {
 				console.log(text)
 				if (text == 1) {
-					alert('카테고리가 삭제되었습니다.')
+					alert('Category has been removed')
 					location.reload()
 				} else if (text == 2) {
-					alert('카테고리를 선택해주세요.')
+					alert('Please select a category')
 				}
 			})
 		})
@@ -296,7 +297,7 @@ function file_delete(e) {
 		}).then(function(res) {
 			res.text().then(function(text) {
 				if(text == 1) {
-					alert('파일이 삭제되었습니다.')
+					alert('File has been deleted')
 					location.reload()
 				}
 			})
@@ -312,12 +313,17 @@ function enterkey() {
 }
 
 function searchForm() {
+	let user_session = document.querySelector('#user_session')
+	if(user_session.value == '') {
+		alert('please try again after login')
+		return
+	}
 	let search_select = document.querySelector('.search_select')
 	let search_input = document.querySelector('#search_input').value
 	search_select = search_select.options[search_select.selectedIndex].value
 
 	if (search_input == '') {
-		alert('내용을 입력해주세요')
+		alert('Please enter contents')
 		return
 	}
 
@@ -334,7 +340,7 @@ function movePage(pageNumber) {
 	} else if (currentPath == "largeCategory") {
 		location.href = `/category/` + largeCategory + `?page=` + pageNumber
 	} else if (currentPath == "smallCategory") {
-		location.href = `/category/` + largeCateory + `/` + smallCategory + `?page=` + pageNumber
+		location.href = `/category/` + largeCategory + `/` + smallCategory + `?page=` + pageNumber
 	} else if (currentPath == "searchTitle" || currentPath == "searchCategory") {
 		location.href = `/search/` + currentPath + `/` + searchContent + `?page=` + pageNumber
 	}

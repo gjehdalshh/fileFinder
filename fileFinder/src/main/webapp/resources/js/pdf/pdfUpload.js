@@ -49,22 +49,24 @@ function upload() {
 	let top_category_choice_upload = document.querySelector('#top_category_choice_upload')
 
 	if (top_category_choice_upload.value == 0) {
-		alert('카테고리를 선택해주세요.')
+		alert('Please select a category')
 		return
 	}
 	if (!fileUpload.value) {
-		alert("파일을 첨부해 주세요.");
+		alert("Please attach the file");
 		return
 	}
 
 	let files = fileUpload.files
 	let formData = new FormData()
 	filesArr = Array.prototype.slice.call(files);
-	console.log('불가')
+
 	for (var i = 0; i < filesArr.length; i++) {
 		formData.append('files', filesArr[i]);
 	}
-	console.log('불가2')
+	let file_modal_content = document.querySelector('.file_modal_content')
+	file_modal_content.style.display = 'none'
+
 	fetch(`/fileUpload`, {
 		method: 'POST',
 		headers: {
@@ -77,12 +79,12 @@ function upload() {
 		res.text().then(function(text) {
 			console.log(text)
 			if (text == 1) {
-				alert('파일이 업로드되었습니다.')
+				alert('File uploaded successfully')
 				location.reload()
 			} else if (text == 2) {
-				alert('카테고리를 선택해주세요.')
+				alert('Please select a category')
 			} else if (text == 3) {
-				alert('파일이 이미 존재합니다.')
+				alert('File already exists')
 			}
 		})
 	})

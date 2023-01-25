@@ -211,7 +211,7 @@ select::-ms-expand {
 }
 
 #nullcontentContainer {
-	margin-top: 50px;
+	margin: 50 0 100;
 }
 
 #nullcontentContainer ul, li {

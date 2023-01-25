@@ -21,7 +21,16 @@
 	<select id="getUserInfoListUnapproved" resultType="UserDTO">
 		SELECT * FROM user WHERE user_status = 0;
 	</select>
-	
+	<select id="findUserId" resultType="string">
+		SELECT user_id FROM user WHERE user_nm = #{user_nm} AND user_email = #{user_email}
+	</select>
+	<select id="findUserPw" resultType="string">
+		SELECT user_id FROM user WHERE user_nm = #{user_nm} AND user_email = #{user_email} AND user_id = #{user_id}
+	</select>
+	<select id="getUserPw" resultType="string">
+		SELECT user_pw FROM user WHERE user_id = #{user_id}
+	</select>
+
 	
 	<!-- create -->
 	<insert id="insUser">
@@ -36,9 +45,21 @@
 	<update id="approvalUserRegistration">
 		UPDATE user SET user_status = 1 WHERE user_id = #{id}; 
 	</update>
+	<update id="changeUserAuthorityManager">
+		UPDATE user SET user_authority = 0 WHERE i_user = #{i_user}; 
+	</update>
+	<update id="changeUserAuthorityMember">
+		UPDATE user SET user_authority = 1 WHERE i_user = #{i_user}; 
+	</update>
+	<update id="changeUserPw">
+		UPDATE user SET user_pw = #{current_pw} WHERE user_id = #{user_id}; 
+	</update>
 	
 	<!-- delete -->
 	<delete id="unapprovalUserResistration">
 		DELETE FROM user WHERE user_id = #{id}
+	</delete>
+	<delete id="deleteUserByIUser">
+		DELETE FROM user WHERE i_user = #{i_user}
 	</delete>
 </mapper>

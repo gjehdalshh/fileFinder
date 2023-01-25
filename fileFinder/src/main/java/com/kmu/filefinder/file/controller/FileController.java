@@ -51,6 +51,8 @@ public class FileController {
 
 	@GetMapping("/fileOpen")
 	public void fileOpen(HttpServletResponse resp, @RequestParam("fileName") String fileName, @RequestParam("extension") String extension) throws IOException  {
+		System.out.println(fileName);
+		System.out.println(extension);
 		fileService.fileOpen(resp, fileName, extension);
 	}
 	

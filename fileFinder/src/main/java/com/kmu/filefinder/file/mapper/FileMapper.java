@@ -17,7 +17,7 @@ public interface FileMapper {
 	public int getFileListCountByName(@Param("content") String content);
 	public List<String> getFileNameList();
 	public List<FileCategoryDTO> getFileCategoryInfoList(PagingVO pagingVo);
-	
+	public int getIcategorySmallByCategoryNm(@Param("large_i_category") int large_i_category, @Param("category_nm")String category_nm);
 	public int getIcategoryByCategoryNm(String category_nm);
 	public List<Integer> getIcategoryByCategoryTop(int category_top);
 	public List<FileCategoryDTO> getFileLargeInfoList(@Param("i_category") int i_category, @Param("pagingVO") PagingVO pagingVo);

@@ -19,7 +19,12 @@
 			</div>
 			<div id="login_btn" onclick="login()">Login</div>
 		</div>
+		<div class="find_div">
+			<div class="find_id" onclick="moveFindId()">Find ID</div>
+			<div class="find_pw" onclick="moveFindPw()">Find Password</div>
+		</div>
 	</div>
 </div>
 
-<script defer src="/res/js/user/login.js?ver=4"></script>
+<script defer src="/res/js/user/login.js?ver=5"></script>
+<script defer src="/res/js/user/find.js?ver=5"></script>

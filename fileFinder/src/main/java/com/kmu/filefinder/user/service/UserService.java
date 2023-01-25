@@ -8,7 +8,10 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.kmu.filefinder.user.dto.UserAuthManagementDTO;
+import com.kmu.filefinder.user.dto.UserChangePwDTO;
 import com.kmu.filefinder.user.dto.UserDTO;
 import com.kmu.filefinder.user.mapper.UserMapper;
 
@@ -69,6 +72,13 @@ public class UserService {
 
 		return userMapper.insUser(dto);
 	}
+	
+	public ModelAndView OpenUserPage() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("user/management");
+		
+		return mv;
+	}
 
 	public List<UserDTO> getUserInfoList() {
 		return userMapper.getUserInfoList();
@@ -84,5 +94,41 @@ public class UserService {
 
 	public int unapprovalUserResistration(String id) {
 		return userMapper.unapprovalUserResistration(id);
+	}
+	
+	public int changeUserAuthority(UserAuthManagementDTO dto) {
+		
+		String authority = dto.getUser_authority();
+		
+		if(authority.equals("manager")) {
+			return userMapper.changeUserAuthorityManager(dto.getI_user());
+		} else if(authority.equals("member")) {
+			return userMapper.changeUserAuthorityMember(dto.getI_user());
+		} else if(authority.equals("delete")) {
+			return userMapper.deleteUserByIUser(dto.getI_user());
+		}
+		return 2;
+	}
+	
+	public String findUserId(UserDTO dto) {
+		return userMapper.findUserId(dto);
+	}
+	public String findUserPw(UserDTO dto) {
+		return userMapper.findUserPw(dto);
+	}
+	public int checkUserInfo(UserChangePwDTO dto) {
+		
+		String user_pw = userMapper.getUserPw(dto.getUser_id());
+		if(user_pw == null) { // 아이디가 존재하지 않음
+			return 2;
+		}
+		if(!dto.getChange_pw().equals(dto.getConfirm_change_pw())) {
+			return 3;
+		}
+		System.out.println("확인");
+		System.out.println(dto.getCurrent_pw());
+		dto.setCurrent_pw(bcrypt.encode(dto.getChange_pw()));
+		System.out.println("안됨");
+		return userMapper.changeUserPw(dto);
 	}
 }
