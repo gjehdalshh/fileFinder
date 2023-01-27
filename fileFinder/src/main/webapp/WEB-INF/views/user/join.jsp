@@ -26,8 +26,8 @@
 					placeholder="Email">
 			</div>
 			<div>
-				<input id="join_department" type="text" onkeyup="enterkey()"
-					placeholder="Department">
+				<input id="join_affiliation" type="text" onkeyup="enterkey()"
+					placeholder="affiliation">
 			</div>
 			<div id="join_btn" onclick="join()">Sign Up</div>
 		</div>

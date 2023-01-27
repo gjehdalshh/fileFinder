@@ -38,6 +38,12 @@ a {
 	display: flex;
 }
 
+.flex_page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .flex_title {
 	display: flex;
 	align-items: baseline;
@@ -70,8 +76,8 @@ a {
 
 #file_upload, #insert_category, #delete_category, #user_management {
 	font-size: 13;
-    padding: 0 10;
-    cursor: pointer;
+	padding: 0 10;
+	cursor: pointer;
 }
 
 #wholeViewContainer {
@@ -88,6 +94,8 @@ a {
 	border: 0.1px solid #b9b6b6;
 	border-radius: 3px;
 	padding: 20px 20 60 20;
+	width: 310;
+	box-sizing: border-box;
 }
 
 .page_value_list {
@@ -98,8 +106,16 @@ a {
 	cursor: pointer;
 }
 
+#first_btn, #prev_btn {
+	margin-right: 10px;
+}
+
+#next_btn, #last_btn {
+	margin-left: 10px;
+}
+
 #sub_content_container {
-	margin-left: 80px;
+	margin-left: 60px;
 }
 
 #middle_title {
@@ -243,13 +259,13 @@ select {
 }
 
 .large_category_input, .small_category_input {
-	width: 160px;
+	width: 196px;
 	height: 35px;
 	padding: 10 0 6 10;
 	border: 1px solid #999595;
 	border-radius: 6px;
 	font-size: 15px;
-	margin: 5 10 10 0;
+	margin: 5 0 10 0;
 }
 
 #search_input {
@@ -319,6 +335,17 @@ select {
 	z-index: -1;
 }
 
+#file_upload_wait_div {
+	width: 400px;
+	text-align: center;
+	margin: 0px auto;
+	padding: 50;
+	background: #fff;
+	border: 2px solid #666;
+	border-radius: 6px;
+	display: none;
+}
+
 #top_category_choice_upload {
 	margin-right: 5px;
 }
@@ -332,6 +359,7 @@ select {
 	width: 195px;
 	text-align: center;
 	margin-top: 35px;
+	cursor: pointer;
 }
 
 .filebox {
@@ -450,6 +478,8 @@ select {
 	border: 0.1px solid darkgray;
 	border-radius: 3px;
 	margin: 0 3 10 0;
+	width: 185px;
+	cursor: pointer;
 }
 
 #large_category {
@@ -465,6 +495,7 @@ select {
 	width: 195px;
 	text-align: center;
 	margin-top: 35px;
+	cursor: pointer;
 }
 
 /* ---------------- 카테고리 삭제 모달창 ------------------ */
@@ -499,6 +530,10 @@ select {
 	display: none;
 }
 
+#category_choice {
+	width: 196px;
+}
+
 .large_category_list {
 	background-color: white;
 	border: none;
@@ -512,7 +547,7 @@ select {
 	background-color: white;
 	border: none;
 	margin-bottom: 5px;
-	margin-left: 22px;
+	margin-left: 12px;
 	font-size: 14px;
 	cursor: pointer;
 }
@@ -530,6 +565,17 @@ select {
 	border: 0.1px solid darkgray;
 	border-radius: 3px;
 	margin: 0 3 10 0;
+	width: 185px;
+	cursor: pointer;
+}
+#large_category_choice, #small_category_choice, #top_category_change {
+	width: 196px;
+    height: 35px;
+    padding: 10 0 6 10;
+    border: 1px solid #999595;
+    border-radius: 6px;
+    font-size: 15px;
+    margin: 5 0 10 0;
 }
 
 #large_delete_category {
@@ -545,4 +591,5 @@ select {
 	width: 195px;
 	text-align: center;
 	margin-top: 35px;
+	cursor: pointer;
 }

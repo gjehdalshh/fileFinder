@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kmu.filefinder.common.dto.PagingVO;
 import com.kmu.filefinder.common.utils.ConvertType;
 import com.kmu.filefinder.common.utils.Verification;
+import com.kmu.filefinder.file.mapper.FileMapper;
 import com.kmu.filefinder.main.dto.CategoryDTO;
 import com.kmu.filefinder.main.mapper.MainMapper;
 
@@ -19,6 +19,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private MainMapper mainMapper;
+	
+	@Autowired
+	private FileMapper fileMapper;
 
 	@Value("${local.pdf.path}")
 	private String path;
@@ -29,8 +32,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	// 이름으로 카테고리를 가져옴
-	public CategoryDTO getCategoryByNm(String nm) {
-		return mainMapper.getCategoryByNm(nm);
+	public CategoryDTO getCategoryByNm(CategoryDTO dto) {
+		return mainMapper.getCategoryByNm(dto);
 	}
 
 	// category_top으로 CategoryName을 가져옴
@@ -55,8 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	// 카테고리 생성
 	public int createCategory(CategoryDTO dto) {
-		System.out.println("확인 : " + dto.getCategory_order());
-		if (!validateFolderNameExistence(dto.getCategory_nm())) {
+		if (!validateFolderNameExistence(dto)) {
 			if(dto.getCategory_order() == 2) {
 				return 4;
 			}
@@ -84,8 +86,10 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		decreaseLargeFileCount(i_category);
 		String path = mainMapper.getCategoryPathByIcategory(i_category);
-		deleteLocalCategory(path);
-
+		deleteLocalCategory(path); // 로컬에서 삭제
+		fileMapper.deleteFile(i_category); // db 소분류 내 파일 삭제
+		
+		// db에서 소분류 삭제
 		return mainMapper.deleteSmallCategory(i_category);
 	}
 
@@ -97,7 +101,12 @@ public class CategoryServiceImpl implements CategoryService {
 		}
 		String path = mainMapper.getCategoryPathByIcategory(i_category);
 		deleteLocalCategory(path);
-
+		
+		List<Integer> list = mainMapper.getICategoryByIcategoryTop(i_category);
+		for(Integer l : list) {
+			fileMapper.deleteFile(l);
+		}
+		
 		mainMapper.deleteLargeCategory(i_category); // 대분류 삭제
 		return mainMapper.deleteSmallCategory(i_category); // 소분류 삭제
 	}
@@ -144,8 +153,8 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	// 이름 존재 유무 검색
-	public boolean validateFolderNameExistence(String nm) {
-		if (getCategoryByNm(nm) != null) {
+	public boolean validateFolderNameExistence(CategoryDTO dto) {
+		if (getCategoryByNm(dto) != null) {
 			return false;
 		}
 		return true;

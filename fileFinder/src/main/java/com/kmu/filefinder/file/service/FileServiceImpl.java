@@ -73,7 +73,7 @@ public class FileServiceImpl implements FileService {
 		if (path == 0) {
 			return 2;
 		}
-
+		
 		String urlPath = fileMapper.getCategoryPathByIcategory(path);
 		String uploadFolder = urlPath + "\\";
 		List<MultipartFile> list = files.getFiles("files");
@@ -185,13 +185,12 @@ public class FileServiceImpl implements FileService {
 	public List<FileCategoryDTO> getSmallFileInfoList(String largeCateogryNm, String category_nm, PagingVO pagingVo) throws IOException {
 		// 파일 전체 다운로드 시 사용
 		this.currentCategoryName = category_nm;
-		System.out.println("category_nm : " + category_nm);
 		int large_i_category = fileMapper.getIcategoryByCategoryNm(largeCateogryNm);
 		int i_category = fileMapper.getIcategorySmallByCategoryNm(large_i_category, category_nm);
-		System.out.println("들어오나");
+		
 		int count = mainMapper.getSmallNumberPosts(i_category);
-		System.out.println("확인");
 		this.count = count;
+		
 		Pagination pagination = new Pagination(count, pagingVo);
 		pagingVo.setPagination(pagination);
 		List<FileCategoryDTO> list = fileMapper.getFileSmallInfoList(i_category, pagingVo);

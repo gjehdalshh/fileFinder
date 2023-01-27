@@ -37,4 +37,5 @@ public interface FileMapper {
 	
 	/* -------------- delete -------------- */
 	public int fileDelete(int i_file);
+	public int deleteFile(int i_category);
 }

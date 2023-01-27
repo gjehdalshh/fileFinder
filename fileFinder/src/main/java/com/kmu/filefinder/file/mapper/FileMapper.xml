@@ -136,4 +136,8 @@
 	<delete id="fileDelete">
 		DELETE FROM file WHERE i_file = #{i_file};
 	</delete>
+	<delete id="deleteFile">
+		DELETE FROM file WHERE i_category = #{i_category};
+	</delete>
+
 </mapper>

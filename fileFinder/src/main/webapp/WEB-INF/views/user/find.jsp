@@ -23,7 +23,7 @@
 					<div id="id_find_text"></div>
 					<div id="showId"></div>
 				</div>
-				<div id="login_btn" onclick="login()">Login</div>
+				<div id="login_btn" onclick="move_login()">Login</div>
 			</div>
 		</c:if>
 		<c:if test="${find eq 'pw'}">
@@ -61,4 +61,4 @@
 	</div>
 </div>
 
-<script defer src="/res/js/user/find.js?ver=22"></script>
+<script defer src="/res/js/user/find.js?ver=23"></script>

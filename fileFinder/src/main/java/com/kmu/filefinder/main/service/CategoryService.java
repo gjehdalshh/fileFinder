@@ -7,7 +7,7 @@ import com.kmu.filefinder.main.dto.CategoryDTO;
 
 public interface CategoryService {
 	/* ---------- business logic ---------- */
-	boolean validateFolderNameExistence(String nm);
+	boolean validateFolderNameExistence(CategoryDTO dto);
 	String createFile(CategoryDTO dto);
 	void deleteLocalCategory(String path);
 	ModelAndView homeCategoryInfo(ModelAndView mv);

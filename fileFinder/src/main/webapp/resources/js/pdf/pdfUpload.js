@@ -60,13 +60,24 @@ function upload() {
 	let files = fileUpload.files
 	let formData = new FormData()
 	filesArr = Array.prototype.slice.call(files);
-
+	let fileSize = 0
 	for (var i = 0; i < filesArr.length; i++) {
 		formData.append('files', filesArr[i]);
+		fileSize += filesArr[i].size
 	}
-	let file_modal_content = document.querySelector('.file_modal_content')
-	file_modal_content.style.display = 'none'
+	console.log(fileSize)
+	if(fileSize > 104857600) { // 현재 톰캣의 최대 업로드 가능 파일 사이즈 100MB
+		alert('can upload up to 100MB at once.')
+		location.reload()
+		return
+	}
 
+	let file_modal_content = document.querySelector('.file_modal_content')
+	let file_upload_wait_div =  document.querySelector('#file_upload_wait_div')
+	
+	file_modal_content.style.display = 'none'
+	file_upload_wait_div.style.display = 'block'
+	
 	fetch(`/fileUpload`, {
 		method: 'POST',
 		headers: {
@@ -85,6 +96,7 @@ function upload() {
 				alert('Please select a category')
 			} else if (text == 3) {
 				alert('File already exists')
+				location.reload()
 			}
 		})
 	})

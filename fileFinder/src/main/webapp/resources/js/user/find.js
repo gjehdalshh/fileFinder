@@ -24,7 +24,7 @@ function enterkeyChangePw() {
 function goHome() {
 	location.href = `/`
 }
-function login() {
+function move_login() {
 	location.href = `/user/login`
 }
 

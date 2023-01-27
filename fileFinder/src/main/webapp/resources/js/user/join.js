@@ -13,7 +13,7 @@ function join() {
 	let pw = document.querySelector('#join_pw').value
 	let nm = document.querySelector('#join_nm').value
 	let email = document.querySelector('#join_email').value
-	let department = document.querySelector('#join_department').value
+	let affiliation = document.querySelector('#join_affiliation').value
 
 	if(id == '') {
 		alert('Please enter your ID')
@@ -27,7 +27,7 @@ function join() {
 	} else if(email == '') {
 		alert('Please enter your Email')
 		return
-	} else if(department == '') {
+	} else if(affiliation == '') {
 		alert('Please enter your Department')
 		return
 	}
@@ -38,7 +38,7 @@ function join() {
 		user_nm: nm,
 		user_email: email,
 		user_authority: 1,
-		user_department: department
+		user_department: affiliation
 	}
 
 	fetch(`/user/join`, {

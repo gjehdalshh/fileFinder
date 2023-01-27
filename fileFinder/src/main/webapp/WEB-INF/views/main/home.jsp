@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<link rel="stylesheet" href="/res/css/main/home.css?ver=1">
+<link rel="stylesheet" href="/res/css/main/home.css?ver=6">
 
 <input id="contentValue" type="hidden" value="${param.content}">
 <input id="user_session" type="hidden" value="${user}">
@@ -11,6 +11,7 @@
 <input id="searchContent" type="hidden" value="${searchContent}">
 <input id="largeCategory" type="hidden" value="${largeCategory}">
 <input id="smallCategory" type="hidden" value="${smallCategory}">
+<input id="currentPage" type="hidden" value="${param.page}">
 
 <div id="title_container">
 	<div class="flex_title">
@@ -48,7 +49,7 @@
 			<c:choose>
 				<c:when test="${currentPath eq 'mainCategory' }">
 					<div id="middle_title">
-						Total Cateogry <span id="totalNumberPosts">${totalNumberPosts}</span>
+						Total Cateogries <span id="totalNumberPosts">${totalNumberPosts}</span>
 						<c:if test="${not empty user}">
 							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
 								Download</span>
@@ -59,7 +60,7 @@
 				</c:when>
 				<c:when test="${currentPath eq 'entireCategory'}">
 					<div id="middle_title">
-						Total Category <span id="totalNumberPosts">${totalNumberPosts}</span>
+						Total Categories <span id="totalNumberPosts">${totalNumberPosts}</span>
 						<c:if test="${not empty user}">
 							<span class="totalDownload_btn" onclick="downloadTotalFile()">Full
 								Download</span>
@@ -447,21 +448,21 @@
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
-			<div class="flex">
+			<div class="flex_page">
 				<c:if test="${pagingVO.pagination.existPrevPage == true}">
-					<div onclick="movePage(1)">첫 페이지</div>
-					<div onclick="movePage(${pagingVO.pagination.startPage - 1})">이전
-						페이지</div>
+					<div id="first_btn" onclick="movePage(1)">first</div>
+					<div id="prev_btn"
+						onclick="movePage(${pagingVO.pagination.startPage - 1})">prev</div>
 				</c:if>
 				<c:forEach var="page" begin="${pagingVO.pagination.startPage}"
 					end="${pagingVO.pagination.endPage}">
 					<div class="page_value_list" onclick="movePage(${page})">${page}</div>
 				</c:forEach>
 				<c:if test="${pagingVO.pagination.existNextPage == true}">
-					<div onclick="movePage(${pagingVO.pagination.endPage + 1})">다음
-						페이지</div>
-					<div onclick="movePage(${pagingVO.pagination.totalPageCount})">마지막
-						페이지</div>
+					<div id="next_btn"
+						onclick="movePage(${pagingVO.pagination.endPage + 1})">next</div>
+					<div id="last_btn"
+						onclick="movePage(${pagingVO.pagination.totalPageCount})">last</div>
 				</c:if>
 			</div>
 		</div>
@@ -478,7 +479,7 @@
 			<div id="category_list_container">
 				<form action="/category" method="get">
 					<input id="entire_categoey_submit" type="submit"
-						value="Total Category (${totalNumberPosts})">
+						value="Total Categories (${totalNumberPosts})">
 				</form>
 				<!-- top 카테고리 출력 -->
 				<c:forEach var="top_category" items="${category}">
@@ -520,10 +521,10 @@
 <!-- 파일 업로드 모달창 -->
 <div id="file_modal_div">
 	<div class="file_modal_content">
-		<div id="file_upload_title">파일 업로드</div>
+		<div id="file_upload_title">File Upload</div>
 		<form id="fileForm" method="post" enctype="multipart/form-data">
 			<div class="filebox">
-				<label for="fileUpload">업로드</label> <input type="file"
+				<label for="fileUpload">Upload</label> <input type="file"
 					id="fileUpload" name="fileUpload" multiple="multiple"
 					onchange=changeFileName(this.files)> <span
 					class="file_name"></span>
@@ -531,7 +532,7 @@
 			<div id="file_upload_category_container" class="flex">
 				<select id="top_category_choice_upload"
 					onchange="uploadCategoryChange(this)">
-					<option selected="selected" value="0">대분류 선택</option>
+					<option selected="selected" value="0">Main category</option>
 					<c:forEach var="top_category_upload" items="${category}">
 						<c:if test="${top_category_upload.category_order == 1}">
 							<option value="${top_category_upload.i_category}">${top_category_upload.category_nm}</option>
@@ -549,26 +550,28 @@
 					</c:forEach>
 				</select> <select id="sub_category_choice_upload"
 					onchange="subUploadCategoryChange(this)">
-					<option value="0">소분류 선택</option>
+					<option value="0">Subcategory</option>
 				</select>
 			</div>
 		</form>
 		<div class=flex>
-			<div id="upload" onclick="upload()">업로드</div>
-			<div id="upload_close" onclick="upload_modal_close()">취소</div>
+			<div id="upload" onclick="upload()">Upload</div>
+			<div id="upload_close" onclick="upload_modal_close()">Close</div>
 		</div>
 	</div>
+	<div id="file_upload_wait_div"><p>Uploading file</p> 
+		<p>Please wait a moment</p></div>
 	<div class="file_modal_layer"></div>
 </div>
 
 <!-- 카테고리 등록 모달창 -->
 <div id="modal_insert">
 	<div class="modal_content">
-		<div id="category_insert_title">카테고리 등록</div>
+		<div id="category_insert_title">Register Category</div>
 		<div>
 			<div class="flex">
-				<div id="large_category">대분류</div>
-				<div id="small_category">소분류</div>
+				<div id="large_category">Main category</div>
+				<div id="small_category">Subcategory</div>
 			</div>
 			<div id="large_category_div">
 				<input type="text" class="large_category_input">
@@ -584,8 +587,8 @@
 			</div>
 		</div>
 		<div class="flex">
-			<div id="insert_category_btn" onclick="insert_cateogry()">추가</div>
-			<div id="insert_category_close" onclick="insert_category_close()">닫기</div>
+			<div id="insert_category_btn" onclick="insert_cateogry()">Registration</div>
+			<div id="insert_category_close" onclick="insert_category_close()">Close</div>
 		</div>
 	</div>
 	<div class="modal_layer"></div>
@@ -594,11 +597,11 @@
 <!-- 카테고리 삭제 모달창 -->
 <div id="modal_delete">
 	<div class="modal_delete_content">
-		<div id="category_delete_title">카테고리 삭제</div>
+		<div id="category_delete_title">Delete Category</div>
 		<div>
 			<div class="flex">
-				<div id="large_delete_category">대분류</div>
-				<div id="small_delete_category">소분류</div>
+				<div id="large_delete_category">Main category</div>
+				<div id="small_delete_category">Subcategory</div>
 			</div>
 			<div id="large_delete_category_div">
 				<select id="large_category_choice">
@@ -609,10 +612,9 @@
 					</c:forEach>
 				</select>
 			</div>
-
 			<div id="small_delete_category_div">
-				<select onchange="top_categoryChange(this)">
-					<option value="0">대분류 선택</option>
+				<select id="top_category_change" onchange="top_categoryChange(this)">
+					<option value="0">Main category</option>
 					<c:forEach var="top_category" items="${category}">
 						<c:if test="${top_category.category_order == 1}">
 							<option value="${top_category.i_category}">${top_category.category_nm}</option>
@@ -629,20 +631,20 @@
 						</c:if>
 					</c:forEach>
 				</select> <select id="small_category_choice">
-					<option value="0">소분류 선택</option>
+					<option value="0">Subcategory</option>
 				</select>
 			</div>
 		</div>
 		<div class="flex">
-			<div id="delete_category_btn" onclick="delete_category()">삭제</div>
-			<div id="delete_category_close" onclick="delete_category_close()">닫기</div>
+			<div id="delete_category_btn" onclick="delete_category()">Delete</div>
+			<div id="delete_category_close" onclick="delete_category_close()">Close</div>
 		</div>
 	</div>
 	<div class="modal_delete_layer"></div>
 </div>
 
-<script defer src="/res/js/main/home.js?ver=21"></script>
-<script defer src="/res/js/pdf/pdfUpload.js?ver=2"></script>
+<script defer src="/res/js/main/home.js?ver=29"></script>
+<script defer src="/res/js/pdf/pdfUpload.js?ver=18"></script>
 <script defer src="/res/js/pdf/fileOpen.js?ver=18"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script defer src="/res/js/pdf/fileDownload.js?ver=23"></script>

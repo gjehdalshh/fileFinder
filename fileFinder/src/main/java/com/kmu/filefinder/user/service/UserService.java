@@ -29,7 +29,6 @@ public class UserService {
 
 	public int loginProc(UserDTO dto) {
 		UserDTO vo = userMapper.checkUserExistence(dto);
-		
 		if (vo == null || !idPasswordCheck(dto)) {
 			return 2;
 		}

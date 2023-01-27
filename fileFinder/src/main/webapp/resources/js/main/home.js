@@ -26,14 +26,35 @@ let largeCategory = document.querySelector('#largeCategory').value
 let smallCategory = document.querySelector('#smallCategory').value
 
 window.onload = function() {
-	changeColor()
+	changeTextColor()
+	changePageColor()
 }
 
 function goHome() {
 	location.href = `/`
 }
 
-function changeColor() { // 검색 시 특정 문자 색 변경
+function changePageColor() { // 현재 페이지 색 변경
+	let currentPage = document.querySelector('#currentPage').value
+	let pageList = document.querySelectorAll('.page_value_list')
+	
+	if(currentPage == '') {
+		pageList[0].style.backgroundColor = '#d3f2ff'
+		return
+	}
+	
+	for(let i = 0; i < pageList.length; i++) {
+		pageList[i].style.backgroundColor = 'white'
+	}
+	currentPage = currentPage % 10
+	if(currentPage == 0) {
+		currentPage = 10
+	}
+	console.log(currentPage)
+	pageList[currentPage-1].style.backgroundColor = '#d3f2ff'
+}
+
+function changeTextColor() { // 검색 시 특정 문자 색 변경
 	if(currentPath == "searchTitle") {
 		return
 	}
@@ -177,6 +198,15 @@ function insert_cateogry() {
 	let category_top
 	let category_input
 
+	if(large_category_input.value.length > 25) {
+		alert('Please fill it out within 25 characters.')
+		return
+	}
+	if(small_category_input.value.length > 25) {
+		alert('Please fill it out within 25 characters.')
+		return
+	}
+	
 	if (order == 1) {
 		category_top = 0
 		category_input = large_category_input
@@ -213,7 +243,7 @@ function insert_cateogry() {
 				alert('Please enter a category title')
 				break
 			case 4:
-				alert('Cannot use the same title as the main category')
+				alert('Cannot use the same title as the subcategory')
 				break
 		}
 	})
@@ -246,7 +276,12 @@ function delete_category() {
 	let small_category_choice = document.querySelector('#small_category_choice')
 	let large_category_choice = document.querySelector('#large_category_choice')
 	let id
-	console.log(large_category_choice.options[large_category_choice.selectedIndex].value)
+	
+	if(large_category_choice.options[large_category_choice.selectedIndex] === undefined) {
+		alert('category does not exist')
+		return
+	}
+	
 	if (order == 1) {
 		id = large_category_choice.options[large_category_choice.selectedIndex].value
 

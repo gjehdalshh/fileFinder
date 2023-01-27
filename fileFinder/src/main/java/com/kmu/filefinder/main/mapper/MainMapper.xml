@@ -23,7 +23,7 @@
 	<select id="getCategoryByNm" resultType="CategoryDTO">
 		SELECT i_category,
 		category_nm, category_order FROM category
-		WHERE category_nm = #{nm};
+		WHERE category_nm = #{category_nm} AND category_top = #{category_top};
 	</select>
 	<select id="getCategoryPathByIcategory" resultType="string">
 		SELECT
@@ -43,6 +43,9 @@
 	<select id="getCategoryCountByIcategory" resultType="int">
 		SELECT category_count FROM category WHERE i_category
 		= #{i_category};
+	</select>
+	<select id="getICategoryByIcategoryTop" resultType="int">
+		SELECT i_category FROM category WHERE category_top = #{i_category};
 	</select>
 
 	<!-- create -->
@@ -78,5 +81,5 @@
 		DELETE FROM category WHERE category_top =
 		#{i_category};
 	</delete>
-
+	
 </mapper>
