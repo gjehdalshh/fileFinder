@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<link rel="stylesheet" href="/res/css/user/management.css?ver=34">
+<link rel="stylesheet" href="/res/css/user/management.css?ver=36">
 
 <div id="title_container">
 	<div class="flex_title">

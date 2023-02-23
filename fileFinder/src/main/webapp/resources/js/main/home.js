@@ -215,9 +215,15 @@ function insert_cateogry() {
 		category_top = category_choice.options[category_choice.selectedIndex].value
 		category_input = small_category_input
 	}
+	
+	category_input = category_input.value.replace(/\s/g, ""); 
+	if (category_input=="") {
+		alert('Please enter a category title')
+		return
+	}
 	modal_insert.style.display = 'none';
 	let param = {
-		category_nm: category_input.value,
+		category_nm: category_input,
 		category_order: order,
 		category_top: category_top
 	}
@@ -233,7 +239,7 @@ function insert_cateogry() {
 	}).then(function(data) {
 		switch (data.category) {
 			case 1:
-				alert('category has been registered')
+				alert('Category has been registered')
 				location.reload()
 				break;
 			case 2:
@@ -241,9 +247,6 @@ function insert_cateogry() {
 				break;
 			case 3:
 				alert('Please enter a category title')
-				break
-			case 4:
-				alert('Cannot use the same title as the subcategory')
 				break
 		}
 	})
@@ -292,7 +295,7 @@ function delete_category() {
 				console.log(text)
 				if (text == 1) {
 					alert('Category has been removed')
-					location.reload()
+					location.href=`/`
 				} else if (text == 2) {
 					alert('Please select a category')
 				}
@@ -314,7 +317,7 @@ function delete_category() {
 				console.log(text)
 				if (text == 1) {
 					alert('Category has been removed')
-					location.reload()
+					location.href=`/`
 				} else if (text == 2) {
 					alert('Please select a category')
 				}
@@ -359,6 +362,10 @@ function searchForm() {
 
 	if (search_input == '') {
 		alert('Please enter contents')
+		return
+	}
+	if (search_input.length < 3) {
+		alert('Please enter at least 3 characters')
 		return
 	}
 

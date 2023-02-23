@@ -31,6 +31,7 @@ body {
 	margin: auto;
 	box-sizing: border-box;
 	background-color: #3aff3a;
+	cursor: pointer;
 }
 
 #find_nm, #find_email, #find_btn, #login_btn, #find_id, #current_password, #user_id,

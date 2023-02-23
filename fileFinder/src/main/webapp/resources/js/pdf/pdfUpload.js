@@ -27,7 +27,10 @@ function subUploadCategoryChange(e) {
 // 업로드전 path 위치 설정
 function changeCategory() {
 	let sub_category_choice_upload = document.querySelector('#sub_category_choice_upload')
-	console.log(sub_category_choice_upload.value)
+
+	if(sub_category_choice_upload.value=="") { // 서브 카테고리가 존재하지 않음
+		return
+	}
 	fetch(`/filePath`, {
 		method: 'POST',
 		headers: {
@@ -47,9 +50,14 @@ function changeFileName(file) {
 function upload() {
 	let fileUpload = document.querySelector('#fileUpload')
 	let top_category_choice_upload = document.querySelector('#top_category_choice_upload')
+	let sub_category_choice_upload = document.querySelector('#sub_category_choice_upload')
 
 	if (top_category_choice_upload.value == 0) {
 		alert('Please select a category')
+		return
+	}
+	if (sub_category_choice_upload.value=="") {
+		alert('Subcategory does not exist')
 		return
 	}
 	if (!fileUpload.value) {
@@ -68,7 +76,6 @@ function upload() {
 	console.log(fileSize)
 	if(fileSize > 104857600) { // 현재 톰캣의 최대 업로드 가능 파일 사이즈 100MB
 		alert('can upload up to 100MB at once.')
-		location.reload()
 		return
 	}
 
@@ -96,6 +103,9 @@ function upload() {
 				alert('Please select a category')
 			} else if (text == 3) {
 				alert('File already exists')
+				location.reload()
+			} else if (text == 4) {
+				alert('Only docx and pdf files can be uploaded')
 				location.reload()
 			}
 		})

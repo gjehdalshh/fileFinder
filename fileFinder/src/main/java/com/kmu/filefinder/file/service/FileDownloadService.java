@@ -9,7 +9,7 @@ import com.kmu.filefinder.file.dto.FileCategoryDTO;
 public interface FileDownloadService {
 	int fileDownload(FileCategoryDTO fileDTO) throws IOException;
 	int fileDownloadPdf(FileCategoryDTO fileDTO) throws IOException;
-	int fileDownloadDocx(FileCategoryDTO fileDTO);
+	int fileDownloadDocx(FileCategoryDTO fileDTO, String extension);
 	
 	void makeFolder();
 	int totalFileDownload(FileCategoryDTO fileDTO) throws IOException;

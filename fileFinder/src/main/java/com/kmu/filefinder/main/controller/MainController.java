@@ -46,7 +46,6 @@ public class MainController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("fileCategoryInfoList", fileService.getFileCategoryInfoList(pagingVo));
 		mv.addObject("currentPath", "mainCategory");
-		System.out.println("db에 존재해서 에러");
 		return categoryService.homeCategoryInfo(mv);
 	}
 

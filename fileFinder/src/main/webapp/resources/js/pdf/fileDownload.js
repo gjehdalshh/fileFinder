@@ -1,6 +1,11 @@
-function downloadTotalFile() {
+function downloadTotalFile(search_count) {
 	let category = document.querySelector('#currentPathForDownload').value
-	
+
+	console.log(search_count)
+	if (search_count == 0) {
+		alert('file does not exist')
+		return
+	}
 	let param = {
 		currentPath: category
 	}
@@ -8,7 +13,10 @@ function downloadTotalFile() {
 }
 
 function downloadAjax(param) {
-	
+
+	let file_download_wait_div = document.querySelector('#file_download_wait_div')
+	file_download_wait_div.style.display = 'block'
+
 	fetch(`/totalFileDownload`, {
 		method: 'POST',
 		headers: {
@@ -20,9 +28,11 @@ function downloadAjax(param) {
 	}).then(function(data) {
 		switch (data) {
 			case 1:
+				file_download_wait_div.style.display = 'none'
 				alert('Download Successful')
 				break
 			case 2:
+				file_download_wait_div.style.display = 'none'
 				alert('Download failed')
 				break
 		}
@@ -39,6 +49,9 @@ function file_download(e) {
 	}
 	console.log(nm)
 	console.log(extension)
+	let file_download_wait_div = document.querySelector('#file_download_wait_div')
+	file_download_wait_div.style.display = 'block'
+
 
 	let param = {
 		file_nm: nm.value,
@@ -58,9 +71,11 @@ function file_download(e) {
 		switch (data) {
 			case 1:
 				alert('Download Successful')
+				file_download_wait_div.style.display = 'none'
 				break
 			case 2:
 				alert('Download failed')
+				file_download_wait_div.style.display = 'none'
 				break
 		}
 	})

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<link rel="stylesheet" href="/res/css/user/login.css?ver=14">
+<link rel="stylesheet" href="/res/css/user/login.css?ver=15">
 
 <div id="main_container">
 	<div id="login_container">

@@ -165,8 +165,7 @@ select {
 	background-color: white;
 	border: none;
 	font-size: 15px;
-	padding: 11 0 0;
-	cursor: pointer;
+	margin: 11 0 0;
 }
 
 .sub_category {
@@ -175,4 +174,5 @@ select {
 	width: 160px;
 	border-radius: 5px;
 	padding: 5 0;
+	cursor: pointer;
 }

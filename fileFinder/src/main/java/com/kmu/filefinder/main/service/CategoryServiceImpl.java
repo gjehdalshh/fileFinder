@@ -58,10 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 	// 카테고리 생성
 	public int createCategory(CategoryDTO dto) {
-		if (!validateFolderNameExistence(dto)) {
-			if(dto.getCategory_order() == 2) {
-				return 4;
-			}
+		if (!validateFolderNameExistence(dto)) { //  폴더 이름 존재 유무 검사
 			return 2;
 		}
 		if (dto.getCategory_nm().equals("")) {
@@ -71,6 +68,14 @@ public class CategoryServiceImpl implements CategoryService {
 		dto.setCategory_path(urlPath);
 		return mainMapper.createCategory(dto);
 	}
+	
+	// 이름 존재 유무 검색
+		public boolean validateFolderNameExistence(CategoryDTO dto) {
+			if (getCategoryByNm(dto) != null) { // 이미 파일이 존재함
+				return false;
+			}
+			return true;
+		}
 
 	// DB 대분류 카테고리 개수 감소
 	public void decreaseLargeFileCount(int i_category) {
@@ -126,10 +131,11 @@ public class CategoryServiceImpl implements CategoryService {
 			File folder = new File(urlPath);
 			folder.mkdirs();
 		}
+		
 
 		return urlPath;
 	}
-
+	int a = 0;
 	// 로컬 디렉토리 삭제
 	@Override
 	public void deleteLocalCategory(String path) {
@@ -143,21 +149,15 @@ public class CategoryServiceImpl implements CategoryService {
 					} else { // 폴더안에 폴더가 있을 경우
 						deleteLocalCategory(folder_list[i].getPath()); // 재귀함수호출
 					}
-					folder_list[i].delete();
+					boolean fileDeleted = folder_list[i].delete();
+					System.out.println(fileDeleted);
 				}
-				folder.delete(); // 폴더 삭제
+				 boolean directoryDeleted = folder.delete(); // 폴더 삭제
+				 //System.out.println(directoryDeleted);
 			}
 		} catch (Exception e) {
 			e.getStackTrace();
 		}
-	}
-
-	// 이름 존재 유무 검색
-	public boolean validateFolderNameExistence(CategoryDTO dto) {
-		if (getCategoryByNm(dto) != null) {
-			return false;
-		}
-		return true;
 	}
 
 	// main/home에 기본적으로 담길 내용

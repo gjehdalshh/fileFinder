@@ -23,7 +23,7 @@
 	<select id="getCategoryByNm" resultType="CategoryDTO">
 		SELECT i_category,
 		category_nm, category_order FROM category
-		WHERE category_nm = #{category_nm} AND category_top = #{category_top};
+		WHERE category_nm = #{category_nm};
 	</select>
 	<select id="getCategoryPathByIcategory" resultType="string">
 		SELECT

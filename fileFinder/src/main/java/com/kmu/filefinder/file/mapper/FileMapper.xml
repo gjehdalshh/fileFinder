@@ -94,7 +94,7 @@
 		a.i_category, a.file_path,
 		b.category_nm FROM file as a LEFT JOIN
 		category as b ON a.i_category =
-		b.i_category WHERE a.file_extension = ".docx" ORDER BY r_dt DESC;
+		b.i_category WHERE a.file_extension = ".docx" or a.file_extension = ".doc" ORDER BY r_dt DESC;
 	</select>
 	<select id="getFileNameList" resultType="string">
 		SELECT file_nm FROM

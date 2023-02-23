@@ -10,6 +10,7 @@ public interface FileExtractionService {
 	String extractText(FileCategoryDTO dto) throws IOException;
 	String extractTextByPDF(String filePath) throws IOException;
 	String extractTextByDOCX(String filePath) throws IOException;
+	String extractTextByDOC(String filePath) throws IOException;
 	List<FileCategoryDTO> extractSearchSentence(String[] strArr, FileCategoryDTO dto, String content);
 	List<FileCategoryDTO> extractSummaryText(FileCategoryDTO dto, String content) throws IOException;
 }

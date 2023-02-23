@@ -31,6 +31,7 @@ body {
 	margin: auto;
 	box-sizing: border-box;
 	background-color: #3aff3a;
+	cursor: pointer;
 }
 
 #login_id, #login_pw, #login_btn {
@@ -54,4 +55,5 @@ body {
 }
 .find_id, .find_pw {
 	font-size: 15px;
+	cursor: pointer;
 }

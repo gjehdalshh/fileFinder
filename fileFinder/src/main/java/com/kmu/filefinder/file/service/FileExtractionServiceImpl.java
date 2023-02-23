@@ -9,8 +9,13 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +34,8 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 			return extractTextByPDF(dto.getFile_path());
 		} else if (dto.getFile_extension().equals(".docx")) {
 			return extractTextByDOCX(dto.getFile_path());
+		} else if (dto.getFile_extension().equals(".doc")) {
+			return extractTextByDOC(dto.getFile_path());
 		}
 		return null;
 	}
@@ -65,10 +72,33 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 
 		try {
 			FileInputStream fs = new FileInputStream(new File(filePath));
-
-			OPCPackage d = OPCPackage.open(fs);
+			OPCPackage d = OPCPackage.open(fs); // doc 여기서 에러
 			xw = new XWPFWordExtractor(d);
+			fs.close();
+			d.close();
 			return xw.getText();
+		} catch (Exception e) {
+			System.out.println("# DocxFileParser Error :" + e.getMessage());
+		}
+		return "";
+	}
+	
+	@Override
+	public String extractTextByDOC(String filePath) throws IOException {
+		try {
+			POIFSFileSystem poi = new POIFSFileSystem(new FileInputStream(new File(filePath)));
+			HWPFDocument hwp = new HWPFDocument(poi);
+		    WordExtractor we = new WordExtractor(hwp);
+		 
+		    String[] paragraphs = we.getParagraphText();
+		    String result = "";
+		    for (int i = 0; i < paragraphs.length; i++) {
+		        result += paragraphs[i];
+		    }
+			we.close();
+			hwp.close();
+			poi.close();
+			return result;
 		} catch (Exception e) {
 			System.out.println("# DocxFileParser Error :" + e.getMessage());
 		}
@@ -92,8 +122,27 @@ public class FileExtractionServiceImpl implements FileExtractionService {
 				d = OPCPackage.open(fs);
 				xw = new XWPFWordExtractor(d);
 				text = xw.getText();
+				d.close();
+				xw.close();
 			} catch (InvalidFormatException e) {
 				e.printStackTrace();
+			}
+			fs.close();
+		} else if (dto.getFile_extension().equals(".doc")) {
+			try {
+				POIFSFileSystem poi = new POIFSFileSystem(new FileInputStream(file));
+				HWPFDocument hwp = new HWPFDocument(poi);
+			    WordExtractor we = new WordExtractor(hwp);
+			 
+			    String[] paragraphs = we.getParagraphText();
+			    for (int i = 0; i < paragraphs.length; i++) {
+			        text += paragraphs[i];
+			    }
+				we.close();
+				hwp.close();
+				poi.close();
+			} catch (Exception e) {
+				System.out.println("# DocxFileParser Error :" + e.getMessage());
 			}
 		}
 

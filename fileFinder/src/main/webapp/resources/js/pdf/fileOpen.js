@@ -30,7 +30,7 @@ function file_open_modal(e) {
 	file_dcx_title.textContent = title[0]
 	file_docx_content.textContent = middle_text.substr(title[0].length+1)
 	
-	changeColor()
+	changeTextColor()
 }
 
 function file_modal_docx_close() {

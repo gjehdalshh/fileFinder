@@ -41,11 +41,13 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 	@Override
 	public int fileDownload(FileCategoryDTO fileDTO) throws IOException {
 		makeFolder();
-
+		
 		if (fileDTO.getFile_extension().equals(".pdf")) {
 			return fileDownloadPdf(fileDTO);
 		} else if (fileDTO.getFile_extension().equals(".docx")) {
-			return fileDownloadDocx(fileDTO);
+			return fileDownloadDocx(fileDTO, "docx");
+		} else if (fileDTO.getFile_extension().equals(".doc")) {
+			return fileDownloadDocx(fileDTO, "doc");
 		}
 		return 2;
 	}
@@ -77,10 +79,16 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 
 	// docx 다운로드
 	@Override
-	public int fileDownloadDocx(FileCategoryDTO fileDTO) {
+	public int fileDownloadDocx(FileCategoryDTO fileDTO, String extension) {
 		// docx 로 다운로드, 텍스트 파일을 docx로 변환하기 때문에 시간이 오래 걸림
 		String text = fileDTO.getFullText();
-		File downloadFile = new File(this.downloadPath + "\\" + fileDTO.getFile_nm() + ".docx");
+		File downloadFile = null;
+		if (extension.equals("docx")) {
+			downloadFile = new File(this.downloadPath + "\\" + fileDTO.getFile_nm() + ".docx");
+		} else if (extension.equals("doc")) {
+			downloadFile = new File(this.downloadPath + "\\" + fileDTO.getFile_nm() + ".doc");
+		}
+
 		WordprocessingMLPackage wordPackage;
 		try {
 			wordPackage = WordprocessingMLPackage.createPackage();
@@ -113,6 +121,7 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 	// 분류별 전체 다운로드
 	@Override
 	public int totalFileDownload(FileCategoryDTO fileDTO) throws IOException {
+		makeFolder();
 		this.downloadPath = "C:\\Users\\User\\Downloads\\DocumentDownloads";
 		String category = fileDTO.getCurrentPath();
 		if (category.equals("mainCategory") || category.equals("entireCategory")) {
@@ -133,7 +142,6 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 	@Override
 	public int downloadTotal(FileCategoryDTO fileDTO) throws IOException {
 		int count = mainMapper.getTotalNumberPosts();
-
 		PagingVO pagingVo = createPagingVo(count);
 		List<FileCategoryDTO> list = fileMapper.getFileCategoryInfoList(pagingVo);
 		downloadProcess(list);
@@ -186,7 +194,12 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 		List<FileCategoryDTO> list = new ArrayList<FileCategoryDTO>();
 
 		for (FileCategoryDTO dto : temp) {
-			String text = fileExtractionServiceImpl.extractTextByDOCX(dto.getFile_path());
+			String text = "";
+			if (dto.getFile_extension().equals(".docx")) {
+				text = fileExtractionServiceImpl.extractTextByDOCX(dto.getFile_path());
+			} else if (dto.getFile_extension().equals(".doc")) {
+				text = fileExtractionServiceImpl.extractTextByDOC(dto.getFile_path());
+			}
 			if (text.toLowerCase().contains(searchContent.toLowerCase())) {
 				list.add(dto);
 			}
@@ -212,7 +225,10 @@ public class FileDownloadServiceImpl implements FileDownloadService{
 				fileDownloadPdf(dto);
 			} else if (dto.getFile_extension().equals(".docx")) {
 				dto.setFullText(fileExtractionServiceImpl.extractTextByDOCX(dto.getFile_path()));
-				fileDownloadDocx(dto);
+				fileDownloadDocx(dto, "docx");
+			} else if (dto.getFile_extension().equals(".doc")) {
+				dto.setFullText(fileExtractionServiceImpl.extractTextByDOC(dto.getFile_path()));
+				fileDownloadDocx(dto, "doc");
 			}
 		}
 	}

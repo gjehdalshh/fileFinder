@@ -77,7 +77,10 @@ public class FileServiceImpl implements FileService {
 		String urlPath = fileMapper.getCategoryPathByIcategory(path);
 		String uploadFolder = urlPath + "\\";
 		List<MultipartFile> list = files.getFiles("files");
-
+		
+		if (!checkExtensions(list)) { // 확장자가 docx나 pdf가 아니라면
+			return 4;
+		}
 		if (!checkFileExistence(list)) { // 파일이 존재한다면
 			return 3;
 		}
@@ -104,6 +107,20 @@ public class FileServiceImpl implements FileService {
 		}
 		return 1;
 	}
+	
+	@Override
+	public boolean checkExtensions(List<MultipartFile> list) {
+		
+		for (MultipartFile item : list) { // 문자열 리스트
+			String fileRealName = item.getOriginalFilename();
+			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
+			System.out.println("확인 : " + fileExtension);
+			if (!(fileExtension.equals(".docx") || fileExtension.equals(".pdf") || fileExtension.equals(".doc"))) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	// 파일 존재 유무 확인
 	@Override
@@ -113,7 +130,7 @@ public class FileServiceImpl implements FileService {
 		for (MultipartFile item : list) { // 문자열 리스트
 			String fileRealName = item.getOriginalFilename();
 			String fileExtension = fileRealName.substring(fileRealName.lastIndexOf("."), fileRealName.length());
-			int extensionLength = 4; // pdf
+			int extensionLength = 4; // pdf, doc
 			if (fileExtension.equals(".docx")) {
 				extensionLength = 5;
 			}

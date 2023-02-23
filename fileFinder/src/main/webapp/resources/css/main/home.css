@@ -18,6 +18,7 @@ a {
 #user_login, #user_join {
 	font-size: 14px;
 	padding: 0 20;
+	cursor: pointer;
 }
 
 #title_user_nm {
@@ -32,6 +33,26 @@ a {
 #entire_container {
 	width: 1024px;
 	margin: auto;
+}
+
+#wrapper {
+	height: auto;
+	min-height: 100%;
+	padding-bottom: 60;
+}
+
+footer {
+	position: relative;
+	transform: translateY(-100%);
+	color: #756d6d;
+	border-top: 0.1px solid darkgray;
+}
+
+#footer_email {
+	background-color: #d6d1d1;
+	font-size: 14px;
+	padding: 3px;
+	border-radius: 3px;
 }
 
 .flex {
@@ -256,6 +277,7 @@ select {
 	border-radius: 3px;
 	font-size: 12;
 	background-size: 20% 70%;
+	cursor: pointer;
 }
 
 .large_category_input, .small_category_input {
@@ -295,6 +317,7 @@ select {
 
 #search_result {
 	color: red;
+	margin-right: 10px;
 }
 
 /* ---------------- 파일 업로드 모달창 ------------------ */
@@ -346,9 +369,28 @@ select {
 	display: none;
 }
 
+#file_download_wait_div {
+	position: fixed;
+    width: 400px;
+    text-align: center;
+    top: 39%;
+    left: 31%;
+    margin: 0px auto;
+    padding: 50;
+    background: #fff;
+    border: 2px solid #666;
+    border-radius: 6px;
+    display: none;
+}
+
 #top_category_choice_upload {
 	margin-right: 5px;
+	cursor: pointer;
 }
+#sub_category_choice_upload {
+	cursor: pointer;
+}
+
 
 #upload, #upload_close {
 	font-size: 16px;
@@ -532,6 +574,7 @@ select {
 
 #category_choice {
 	width: 196px;
+	cursor: pointer;
 }
 
 .large_category_list {
@@ -568,14 +611,16 @@ select {
 	width: 185px;
 	cursor: pointer;
 }
+
 #large_category_choice, #small_category_choice, #top_category_change {
 	width: 196px;
-    height: 35px;
-    padding: 10 0 6 10;
-    border: 1px solid #999595;
-    border-radius: 6px;
-    font-size: 15px;
-    margin: 5 0 10 0;
+	height: 35px;
+	padding: 10 0 6 10;
+	border: 1px solid #999595;
+	border-radius: 6px;
+	font-size: 15px;
+	margin: 5 0 10 0;
+	cursor: pointer;
 }
 
 #large_delete_category {
